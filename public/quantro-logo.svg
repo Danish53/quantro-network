@@ -1,0 +1,8 @@
+<svg width="181" height="47" viewBox="0 0 181 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="7" width="28" height="28" rx="4" fill="#2563EB"/>
+  <path d="M9 14H16L23 21L16 28H9V14Z" fill="white"/>
+  <path d="M16 14H23V21L16 14Z" fill="#BFDBFE"/>
+  <path d="M16 28L23 21V28H16Z" fill="#DBEAFE"/>
+  <text x="38" y="26" fill="#111827" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Quantro</text>
+  <text x="82" y="37" fill="#4B5563" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="700" letter-spacing="2.6">NETWORK</text>
+</svg>
