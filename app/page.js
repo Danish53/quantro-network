@@ -15,7 +15,7 @@ import DocumentationCtaBanner from "./components/DocumentationCtaBanner";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-50 text-slate-900">
       <Navbar />
 
       <main className="flex w-full flex-col gap-14 py-8">

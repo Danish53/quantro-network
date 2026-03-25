@@ -1,19 +1,28 @@
-"use client";
-
 import Navbar from "../components/Navbar";
-import { useSiteTranslation } from "../components/SiteTranslationProvider";
+import FooterSection from "../components/FooterSection";
+import FaqPageContent from "../components/faqs/FaqPageContent";
+
+export const metadata = {
+  title: "Official FAQ | Quantro Network",
+  description:
+    "Find answers about Quantro Network—membership, expert advisors, billing, technical setup, and support.",
+};
 
 export default function FaqsPage() {
-  const { t } = useSiteTranslation();
-
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navbar />
-      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-10">
-        <section className="rounded-2xl border border-slate-200 bg-white p-8">
-          <h1 className="text-3xl font-bold">{t("page.faqs.title")}</h1>
-          <p className="mt-4 max-w-3xl text-slate-600">{t("page.faqs.body")}</p>
-        </section>
+
+      <main>
+        <div className="bg-[#050510] text-slate-100">
+          <FaqPageContent />
+        </div>
+
+        <div className="bg-white">
+          <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-10">
+            <FooterSection />
+          </div>
+        </div>
       </main>
     </div>
   );

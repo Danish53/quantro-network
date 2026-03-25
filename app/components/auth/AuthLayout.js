@@ -3,7 +3,7 @@ import Link from "next/link";
 /**
  * Dark auth backdrop: layered diagonal purple/blue gradients + soft glows.
  */
-export default function AuthLayout({ children }) {
+export default function AuthLayout({ children, compact = false }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#05060a] text-slate-100">
       {/* Base wash */}
@@ -42,14 +42,20 @@ export default function AuthLayout({ children }) {
         aria-hidden
       />
 
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-12 sm:px-6 sm:py-16">
+      <div
+        className={`relative z-10 flex min-h-screen flex-col items-center justify-center ${
+          compact ? "px-3 py-8 sm:px-4 sm:py-10" : "px-4 py-12 sm:px-6 sm:py-16"
+        }`}
+      >
         <Link
           href="/"
-          className="mb-8 text-[13px] font-medium text-slate-500 transition hover:text-slate-300 sm:absolute sm:left-6 sm:top-7 sm:mb-0 lg:left-10 lg:top-9"
+          className={`text-[13px] font-medium text-slate-500 transition hover:text-slate-300 sm:absolute sm:left-6 sm:top-7 lg:left-10 lg:top-9 ${
+            compact ? "mb-5 sm:mb-0" : "mb-8 sm:mb-0"
+          }`}
         >
           ← Back to home
         </Link>
-        <div className="w-full max-w-[430px]">{children}</div>
+        <div className={`w-full ${compact ? "max-w-[400px]" : "max-w-[430px]"}`}>{children}</div>
       </div>
     </div>
   );

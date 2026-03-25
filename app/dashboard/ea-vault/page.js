@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import EaVaultView from "../../components/dashboard/EaVaultView";
 
 export default function EaVaultPage() {
-  return <DashboardPagePlaceholder title="EA Vault" />;
+  return <EaVaultView />;
 }

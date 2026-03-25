@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import KycDocumentsView from "../../components/dashboard/KycDocumentsView";
 
 export default function KycPage() {
-  return <DashboardPagePlaceholder title="KYC Verification" />;
+  return <KycDocumentsView />;
 }

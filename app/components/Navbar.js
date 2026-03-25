@@ -2,18 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { languageOptions } from "@/app/lib/languages";
 import { NAV_LINKS } from "@/app/lib/siteStrings";
+import FlagIcon from "./FlagIcon";
 import { useSiteTranslation } from "./SiteTranslationProvider";
-
-function countryCodeToEmoji(countryCode) {
-  return countryCode
-    .toUpperCase()
-    .split("")
-    .map((char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
-    .join("");
-}
 
 export default function Navbar({
   brand = "Quantro Network",
@@ -25,6 +19,7 @@ export default function Navbar({
   const [isOpen, setIsOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langDropdownRef = useRef(null);
+  const pathname = usePathname();
   const { language, setLanguage, t, isTranslating } = useSiteTranslation();
 
   const selectedLanguage = useMemo(
@@ -52,21 +47,36 @@ export default function Navbar({
 
   return (
     <header className="sticky top-0 z-50 bg-white">
-      <nav className="mx-auto flex h-[80px] w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-10">
-        <Link href="/" className="shrink-0" aria-label={brand}>
-          <Image src="/logo-horizon.png" alt={brand} width={185} height={50} priority />
+      <nav className="mx-auto flex h-[80px] w-full min-w-0 max-w-7xl items-center justify-between gap-2 px-3 sm:px-6 lg:px-10">
+        <Link href="/" className="min-w-0 shrink-0" aria-label={brand}>
+          <Image
+            src="/logo-horizon.png"
+            alt={brand}
+            width={185}
+            height={50}
+            priority
+            className="h-auto max-h-[42px] w-[min(100%,185px)] max-w-[185px] object-contain object-left sm:max-h-[50px]"
+          />
         </Link>
 
         <div className="hidden items-center gap-8 xl:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-[14px] font-[600] text-[#4B5563] transition-colors hover:text-[#111827]"
-            >
-              {t(link.labelKey)}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const active = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-[14px] transition-colors ${
+                  active
+                    ? "font-bold text-[#6366f1]"
+                    : "font-[600] text-[#4B5563] hover:text-[#111827]"
+                }`}
+                aria-current={active ? "page" : undefined}
+              >
+                {t(link.labelKey)}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="hidden items-center gap-3 xl:flex">
@@ -88,7 +98,7 @@ export default function Navbar({
               aria-haspopup="listbox"
               aria-expanded={isLangOpen}
             >
-              <span aria-hidden="true">{countryCodeToEmoji(selectedLanguage.flag)}</span>
+              <FlagIcon countryCode={selectedLanguage.flag} width={22} className="h-[17px]" />
               <span className="uppercase">{selectedLanguage.code}</span>
               <svg
                 className={`h-3 w-3 text-slate-500 transition-transform ${isLangOpen ? "rotate-180" : ""}`}
@@ -123,8 +133,8 @@ export default function Navbar({
                       role="option"
                       aria-selected={language === langOption.code}
                     >
-                      <span aria-hidden="true">{countryCodeToEmoji(langOption.flag)}</span>
-                      <span>{langOption.label}</span>
+                      <FlagIcon countryCode={langOption.flag} width={22} className="h-[17px]" />
+                      <span>{t(langOption.labelKey)}</span>
                       <span className="ml-auto uppercase text-slate-500">{langOption.code}</span>
                     </button>
                   </li>
@@ -166,16 +176,22 @@ export default function Navbar({
       {isOpen ? (
         <div className="border-t border-slate-200 bg-white px-4 py-4 xl:hidden">
           <div className="flex flex-col gap-3">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="rounded-md px-2 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
-                onClick={() => setIsOpen(false)}
-              >
-                {t(link.labelKey)}
-              </Link>
-            ))}
+            {links.map((link) => {
+              const active = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`rounded-md px-2 py-2 text-sm font-medium transition hover:bg-slate-100 ${
+                    active ? "font-semibold text-indigo-600" : "text-slate-700 hover:text-slate-900"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {t(link.labelKey)}
+                </Link>
+              );
+            })}
             <Link href="/login" className="rounded-md px-2 py-2 text-sm font-semibold text-slate-900" onClick={() => setIsOpen(false)}>
               {t(loginLabelKey)}
             </Link>
@@ -200,8 +216,8 @@ export default function Navbar({
                         : "text-slate-700 hover:bg-slate-50"
                     }`}
                   >
-                    <span aria-hidden="true">{countryCodeToEmoji(langOption.flag)}</span>
-                    <span>{langOption.label}</span>
+                    <FlagIcon countryCode={langOption.flag} width={22} className="h-[17px]" />
+                    <span>{t(langOption.labelKey)}</span>
                     <span className="ml-auto uppercase text-slate-500">{langOption.code}</span>
                   </button>
                 ))}

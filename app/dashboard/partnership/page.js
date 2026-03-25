@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import PartnershipView from "../../components/dashboard/PartnershipView";
 
 export default function PartnershipPage() {
-  return <DashboardPagePlaceholder title="Partnership Program" />;
+  return <PartnershipView />;
 }

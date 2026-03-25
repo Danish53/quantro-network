@@ -11,24 +11,28 @@ export default function HeroSection() {
   return (
     <section
       id="about-us"
-      className="relative overflow-hidden rounded-[24px] bg-[#070B3D] px-4 py-10 text-white sm:px-5 sm:py-14 lg:min-h-[610px] lg:px-6"
+      className="relative w-full min-w-0 overflow-hidden rounded-[20px] bg-[#070B3D] px-3 py-8 text-white sm:rounded-[24px] sm:px-5 sm:py-14 lg:min-h-[610px] lg:px-6"
     >
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-0 h-72 w-[46rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(97,90,255,0.9)_0%,_rgba(57,56,166,0.38)_48%,_rgba(7,11,61,0)_75%)]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-[44px]">{t("hero.title")}</h1>
-        <p className="mx-auto mt-5 max-w-2xl text-[16px] font-medium leading-8 text-blue-100/95">{t("hero.body")}</p>
+      <div className="relative z-10 mx-auto max-w-2xl min-w-0 px-1 text-center sm:px-0">
+        <h1 className="text-[1.65rem] font-bold leading-[1.2] tracking-tight sm:text-4xl md:text-[44px] md:leading-tight">
+          {t("hero.title")}
+        </h1>
+        <p className="mx-auto mt-4 max-w-2xl text-sm font-medium leading-7 text-blue-100/95 sm:mt-5 sm:text-[16px] sm:leading-8">
+          {t("hero.body")}
+        </p>
 
         <button
           type="button"
-          className="mt-8 inline-flex items-center justify-center rounded-full bg-[#5C5AFF] px-12 py-4 text-lg font-semibold text-white shadow-[0_10px_40px_rgba(92,90,255,0.45)] transition hover:bg-[#6e6bff]"
+          className="mt-6 inline-flex w-full max-w-xs items-center justify-center rounded-full bg-[#5C5AFF] px-6 py-3.5 text-base font-semibold text-white shadow-[0_10px_40px_rgba(92,90,255,0.45)] transition hover:bg-[#6e6bff] sm:mt-8 sm:w-auto sm:max-w-none sm:px-12 sm:py-4 sm:text-lg"
         >
-          {t("hero.cta")} <span className="ml-2 text-xl leading-none">›</span>
+          {t("hero.cta")} <span className="ml-2 text-lg leading-none sm:text-xl">›</span>
         </button>
 
-        <p className="mt-7 text-lg font-semibold text-white">{t("hero.trusted")}</p>
+        <p className="mt-6 text-base font-semibold text-white sm:mt-7 sm:text-lg">{t("hero.trusted")}</p>
         <div className="mt-2 flex items-center justify-center gap-2 text-amber-400">
           <span className="text-[18px]">★ ★ ★ ★ ★</span>
           <span className="text-lg font-semibold text-white">4.9</span>

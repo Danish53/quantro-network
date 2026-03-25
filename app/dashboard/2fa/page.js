@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import TwoFactorView from "../../components/dashboard/TwoFactorView";
 
 export default function TwoFactorPage() {
-  return <DashboardPagePlaceholder title="2FA Authentication" />;
+  return <TwoFactorView />;
 }

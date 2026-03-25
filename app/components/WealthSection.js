@@ -9,9 +9,9 @@ export default function WealthSection() {
   const titleLines = t("wealth.title").split("\n");
 
   return (
-    <section className="w-full text-center">
+    <section className="w-full min-w-0 overflow-x-hidden text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-violet-500">{t("wealth.eyebrow")}</p>
-      <h2 className="mt-3 text-3xl font-black tracking-tight text-[#111827] sm:text-[44px]">
+      <h2 className="mt-3 px-1 text-2xl font-black tracking-tight text-[#111827] sm:text-3xl md:text-[44px]">
         {titleLines.map((line, i) => (
           <span key={i}>
             {i > 0 ? <br /> : null}
@@ -19,9 +19,9 @@ export default function WealthSection() {
           </span>
         ))}
       </h2>
-      <p className="mx-auto mt-3 max-w-3xl text-[17px] font-[600] leading-7 text-slate-600">{t("wealth.body")}</p>
+      <p className="mx-auto mt-3 max-w-3xl px-1 text-[15px] font-[600] leading-7 text-slate-600 sm:text-[17px]">{t("wealth.body")}</p>
 
-      <div className="relative mx-auto w-full max-w-9xl">
+      <div className="relative mx-auto w-full max-w-[min(100%,96rem)]">
         <svg viewBox="0 0 1618 900" focusable="false" className="h-auto w-full" aria-hidden="true">
           <path
             fillRule="evenodd"

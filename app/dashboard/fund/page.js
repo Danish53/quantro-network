@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import FundAccountView from "../../components/dashboard/FundAccountView";
 
 export default function FundPage() {
-  return <DashboardPagePlaceholder title="Fund" />;
+  return <FundAccountView />;
 }

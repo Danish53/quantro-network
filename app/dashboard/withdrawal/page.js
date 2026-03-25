@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import WithdrawalView from "../../components/dashboard/WithdrawalView";
 
 export default function WithdrawalPage() {
-  return <DashboardPagePlaceholder title="Withdrawal" />;
+  return <WithdrawalView />;
 }

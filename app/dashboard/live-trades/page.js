@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import LiveTradesView from "../../components/dashboard/LiveTradesView";
 
 export default function LiveTradesPage() {
-  return <DashboardPagePlaceholder title="EAs Real Time / Live Trades" />;
+  return <LiveTradesView />;
 }

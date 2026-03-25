@@ -1,5 +1,5 @@
-import DashboardPagePlaceholder from "../../components/dashboard/DashboardPagePlaceholder";
+import MyProfileView from "../../components/dashboard/MyProfileView";
 
 export default function ProfilePage() {
-  return <DashboardPagePlaceholder title="Profile" />;
+  return <MyProfileView />;
 }

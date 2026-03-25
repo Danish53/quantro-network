@@ -25,8 +25,8 @@ const footerColumns = [
   {
     titleKey: "footer.col_legal",
     links: [
-      { labelKey: "footer.link_terms", href: "/about-us" },
-      { labelKey: "footer.link_privacy", href: "/about-us" },
+      { labelKey: "footer.link_terms", href: "/terms" },
+      { labelKey: "footer.link_privacy", href: "/privacy-policy" },
       { labelKey: "footer.link_risk", href: "/about-us" },
     ],
   },

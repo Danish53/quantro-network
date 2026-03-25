@@ -1,44 +1,112 @@
-/** Dummy Subscriber Portal dashboard (stats + chart placeholders). */
+"use client";
+
+import { useMemo } from "react";
+import { useSiteTranslation } from "../SiteTranslationProvider";
+
+const CHART_MONTH_KEYS = [
+  "dash.month_oct",
+  "dash.month_nov",
+  "dash.month_dec",
+  "dash.month_jan",
+  "dash.month_feb",
+  "dash.month_mar",
+];
+
+/** Subscriber Portal dashboard — layout aligned with Quantro Network member UI. */
 export default function SubscriberPortalHome() {
+  const { t } = useSiteTranslation();
+
+  const monthLabels = useMemo(() => CHART_MONTH_KEYS.map((k) => t(k)), [t]);
+
+  const stats = useMemo(
+    () => [
+      { value: "$0.00", labelKey: "dash.stat_ea_wallet", icon: "wallet" },
+      { value: "$0.00", labelKey: "dash.stat_qn_wallet", icon: "stack" },
+      { value: "$0.00", labelKey: "dash.stat_subscription_total", icon: "trend" },
+      { value: "$0.00", labelKey: "dash.stat_total_withdrawals", icon: "bolt" },
+    ],
+    []
+  );
+
   return (
     <div className="space-y-6 lg:space-y-8">
-      <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Subscriber Portal</h1>
+      <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">{t("dash.home_title")}</h1>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {[
-          { value: "$596.80", label: "EA License Wallet", icon: "wallet" },
-          { value: "$9.5K", label: "Quantro Network Wallet", icon: "stack" },
-          { value: "$1.2K", label: "Monthly Earnings", icon: "trend" },
-          { value: "12", label: "Active EAs", icon: "bolt" },
-        ].map((card) => (
+        {stats.map((card) => (
           <div
-            key={card.label}
-            className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-4 shadow-lg backdrop-blur-md sm:p-5"
+            key={card.labelKey}
+            className="flex items-center gap-4 rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 shadow-lg sm:p-5"
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-300 ring-1 ring-cyan-400/20">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] bg-[#9A6B20]/15 text-[#d4a84b] ring-1 ring-[#9A6B20]/25">
               <StatMiniIcon name={card.icon} />
             </div>
             <div className="min-w-0">
               <p className="text-xl font-bold tracking-tight text-white sm:text-2xl">{card.value}</p>
-              <p className="text-xs text-slate-400 sm:text-sm">{card.label}</p>
+              <p className="text-xs text-slate-400 sm:text-sm">{t(card.labelKey)}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <ChartPanel title="Deposits and Withdrawals" footer="Dummy data — Jul–Dec">
-          <AreaChartPlaceholder />
+        <ChartPanel
+          title={t("dash.chart_deposits")}
+          footer={t("dash.chart_dummy_jul_dec")}
+          infoLabel={t("dash.chart_info")}
+          downloadLabel={t("dash.chart_download")}
+          legend={
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-4 text-[11px] text-slate-400 sm:justify-start">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[#3b82f6]" aria-hidden />
+                {t("dash.chart_legend_deposits")}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[#ef4444]" aria-hidden />
+                {t("dash.chart_legend_withdrawals")}
+              </span>
+            </div>
+          }
+        >
+          <DualLineChartPlaceholder monthLabels={monthLabels} />
         </ChartPanel>
-        <ChartPanel title="Monthly Licence Earning" footer="Dummy data — bars by month">
-          <BarChartPlaceholder />
+        <ChartPanel
+          title={t("dash.chart_monthly")}
+          footer={t("dash.chart_dummy_bars")}
+          infoLabel={t("dash.chart_info")}
+          downloadLabel={t("dash.chart_download")}
+          legend={
+            <div className="mt-3 flex flex-wrap gap-4 border-t border-white/[0.06] pt-3 text-[11px] text-slate-400">
+              <span>
+                <span className="text-slate-500">{t("dash.monthly_current_label")}: </span>
+                <span className="font-medium text-white">$0.00</span>
+              </span>
+              <span>
+                <span className="text-slate-500">{t("dash.monthly_total_label")}: </span>
+                <span className="font-medium text-white">$0.00</span>
+              </span>
+            </div>
+          }
+        >
+          <BarChartPlaceholder monthLabels={monthLabels} />
         </ChartPanel>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <section className="rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 sm:p-5">
+          <h2 className="text-sm font-semibold text-white sm:text-base">{t("dash.card_subscription_summary")}</h2>
+          <div className="mt-4 min-h-[120px] rounded-[8px] border border-dashed border-white/[0.08] bg-[#14142a]/80" />
+        </section>
+        <section className="rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 sm:p-5">
+          <h2 className="text-sm font-semibold text-white sm:text-base">{t("dash.card_monthly_earnings_trend")}</h2>
+          <div className="mt-4 min-h-[120px] rounded-[8px] border border-dashed border-white/[0.08] bg-[#14142a]/80" />
+        </section>
       </div>
 
       <button
         type="button"
-        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30 transition hover:bg-blue-500"
-        aria-label="Chat support"
+        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg shadow-blue-600/35 transition hover:bg-[#1d4ed8]"
+        aria-label={t("dash.chat_support")}
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path
@@ -52,100 +120,118 @@ export default function SubscriberPortalHome() {
   );
 }
 
-function ChartPanel({ title, footer, children }) {
+function ChartPanel({ title, footer, infoLabel, downloadLabel, legend, children }) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-xl backdrop-blur-md sm:p-5">
+    <section className="rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 shadow-xl sm:p-5">
       <div className="mb-4 flex items-start justify-between gap-2">
         <h2 className="text-sm font-semibold text-white sm:text-base">{title}</h2>
         <div className="flex gap-1 text-slate-500">
-          <button type="button" className="rounded p-1 hover:bg-white/10 hover:text-white" aria-label="Info">
+          <button type="button" className="rounded p-1 hover:bg-white/[0.06] hover:text-white" aria-label={infoLabel}>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
             </svg>
           </button>
-          <button type="button" className="rounded p-1 hover:bg-white/10 hover:text-white" aria-label="Download">
+          <button type="button" className="rounded p-1 hover:bg-white/[0.06] hover:text-white" aria-label={downloadLabel}>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
           </button>
         </div>
       </div>
-      <div className="relative min-h-[200px] rounded-xl bg-black/20 p-2 sm:min-h-[240px]">{children}</div>
-      <p className="mt-2 text-[11px] text-slate-500">{footer}</p>
+      <div className="relative min-h-[200px] rounded-[8px] bg-[#14142a]/80 p-2 sm:min-h-[240px]">{children}</div>
+      {footer ? <p className="mt-2 text-[11px] text-slate-500">{footer}</p> : null}
+      {legend}
     </section>
   );
 }
 
-function AreaChartPlaceholder() {
+function DualLineChartPlaceholder({ monthLabels }) {
+  const n = monthLabels.length;
+  const w = 400;
+  const padL = 36;
+  const padR = 12;
+  const padT = 16;
+  const padB = 28;
+  const gw = w - padL - padR;
+  const gh = 140;
+  const xAt = (i) => padL + (i / (n - 1)) * gw;
+  const yDep = [125, 118, 122, 95, 72, 88];
+  const yWdr = [132, 128, 115, 102, 98, 105];
+  const path = (ys) =>
+    ys.map((y, i) => `${i === 0 ? "M" : "L"} ${xAt(i).toFixed(1)} ${y.toFixed(1)}`).join(" ");
+
   return (
-    <svg viewBox="0 0 400 180" className="h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden>
-      <defs>
-        <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.02" />
-        </linearGradient>
-      </defs>
-      <text x="8" y="16" fill="#64748b" fontSize="11">
-        $800
+    <svg viewBox={`0 0 ${w} 190`} className="h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <line
+          key={i}
+          x1={padL}
+          y1={padT + (i * gh) / 4}
+          x2={w - padR}
+          y2={padT + (i * gh) / 4}
+          stroke="rgba(255,255,255,0.06)"
+          strokeWidth="1"
+        />
+      ))}
+      <text x="6" y={padT + 4} fill="#64748b" fontSize="10">
+        $10
       </text>
-      <text x="8" y="90" fill="#64748b" fontSize="11">
-        $400
+      <text x="6" y={padT + gh * 0.25 + 4} fill="#64748b" fontSize="10">
+        $5
       </text>
-      <text x="8" y="164" fill="#64748b" fontSize="11">
+      <text x="6" y={padT + gh * 0.5 + 4} fill="#64748b" fontSize="10">
+        $2.5
+      </text>
+      <text x="6" y={padT + gh * 0.75 + 4} fill="#64748b" fontSize="10">
+        $1
+      </text>
+      <text x="6" y={padT + gh + 4} fill="#64748b" fontSize="10">
         $0
       </text>
-      {["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map((m, i) => (
-        <text key={m} x={48 + i * 58} y="175" fill="#64748b" fontSize="10" textAnchor="middle">
+      {monthLabels.map((m, i) => (
+        <text key={m} x={xAt(i)} y="182" fill="#64748b" fontSize="10" textAnchor="middle">
           {m}
         </text>
       ))}
-      <path
-        d="M 48 140 L 106 120 L 164 130 L 222 90 L 280 40 L 338 55"
-        fill="none"
-        stroke="#22d3ee"
-        strokeWidth="2"
-      />
-      <path
-        d="M 48 140 L 106 120 L 164 130 L 222 90 L 280 40 L 338 55 L 338 170 L 48 170 Z"
-        fill="url(#areaFill)"
-      />
+      <path d={path(yDep)} fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinejoin="round" />
+      <path d={path(yWdr)} fill="none" stroke="#ef4444" strokeWidth="2" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function BarChartPlaceholder() {
+function BarChartPlaceholder({ monthLabels }) {
   const bars = [
-    { m: "Jul", h: 40 },
-    { m: "Aug", h: 55 },
-    { m: "Sep", h: 35 },
-    { m: "Oct", h: 70 },
-    { m: "Nov", h: 95 },
-    { m: "Dec", h: 88 },
+    { i: 0, h: 28 },
+    { i: 1, h: 42 },
+    { i: 2, h: 35 },
+    { i: 3, h: 55 },
+    { i: 4, h: 48 },
+    { i: 5, h: 62 },
   ];
   return (
     <svg viewBox="0 0 400 200" className="h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden>
       <text x="8" y="16" fill="#64748b" fontSize="11">
-        $450
+        $1
       </text>
       <text x="8" y="100" fill="#64748b" fontSize="11">
-        $225
+        $0.5
       </text>
       <text x="8" y="184" fill="#64748b" fontSize="11">
         $0
       </text>
-      {bars.map((b, i) => (
-        <g key={b.m}>
-          <text x={36 + i * 58} y="195" fill="#64748b" fontSize="10" textAnchor="middle">
-            {b.m}
+      {bars.map((b) => (
+        <g key={b.i}>
+          <text x={36 + b.i * 58} y="195" fill="#64748b" fontSize="10" textAnchor="middle">
+            {monthLabels[b.i]}
           </text>
           <rect
-            x={22 + i * 58}
-            y={170 - b.h * 1.4}
+            x={22 + b.i * 58}
+            y={170 - b.h * 1.35}
             width="32"
-            height={b.h * 1.4}
+            height={b.h * 1.35}
             rx="4"
-            fill="#22d3ee"
-            fillOpacity="0.75"
+            fill="#9A6B20"
+            fillOpacity="0.85"
           />
         </g>
       ))}
