@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import DashboardToast from "./DashboardToast";
 
 const cardShell =
   "rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-6";
@@ -127,9 +128,24 @@ export default function WalletsView() {
   return (
     <DashboardStandardPage titleKey="dash.wal.title" breadcrumbLastKey="dash.wal.title">
       <p className="mb-6 max-w-3xl text-sm text-slate-400">{t("dash.wal.subtitle")}</p>
-      {error ? <p className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p> : null}
-      {notice ? <p className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">{notice}</p> : null}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="pointer-events-none fixed right-4 top-20 z-[80] space-y-2 sm:right-6">
+        <DashboardToast type="error" message={error} onClose={() => setError("")} />
+        <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
+      </div>
+      {loading ? (
+        <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className={`${cardShell} animate-pulse`}>
+              <div className="h-4 w-28 rounded bg-white/10" />
+              <div className="mt-2 h-3 w-36 rounded bg-white/10" />
+              <div className="mt-3 h-3 w-full rounded bg-white/10" />
+              <div className="mt-4 h-7 w-24 rounded bg-white/10" />
+              <div className="mt-6 h-9 w-full rounded bg-white/10" />
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {!loading ? <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {WALLET_ROWS.map((w) => {
           const wallet = wallets.find((x) => x.asset === w.asset);
           return (
@@ -146,7 +162,7 @@ export default function WalletsView() {
                 disabled={busyAsset === w.asset || loading}
                 className="flex-1 rounded-[10px] bg-[#2563eb] px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-[#1d4ed8]"
               >
-                {t("dash.wal.deposit")}
+                {busyAsset === w.asset ? t("dash.wal.working") : t("dash.wal.deposit")}
               </button>
               <button
                 type="button"
@@ -154,15 +170,15 @@ export default function WalletsView() {
                 disabled={busyAsset === w.asset || loading}
                 className="flex-1 rounded-[10px] border border-white/15 bg-transparent px-3 py-2 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/5"
               >
-                {t("dash.wal.withdraw")}
+                {busyAsset === w.asset ? t("dash.wal.working") : t("dash.wal.withdraw")}
               </button>
             </div>
           </div>
           );
         })}
-      </div>
+      </div> : null}
 
-      <div className={`${cardShell} mt-6`}>
+      {!loading ? <div className={`${cardShell} mt-6`}>
         <h2 className="text-lg font-semibold text-white">{t("dash.wal.history_title")}</h2>
         <div className="mt-4 overflow-x-auto dashboard-sidebar-scroll">
           <table className="w-full min-w-[680px] border-collapse text-left text-sm">
@@ -201,7 +217,7 @@ export default function WalletsView() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> : null}
     </DashboardStandardPage>
   );
 }

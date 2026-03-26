@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import DashboardToast from "./DashboardToast";
 
 const cardShell = "rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6";
 
@@ -147,20 +148,30 @@ export default function VirtualCardView() {
     <DashboardStandardPage titleKey="dash.vcard.title" breadcrumbLastKey="dash.vcard.title">
       <p className="mb-6 max-w-2xl text-sm text-slate-400">{t("dash.vcard.subtitle")}</p>
 
+      <div className="pointer-events-none fixed right-4 top-20 z-[80] space-y-2 sm:right-6">
+        <DashboardToast type="error" message={error} onClose={() => setError("")} />
+        <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
+      </div>
+
       <div className="mb-4 space-y-2">
         <p className="inline-flex items-center rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-200">
           {t("dash.vcard.mock_badge")}
         </p>
-        {error && (
-          <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>
-        )}
-        {notice && (
-          <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">{notice}</p>
-        )}
       </div>
 
       {loading ? (
-        <div className={`${cardShell} text-sm text-slate-400`}>{t("dash.vcard.loading")}</div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className={`${cardShell} animate-pulse`}>
+            <div className="h-3 w-24 rounded bg-white/10" />
+            <div className="mt-8 h-6 w-48 rounded bg-white/10" />
+            <div className="mt-8 h-4 w-32 rounded bg-white/10" />
+          </div>
+          <div className={`${cardShell} animate-pulse`}>
+            <div className="h-3 w-24 rounded bg-white/10" />
+            <div className="mt-4 h-8 w-32 rounded bg-white/10" />
+            <div className="mt-8 h-9 w-36 rounded bg-white/10" />
+          </div>
+        </div>
       ) : null}
 
       {!loading && !hasCard ? (
@@ -176,7 +187,14 @@ export default function VirtualCardView() {
             disabled={busy || loading || kycStatus !== "approved"}
             className="mt-6 rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {busy ? t("dash.vcard.applying") : t("dash.vcard.apply_btn")}
+            {busy ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                {t("dash.vcard.applying")}
+              </span>
+            ) : (
+              t("dash.vcard.apply_btn")
+            )}
           </button>
           {kycStatus !== "approved" && (
             <div className="mt-4">
@@ -235,13 +253,18 @@ export default function VirtualCardView() {
                       : "border border-amber-500/40 bg-amber-500/10 text-amber-200 hover:bg-amber-500/20"
                   } disabled:cursor-not-allowed disabled:opacity-60`}
                 >
-                  {busy
-                    ? t("dash.vcard.saving")
-                    : isPendingReview
-                      ? t("dash.vcard.pending_action")
-                      : isFrozen
-                        ? t("dash.vcard.unfreeze")
-                        : t("dash.vcard.freeze")}
+                  {busy ? (
+                    <span className="inline-flex items-center gap-2">
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      {t("dash.vcard.saving")}
+                    </span>
+                  ) : isPendingReview ? (
+                    t("dash.vcard.pending_action")
+                  ) : isFrozen ? (
+                    t("dash.vcard.unfreeze")
+                  ) : (
+                    t("dash.vcard.freeze")
+                  )}
                 </button>
               </div>
               {isPendingReview && <p className="mt-3 text-xs text-amber-200">{t("dash.vcard.pending_hint")}</p>}

@@ -49,7 +49,7 @@ export default function DashboardShell({ children }) {
       : undefined;
 
   return (
-    <div className="flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-gradient-to-br from-[#0B0B1E] via-[#12122a] to-[#161625] text-slate-100">
+    <div className="dashboard-theme flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-gradient-to-br from-[#0B0B1E] via-[#12122a] to-[#161625] text-slate-100">
       <div
         className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_100%_80%_at_50%_-30%,rgba(154,107,32,0.06),transparent)]"
         aria-hidden

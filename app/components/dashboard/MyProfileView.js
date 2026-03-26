@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import DashboardNavigateDropdown from "./DashboardNavigateDropdown";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import DashboardToast from "./DashboardToast";
 
 const COUNTRIES = ["Pakistan", "United States", "United Kingdom", "United Arab Emirates", "India", "Canada", "Australia"];
 
@@ -17,6 +18,7 @@ export default function MyProfileView() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("Pakistan");
+  const [avatarDataUrl, setAvatarDataUrl] = useState("");
   const [countryOptions, setCountryOptions] = useState(COUNTRIES);
   const [affiliateUrl, setAffiliateUrl] = useState("");
   const [copyDone, setCopyDone] = useState(false);
@@ -24,7 +26,7 @@ export default function MyProfileView() {
   const [saveMessage, setSaveMessage] = useState("");
 
   const baseField =
-    "w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
+    "w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#9A6B20]/50 focus:ring-1 focus:ring-[#9A6B20]/25";
 
   useEffect(() => {
     let cancelled = false;
@@ -43,6 +45,7 @@ export default function MyProfileView() {
         setFullName(u.fullName || "");
         setEmail(u.email || "");
         setPhone(u.phone || "");
+        setAvatarDataUrl(u.avatarDataUrl || "");
         if (u.country) {
           setCountry(u.country);
           if (!COUNTRIES.includes(u.country)) {
@@ -76,8 +79,32 @@ export default function MyProfileView() {
     });
   }, [affiliateUrl]);
 
+  const handlePickAvatar = useCallback((file) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setSaveState("error");
+      setSaveMessage("Please choose an image file");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setSaveState("error");
+      setSaveMessage("Image must be 5MB or smaller");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setAvatarDataUrl(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  }, []);
+
   return (
     <div className="relative pb-24">
+      <div className="pointer-events-none fixed right-4 top-20 z-[80] space-y-2 sm:right-6">
+        <DashboardToast type={saveState === "error" ? "error" : "success"} message={saveMessage} onClose={() => setSaveMessage("")} />
+      </div>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
           <h1 className="text-2xl font-bold tracking-tight text-white">{t("dash.profile.page_title")}</h1>
@@ -100,24 +127,55 @@ export default function MyProfileView() {
         </div>
       </div>
 
+      {profileLoading ? (
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+          <section className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 animate-pulse">
+            <div className="mx-auto h-28 w-28 rounded-full bg-white/10" />
+            <div className="mx-auto mt-4 h-4 w-32 rounded bg-white/10" />
+            <div className="mt-8 h-10 w-full rounded bg-white/10" />
+          </section>
+          <section className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 animate-pulse">
+            <div className="h-5 w-36 rounded bg-white/10" />
+            <div className="mt-2 h-4 w-56 rounded bg-white/10" />
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="h-10 rounded bg-white/10" />
+              <div className="h-10 rounded bg-white/10" />
+              <div className="h-10 rounded bg-white/10" />
+              <div className="h-10 rounded bg-white/10" />
+            </div>
+          </section>
+        </div>
+      ) : (
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
         {/* Profile summary */}
-        <section className="flex flex-col rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
+        <section className="relative flex flex-col rounded-[14px] border border-[#9A6B20]/20 bg-gradient-to-b from-[#1a2140] to-[#161b33] p-6 shadow-[0_14px_35px_rgba(0,0,0,0.28)]">
           <div className="flex flex-col items-center text-center">
             <p className="text-lg font-semibold text-white">
               {profileLoading ? "…" : username || fullName || "—"}
             </p>
             <div className="relative mt-5">
               <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-[#2d3142] ring-2 ring-white/[0.08]">
-                <svg className="h-16 w-16 text-slate-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
+                {avatarDataUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={avatarDataUrl} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <svg className="h-16 w-16 text-slate-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                  </svg>
+                )}
               </div>
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" aria-hidden />
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                aria-hidden
+                onChange={(e) => handlePickAvatar(e.target.files?.[0])}
+              />
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="absolute -bottom-0.5 -right-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg ring-2 ring-[#161b33] transition hover:bg-[#1d4ed8]"
+                className="absolute -bottom-0.5 -right-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-[#9A6B20] text-white shadow-lg ring-2 ring-[#161b33] transition hover:bg-[#ac7924]"
                 aria-label={t("dash.profile.edit_photo")}
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
@@ -125,13 +183,14 @@ export default function MyProfileView() {
                 </svg>
               </button>
             </div>
+            <p className="mt-3 text-xs text-slate-400">JPG/PNG up to 5MB</p>
           </div>
 
           <div className="mt-8 w-full">
             <label htmlFor="affiliate-link" className="text-sm font-medium text-[#a0aec0]">
               {t("dash.profile.affiliate_label")}
             </label>
-            <div className="relative mt-2 flex rounded-[10px] border border-[#2a3558] bg-[#14182b] focus-within:border-[#2563eb]/50 focus-within:ring-1 focus-within:ring-[#2563eb]/25">
+            <div className="relative mt-2 flex rounded-[10px] border border-[#2a3558] bg-[#14182b] focus-within:border-[#9A6B20]/50 focus-within:ring-1 focus-within:ring-[#9A6B20]/25">
               <input
                 id="affiliate-link"
                 readOnly
@@ -184,6 +243,7 @@ export default function MyProfileView() {
                     username: username.trim(),
                     phone: phone.trim(),
                     country: country.trim(),
+                    avatarDataUrl,
                   }),
                 });
                 const data = await res.json().catch(() => ({}));
@@ -193,6 +253,8 @@ export default function MyProfileView() {
                   return;
                 }
                 if (data.user?.username) setUsername(data.user.username);
+                if (typeof data.user?.avatarDataUrl === "string") setAvatarDataUrl(data.user.avatarDataUrl);
+                if (typeof window !== "undefined") window.dispatchEvent(new Event("profile-updated"));
                 setSaveState("success");
                 setSaveMessage(t("dash.profile.save_ok"));
                 setTimeout(() => {
@@ -279,19 +341,11 @@ export default function MyProfileView() {
                 />
               </div>
             </div>
-            {(saveState === "success" || saveState === "error") && saveMessage && (
-              <p
-                className={`mt-4 text-sm ${saveState === "success" ? "text-emerald-400" : "text-red-300"}`}
-                role="status"
-              >
-                {saveMessage}
-              </p>
-            )}
             <div className="mt-6 flex justify-end">
               <button
                 type="submit"
                 disabled={profileLoading || saveState === "saving"}
-                className="rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-[10px] bg-[#9A6B20] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#9A6B20]/20 transition hover:bg-[#ac7924] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saveState === "saving" ? t("dash.profile.saving") : t("dash.profile.save")}
               </button>
@@ -299,6 +353,7 @@ export default function MyProfileView() {
           </form>
         </section>
       </div>
+      )}
 
       {/* Change password — full width */}
       <section className="mt-6 rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
@@ -307,7 +362,7 @@ export default function MyProfileView() {
         <div className="mt-6">
           <Link
             href="/dashboard/reset-password"
-            className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#2563eb] bg-transparent px-6 py-2.5 text-sm font-semibold text-[#60a5fa] transition hover:bg-[#2563eb]/10"
+            className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#9A6B20] bg-transparent px-6 py-2.5 text-sm font-semibold text-[#e8c98a] transition hover:bg-[#9A6B20]/10"
           >
             {t("dash.profile.password_change")}
           </Link>

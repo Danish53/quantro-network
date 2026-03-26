@@ -7,7 +7,19 @@ import { reconcileMockKycStatus } from "@/lib/kyc/mockKyc";
 import { createMockStripeCard, reconcileMockCardLifecycle, serializeCard } from "@/lib/card/mockStripeCard";
 
 export const runtime = "nodejs";
-const USA_ALLOWED = new Set(["US", "USA", "UNITED STATES", "UNITED STATES OF AMERICA"]);
+const USA_ALLOWED = new Set(["US", "USA", "UNITED STATES", "UNITED STATES OF AMERICA", "UNITED STATE"]);
+
+function normalizeCountry(value) {
+  return String(value ?? "")
+    .toUpperCase()
+    .replace(/[^A-Z]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isUsCountry(value) {
+  return USA_ALLOWED.has(normalizeCountry(value));
+}
 
 export async function POST(request) {
   const userId = await getAuthUserIdFromRequest(request);
@@ -33,10 +45,13 @@ export async function POST(request) {
       { status: 403 },
     );
   }
-  const countryCode = String(user.country ?? "").trim().toUpperCase();
-  if (!USA_ALLOWED.has(countryCode)) {
-    return NextResponse.json({ error: "Virtual card is currently available for USA users only" }, { status: 403 });
-  }
+  const profileCountry = normalizeCountry(user.country);
+  // const kycCountry = normalizeCountry(user.kycCountry);
+  // const effectiveCountry = kycCountry || profileCountry;
+  // const isUsResident =  isUsCountry(profileCountry);
+  // if (!isUsResident) {
+  //   return NextResponse.json({ error: "Virtual card is currently available for USA users only" }, { status: 403 });
+  // }
 
   const existing = await VirtualCard.findOne({ userId });
   if (existing) {

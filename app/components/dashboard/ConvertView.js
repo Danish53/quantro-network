@@ -3,6 +3,7 @@
 import { useState } from "react";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import DashboardToast from "./DashboardToast";
 
 export default function ConvertView() {
   const { t } = useSiteTranslation();
@@ -23,8 +24,10 @@ export default function ConvertView() {
   return (
     <DashboardStandardPage titleKey="dash.conv.title" breadcrumbLastKey="dash.conv.title">
       <p className="mb-6 max-w-2xl text-sm text-slate-400">{t("dash.conv.subtitle")}</p>
-      {error ? <p className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p> : null}
-      {notice ? <p className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">{notice}</p> : null}
+      <div className="pointer-events-none fixed right-4 top-20 z-[80] space-y-2 sm:right-6">
+        <DashboardToast type="error" message={error} onClose={() => setError("")} />
+        <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
+      </div>
 
       <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

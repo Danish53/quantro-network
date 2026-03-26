@@ -6,6 +6,7 @@ import Wallet from "@/lib/models/Wallet";
 import {
   createWithdrawal,
   ensureUserWallets,
+  reconcilePendingWithdrawals,
   serializeWallet,
   serializeWalletTransaction,
 } from "@/lib/wallet/mockWalletService";
@@ -39,6 +40,7 @@ export async function POST(request) {
   }
 
   await ensureUserWallets(userId);
+  await reconcilePendingWithdrawals(userId);
   const wallet = await Wallet.findOne({ userId, asset: parsed.data.asset });
   if (!wallet) return NextResponse.json({ error: "Wallet not found" }, { status: 404 });
 

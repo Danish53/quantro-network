@@ -67,3 +67,36 @@ body {
 .dashboard-sidebar-scroll::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, rgba(186, 199, 214, 0.55), rgba(148, 163, 184, 0.55));
 }
+
+/* Dashboard visual polish */
+.dashboard-theme button[class*="bg-[#2563eb]"] {
+  background: linear-gradient(135deg, #9a6b20 0%, #7b5419 100%);
+  box-shadow: 0 10px 24px rgba(154, 107, 32, 0.25);
+}
+
+.dashboard-theme button[class*="bg-[#2563eb]"]:hover {
+  background: linear-gradient(135deg, #ac7924 0%, #8a5f1c 100%);
+}
+
+.dashboard-theme button[class*="border-[#2563eb]"] {
+  border-color: #9a6b20 !important;
+  color: #e8c98a !important;
+}
+
+/* Keep selects/options dark and avoid white dropdown look */
+.dashboard-theme select,
+.dashboard-theme select option {
+  background-color: #14182b !important;
+  color: #e2e8f0 !important;
+}
+
+/* Prevent white/yellow autofill backgrounds in dark inputs */
+.dashboard-theme input:-webkit-autofill,
+.dashboard-theme input:-webkit-autofill:hover,
+.dashboard-theme input:-webkit-autofill:focus,
+.dashboard-theme textarea:-webkit-autofill,
+.dashboard-theme select:-webkit-autofill {
+  -webkit-text-fill-color: #e2e8f0;
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0px 1000px #14182b inset;
+}

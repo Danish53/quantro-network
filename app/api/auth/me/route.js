@@ -12,6 +12,7 @@ const patchMeSchema = z
     username: z.string().trim().min(2).max(50).optional(),
     phone: z.string().trim().min(5).max(40).optional(),
     country: z.string().trim().min(1).max(10).optional(),
+    avatarDataUrl: z.string().max(2_000_000).optional(),
   })
   .refine((d) => Object.values(d).some((v) => v !== undefined), {
     message: "No fields to update",
@@ -25,6 +26,7 @@ function jsonUser(user) {
     username: user.username,
     phone: user.phone,
     country: user.country,
+    avatarDataUrl: user.avatarDataUrl || "",
   };
 }
 
@@ -97,6 +99,7 @@ export async function PATCH(request) {
   if (data.fullName !== undefined) user.fullName = data.fullName;
   if (data.phone !== undefined) user.phone = data.phone;
   if (data.country !== undefined) user.country = data.country;
+  if (data.avatarDataUrl !== undefined) user.avatarDataUrl = data.avatarDataUrl;
 
   if (data.username !== undefined) {
     const nextUsername = data.username.toLowerCase();

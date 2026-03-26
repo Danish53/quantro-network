@@ -12,6 +12,8 @@ import { useSiteTranslation } from "../SiteTranslationProvider";
 export default function DashboardTopBar({ onMenuClick }) {
   const router = useRouter();
   const [langOpen, setLangOpen] = useState(false);
+  const [avatarDataUrl, setAvatarDataUrl] = useState("");
+  const [avatarInitials, setAvatarInitials] = useState("QN");
   const ref = useRef(null);
   const { language, setLanguage, t } = useSiteTranslation();
   const selected = useMemo(
@@ -27,12 +29,39 @@ export default function DashboardTopBar({ onMenuClick }) {
     return () => document.removeEventListener("mousedown", fn);
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    const loadUser = () =>
+      fetch("/api/auth/me", { credentials: "include" })
+        .then((r) => r.json())
+        .then((data) => {
+          if (cancelled || !data?.user) return;
+          const name = String(data.user.fullName || data.user.username || "QN").trim();
+          const initials = name
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((p) => p[0]?.toUpperCase() || "")
+            .join("") || "QN";
+          setAvatarInitials(initials);
+          setAvatarDataUrl(data.user.avatarDataUrl || "");
+        })
+        .catch(() => {});
+
+    const onProfileUpdated = () => loadUser();
+    loadUser();
+    window.addEventListener("profile-updated", onProfileUpdated);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("profile-updated", onProfileUpdated);
+    };
+  }, []);
+
   return (
     <header className="relative z-30 w-full border-b border-white/[0.06] bg-[#14142a]/95 backdrop-blur-md">
-      <div className="flex min-h-[56px] w-full min-w-0 items-center gap-2 px-3 py-2 sm:gap-4 sm:px-5 lg:px-6">
+      <div className="flex min-h-[52px] w-full min-w-0 items-center gap-1.5 px-2 py-1.5 sm:min-h-[56px] sm:gap-4 sm:px-5 sm:py-2 lg:px-6">
         <button
           type="button"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-[#1C1C30] text-white lg:hidden"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-[#1C1C30] text-white lg:hidden"
           aria-label={t("dash.open_menu")}
           onClick={onMenuClick}
         >
@@ -42,10 +71,10 @@ export default function DashboardTopBar({ onMenuClick }) {
         </button>
 
         <Link href="/dashboard" className="flex shrink-0 items-center" aria-label={t("dash.logo_alt")}>
-          <Image src={logoImage} alt={t("dash.logo_alt")} className="h-7 w-auto max-w-[150px] sm:h-8 sm:max-w-[180px]" priority />
+          <Image src={logoImage} alt={t("dash.logo_alt")} className="h-6 w-auto max-w-[120px] sm:h-8 sm:max-w-[180px]" priority />
         </Link>
 
-        <div className="relative mx-auto flex min-w-0 flex-1 max-w-2xl">
+        <div className="relative mx-auto hidden min-w-0 flex-1 max-w-2xl sm:flex">
           <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -65,7 +94,7 @@ export default function DashboardTopBar({ onMenuClick }) {
         <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
           <button
             type="button"
-            className="relative flex h-10 w-10 items-center justify-center rounded-[10px] text-slate-400 transition hover:bg-white/[0.05] hover:text-white"
+            className="relative flex h-9 w-9 items-center justify-center rounded-[10px] text-slate-400 transition hover:bg-white/[0.05] hover:text-white sm:h-10 sm:w-10"
             aria-label={t("dash.notifications")}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -82,7 +111,7 @@ export default function DashboardTopBar({ onMenuClick }) {
 
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-[10px] text-slate-400 transition hover:bg-white/[0.05] hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-[10px] text-slate-400 transition hover:bg-white/[0.05] hover:text-white sm:h-10 sm:w-10"
             aria-label={t("dash.theme")}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -99,7 +128,7 @@ export default function DashboardTopBar({ onMenuClick }) {
             <button
               type="button"
               onClick={() => setLangOpen((v) => !v)}
-              className="flex h-10 items-center gap-1.5 rounded-[10px] border border-white/[0.08] bg-[#1C1C30] px-2.5 text-xs font-medium text-white sm:gap-2 sm:px-3 sm:text-sm"
+              className="flex h-9 items-center gap-1.5 rounded-[10px] border border-white/[0.08] bg-[#1C1C30] px-2 text-xs font-medium text-white sm:h-10 sm:gap-2 sm:px-3 sm:text-sm"
               aria-expanded={langOpen}
               aria-haspopup="listbox"
             >
@@ -155,7 +184,12 @@ export default function DashboardTopBar({ onMenuClick }) {
             className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.12] bg-gradient-to-br from-[#3d3d52] to-[#252538] text-xs font-bold text-white sm:h-10 sm:w-10"
             aria-label={t("dash.profile")}
           >
-            QN
+            {avatarDataUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={avatarDataUrl} alt="" className="h-full w-full object-cover" />
+            ) : (
+              avatarInitials
+            )}
           </button>
         </div>
       </div>
