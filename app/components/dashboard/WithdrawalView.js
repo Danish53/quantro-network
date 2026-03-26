@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 
@@ -9,18 +9,75 @@ export default function WithdrawalView() {
   const [asset, setAsset] = useState("USDT_BNB");
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
   const baseField =
     "mt-2 w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
 
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/wallets/transactions", { credentials: "include" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        const tx = Array.isArray(data?.transactions) ? data.transactions : [];
+        setRows(tx.filter((x) => x.type === "withdrawal"));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <DashboardStandardPage titleKey="dash.wd.title" breadcrumbLastKey="dash.wd.title">
       <p className="mb-6 text-sm text-slate-400">{t("dash.wd.subtitle")}</p>
+      {error ? <p className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p> : null}
+      {notice ? <p className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">{notice}</p> : null}
 
       <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6">
         <form
           className="grid grid-cols-1 gap-5 md:grid-cols-2"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setError("");
+            setNotice("");
+            const amt = Number(amount);
+            if (!Number.isFinite(amt) || amt <= 0) {
+              setError(t("dash.wd.err_amount"));
+              return;
+            }
+            if (!address.trim()) {
+              setError(t("dash.wd.err_address"));
+              return;
+            }
+            try {
+              setBusy(true);
+              const res = await fetch("/api/wallets/withdraw/mock", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  asset,
+                  amount: amt,
+                  destinationAddress: address.trim(),
+                }),
+              });
+              const data = await res.json().catch(() => ({}));
+              if (!res.ok) throw new Error(data?.error || t("dash.wd.err_submit"));
+              setRows((prev) => [data.transaction, ...prev]);
+              setAmount("");
+              setAddress("");
+              setNotice(t("dash.wd.ok"));
+            } catch (err) {
+              setError(err.message || t("dash.wd.err_submit"));
+            } finally {
+              setBusy(false);
+            }
+          }}
         >
           <div>
             <label htmlFor="wd-asset" className="text-sm text-[#a0aec0]">
@@ -36,7 +93,12 @@ export default function WithdrawalView() {
             <label htmlFor="wd-net" className="text-sm text-[#a0aec0]">
               {t("dash.wd.network")}
             </label>
-            <input id="wd-net" readOnly value="BNB Smart Chain" className={`${baseField} cursor-not-allowed opacity-80`} />
+            <input
+              id="wd-net"
+              readOnly
+              value={asset === "ETH" ? "Ethereum Mainnet" : "BNB Smart Chain (BEP-20)"}
+              className={`${baseField} cursor-not-allowed opacity-80`}
+            />
           </div>
           <div className="md:col-span-2">
             <label htmlFor="wd-addr" className="text-sm text-[#a0aec0]">
@@ -51,8 +113,12 @@ export default function WithdrawalView() {
             <input id="wd-amt" value={amount} onChange={(e) => setAmount(e.target.value)} className={baseField} inputMode="decimal" placeholder="0.00" />
           </div>
           <div className="md:col-span-2">
-            <button type="submit" className="rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8]">
-              {t("dash.wd.submit")}
+            <button
+              type="submit"
+              disabled={busy}
+              className="rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {busy ? t("dash.wd.working") : t("dash.wd.submit")}
             </button>
           </div>
         </form>
@@ -71,11 +137,22 @@ export default function WithdrawalView() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan={4} className="px-4 py-12 text-center text-slate-500">
-                  {t("dash.wd.empty")}
-                </td>
-              </tr>
+              {!rows.length ? (
+                <tr>
+                  <td colSpan={4} className="px-4 py-12 text-center text-slate-500">
+                    {t("dash.wd.empty")}
+                  </td>
+                </tr>
+              ) : (
+                rows.map((tx) => (
+                  <tr key={tx.id} className="border-b border-white/[0.04] last:border-0">
+                    <td className="px-4 py-3 text-slate-300">{tx.reference || "—"}</td>
+                    <td className="px-4 py-3 text-slate-300">{tx.asset}</td>
+                    <td className="px-4 py-3 text-rose-300">-{Number(tx.amount || 0).toFixed(4)}</td>
+                    <td className="px-4 py-3 text-slate-300">{tx.status}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

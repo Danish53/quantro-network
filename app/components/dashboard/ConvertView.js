@@ -8,13 +8,23 @@ export default function ConvertView() {
   const { t } = useSiteTranslation();
   const [from, setFrom] = useState("USDT_BNB");
   const [amount, setAmount] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [rate, setRate] = useState(1);
+  const [receiveUsd, setReceiveUsd] = useState(0);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
   const baseField =
     "mt-2 w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
 
+  const parsedAmount = Number(amount || 0);
+  const previewUsd = Number.isFinite(parsedAmount) ? Number((parsedAmount * rate).toFixed(2)) : 0;
+
   return (
     <DashboardStandardPage titleKey="dash.conv.title" breadcrumbLastKey="dash.conv.title">
       <p className="mb-6 max-w-2xl text-sm text-slate-400">{t("dash.conv.subtitle")}</p>
+      {error ? <p className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p> : null}
+      {notice ? <p className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">{notice}</p> : null}
 
       <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -49,10 +59,10 @@ export default function ConvertView() {
 
         <div className="mt-6 rounded-[10px] border border-white/[0.06] bg-[#14182b] px-4 py-3 text-sm text-slate-400">
           <p>
-            {t("dash.conv.rate")}: <span className="text-slate-200">1 USDT ≈ 1.00 USD</span>
+            {t("dash.conv.rate")}: <span className="text-slate-200">1 {from.replace("_BNB", "")} ≈ {rate.toFixed(2)} USD</span>
           </p>
           <p className="mt-2">
-            {t("dash.conv.receive")}: <span className="font-semibold text-[#38bdf8]">$0.00</span>
+            {t("dash.conv.receive")}: <span className="font-semibold text-[#38bdf8]">${(receiveUsd || previewUsd).toFixed(2)}</span>
           </p>
         </div>
 
@@ -60,9 +70,41 @@ export default function ConvertView() {
 
         <button
           type="button"
+          disabled={busy}
+          onClick={async () => {
+            setError("");
+            setNotice("");
+            const amt = Number(amount);
+            if (!Number.isFinite(amt) || amt <= 0) {
+              setError(t("dash.conv.err_amount"));
+              return;
+            }
+            try {
+              setBusy(true);
+              const res = await fetch("/api/wallets/convert/mock", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ asset: from, amount: amt }),
+              });
+              const data = await res.json().catch(() => ({}));
+              if (!res.ok) {
+                if (typeof data?.rate === "number") setRate(data.rate);
+                throw new Error(data?.error || t("dash.conv.err_convert"));
+              }
+              setRate(data?.conversion?.rate || rate);
+              setReceiveUsd(data?.conversion?.usdValue || 0);
+              setAmount("");
+              setNotice(t("dash.conv.ok"));
+            } catch (e) {
+              setError(e.message || t("dash.conv.err_convert"));
+            } finally {
+              setBusy(false);
+            }
+          }}
           className="mt-6 rounded-[10px] bg-[#2563eb] px-8 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8]"
         >
-          {t("dash.conv.cta")}
+          {busy ? t("dash.conv.working") : t("dash.conv.cta")}
         </button>
       </div>
     </DashboardStandardPage>

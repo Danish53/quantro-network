@@ -112,6 +112,7 @@ function FileDropZone({ variant, preview, onFile, onClear, uploadKey, required }
 
 export default function KycDocumentsView() {
   const { t } = useSiteTranslation();
+  const [kycStatus, setKycStatus] = useState("not_submitted");
   const [docType, setDocType] = useState("national_id");
   const [docNumber, setDocNumber] = useState("");
   const [frontFile, setFrontFile] = useState(null);
@@ -119,6 +120,30 @@ export default function KycDocumentsView() {
   const [frontPreview, setFrontPreview] = useState("");
   const [backPreview, setBackPreview] = useState("");
   const [formError, setFormError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [notice, setNotice] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    const pullStatus = () =>
+      fetch("/api/kyc/me", { credentials: "include" })
+        .then((r) => r.json())
+        .then((data) => {
+          if (cancelled) return;
+          if (data?.kyc?.status) {
+            setKycStatus(data.kyc.status);
+          }
+        })
+        .catch(() => {});
+
+    pullStatus();
+    const id = setInterval(pullStatus, 5000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
 
   const revoke = useCallback((url) => {
     if (url && url.startsWith("blob:")) URL.revokeObjectURL(url);
@@ -181,9 +206,10 @@ export default function KycDocumentsView() {
     };
   }, [frontPreview, backPreview, revoke]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError("");
+    setNotice("");
     if (!docType) {
       setFormError(t("dash.kyc.error_doc_type"));
       return;
@@ -191,6 +217,31 @@ export default function KycDocumentsView() {
     if (!frontFile) {
       setFormError(t("dash.kyc.error_front"));
       return;
+    }
+    try {
+      setSubmitting(true);
+      const res = await fetch("/api/kyc/submit", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          docType,
+          docNumber: docNumber.trim(),
+          hasFrontImage: Boolean(frontFile),
+          hasBackImage: Boolean(backFile),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setFormError(data?.error || t("dash.kyc.submit_error"));
+        return;
+      }
+      setKycStatus(data?.kyc?.status || "pending");
+      setNotice(t("dash.kyc.submit_ok"));
+    } catch {
+      setFormError(t("dash.kyc.submit_error"));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -227,6 +278,15 @@ export default function KycDocumentsView() {
           onSubmit={handleSubmit}
           className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-8"
         >
+          <div className="mb-4">
+            {kycStatus === "approved" ? (
+              <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">{t("dash.kyc.status_approved")}</p>
+            ) : kycStatus === "pending" ? (
+              <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">{t("dash.kyc.status_pending")}</p>
+            ) : (
+              <p className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm text-cyan-100">{t("dash.kyc.status_not_submitted")}</p>
+            )}
+          </div>
           <div className="flex gap-3 rounded-[10px] border border-cyan-500/35 bg-cyan-950/40 px-4 py-3 text-sm text-cyan-50">
             <span className="mt-0.5 shrink-0 text-cyan-300" aria-hidden>
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -285,6 +345,12 @@ export default function KycDocumentsView() {
             <FileDropZone variant="back" preview={backPreview} onFile={setBack} onClear={clearBack} uploadKey="dash.kyc.upload_back" required={false} />
           </div>
 
+          {notice ? (
+            <p className="mt-4 text-sm text-emerald-300" role="status">
+              {notice}
+            </p>
+          ) : null}
+
           {formError ? (
             <p className="mt-4 text-sm text-red-400" role="alert">
               {formError}
@@ -292,8 +358,12 @@ export default function KycDocumentsView() {
           ) : null}
 
           <div className="mt-8 flex justify-start">
-            <button type="submit" className="rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8]">
-              {t("dash.kyc.submit")}
+            <button
+              type="submit"
+              disabled={submitting || kycStatus === "approved"}
+              className="rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitting ? t("dash.kyc.submitting") : t("dash.kyc.submit")}
             </button>
           </div>
         </form>
