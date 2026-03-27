@@ -5,6 +5,7 @@ import Link from "next/link";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 import DashboardToast from "./DashboardToast";
+import PremiumPlasticCard, { firstFourDigitsFromMaskedPan } from "./PremiumPlasticCard";
 
 const cardShell = "rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6";
 
@@ -161,10 +162,15 @@ export default function VirtualCardView() {
 
       {loading ? (
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className={`${cardShell} animate-pulse`}>
-            <div className="h-3 w-24 rounded bg-white/10" />
-            <div className="mt-8 h-6 w-48 rounded bg-white/10" />
-            <div className="mt-8 h-4 w-32 rounded bg-white/10" />
+          <div
+            className="mx-auto w-full max-w-[420px] animate-pulse overflow-hidden rounded-[22px] border border-white/10 bg-gradient-to-br from-[#0047AB]/40 to-[#4B0082]/30"
+            style={{ aspectRatio: "1.586 / 1" }}
+          >
+            <div className="h-full p-6">
+              <div className="h-3 w-28 rounded bg-white/10" />
+              <div className="mt-10 h-8 w-full max-w-[280px] rounded bg-white/10" />
+              <div className="mt-6 h-4 w-16 rounded bg-white/10" />
+            </div>
           </div>
           <div className={`${cardShell} animate-pulse`}>
             <div className="h-3 w-24 rounded bg-white/10" />
@@ -207,22 +213,20 @@ export default function VirtualCardView() {
       ) : !loading && hasCard ? (
         <>
           <div className="grid gap-6 lg:grid-cols-2">
-            <div
-              className="relative overflow-hidden rounded-2xl border border-white/10 p-6 shadow-xl"
-              style={{
-                background: "linear-gradient(135deg, #1e3a5f 0%, #0f172a 50%, #1e1b4b 100%)",
-              }}
-            >
-              <p className="text-xs font-medium uppercase tracking-widest text-slate-400">
+            <div className="flex flex-col items-stretch">
+              {/* <p className="mb-3 text-center text-[11px] font-medium uppercase tracking-widest text-slate-400 lg:text-left">
                 {card.networkLabel || t("dash.vcard.network")}
-              </p>
-              <p className="mt-8 font-mono text-xl tracking-widest text-white">{card.maskedPan || t("dash.vcard.masked")}</p>
-              <div className="mt-6 flex justify-between text-sm text-slate-300">
-                <span>
-                  {t("dash.vcard.expiry")} {String(card.expiryMonth).padStart(2, "0")}/{String(card.expiryYear).slice(-2)}
-                </span>
-                <span>CVV •••</span>
-              </div>
+              </p> */}
+              <PremiumPlasticCard
+                bankName={t("dash.vcard.network")}
+                cardNumberDisplay={card.maskedPan || t("dash.vcard.masked")}
+                cardNumberSub={firstFourDigitsFromMaskedPan(card.maskedPan)}
+                expiresTitle={t("dash.vcard.card_expires_end")}
+                expiresMidLabel={t("dash.vcard.card_month_year")}
+                expiresValue={`${String(card.expiryMonth).padStart(2, "0")}-${String(card.expiryYear).slice(-2)}`}
+                cardholderName={t("dash.vcard.cardholder_placeholder")}
+                cvvHint={t("dash.vcard.cvv_masked")}
+              />
             </div>
 
             <div className={`${cardShell} flex flex-col justify-between`}>

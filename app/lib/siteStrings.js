@@ -554,7 +554,7 @@ export const SITE_STRINGS = {
   "dash.vcard.applying": "Creating card...",
   "dash.vcard.masked": "•••• •••• •••• 4242",
   "dash.vcard.expiry": "Expires",
-  "dash.vcard.network": "Visa · Virtual",
+  "dash.vcard.network": "Quantro Debit Card",
   "dash.vcard.loading": "Loading your card...",
   "dash.vcard.mock_badge": "Mock Sandbox Mode",
   "dash.vcard.saving": "Updating...",
@@ -574,6 +574,11 @@ export const SITE_STRINGS = {
   "dash.vcard.tx_approved": "Approved",
   "dash.vcard.tx_pending": "Pending",
   "dash.vcard.tx_declined": "Declined",
+  "dash.vcard.card_bank_name": "BANK NAME",
+  "dash.vcard.card_expires_end": "EXPIRES END",
+  "dash.vcard.card_month_year": "MONTH / YEAR",
+  "dash.vcard.cardholder_placeholder": "CARDHOLDER NAME",
+  "dash.vcard.cvv_masked": "CVV •••",
   "dash.wal.title": "Crypto Wallets",
   "dash.wal.subtitle": "USDT & USDC on BNB Chain, and Ethereum — for funding your virtual card and withdrawals.",
   "dash.wal.usdt": "Tether (USDT)",
@@ -887,7 +892,7 @@ export const SITE_STRINGS = {
 };
 
 /** Bump when strings change so cached translations invalidate. */
-export const SITE_STRINGS_REVISION = 3;
+export const SITE_STRINGS_REVISION = 4;
 
 /** Stable key order for batch translation (must match SITE_STRINGS). */
 export const SITE_STRING_KEYS = Object.keys(SITE_STRINGS);

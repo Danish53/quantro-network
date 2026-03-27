@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import leftImage from "@/public/images/left-image.999f05cb.png";
 import rightImage from "@/public/images/right-image.5e8ab15a.png";
@@ -7,6 +9,24 @@ import { useSiteTranslation } from "./SiteTranslationProvider";
 
 export default function HeroSection() {
   const { t } = useSiteTranslation();
+  const [ctaHref, setCtaHref] = useState("/login");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        if (!cancelled) {
+          setCtaHref(res.ok ? "/dashboard" : "/login");
+        }
+      } catch {
+        if (!cancelled) setCtaHref("/login");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <section
@@ -25,12 +45,12 @@ export default function HeroSection() {
           {t("hero.body")}
         </p>
 
-        <button
-          type="button"
+        <Link
+          href={ctaHref}
           className="mt-6 inline-flex w-full max-w-xs items-center justify-center rounded-full bg-[#5C5AFF] px-6 py-3.5 text-base font-semibold text-white shadow-[0_10px_40px_rgba(92,90,255,0.45)] transition hover:bg-[#6e6bff] sm:mt-8 sm:w-auto sm:max-w-none sm:px-12 sm:py-4 sm:text-lg"
         >
           {t("hero.cta")} <span className="ml-2 text-lg leading-none sm:text-xl">›</span>
-        </button>
+        </Link>
 
         <p className="mt-6 text-base font-semibold text-white sm:mt-7 sm:text-lg">{t("hero.trusted")}</p>
         <div className="mt-2 flex items-center justify-center gap-2 text-amber-400">
