@@ -641,7 +641,7 @@ export const SITE_STRINGS = {
   "dash.wc.available_wallets": "Choose a wallet provider below.",
   "dash.wc.connected_with": "Connected with",
   "dash.wc.switch_network": "Switch to BNB Chain",
-  "dash.wc.switching": "Switching...",
+  "dash.wc.switching": "Switching..",
   "dash.wc.connect_failed": "Wallet connection failed. Please try again.",
   "dash.wc.address_hidden": "Address hidden for privacy",
   "dash.wc.close": "Close",
