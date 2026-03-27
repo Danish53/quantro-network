@@ -5,6 +5,7 @@ import { useSiteTranslation } from "../SiteTranslationProvider";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardTopBar from "./DashboardTopBar";
 import LimitedAccessBanner from "./LimitedAccessBanner";
+import DashboardWagmiProvider from "./DashboardWagmiProvider";
 
 function subscribeLg(callback) {
   const mq = window.matchMedia("(min-width: 1024px)");
@@ -82,7 +83,9 @@ export default function DashboardShell({ children }) {
           <DashboardSidebar onNavigate={() => setMobileOpen(false)} />
         </div>
 
-        <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain p-4 sm:p-6 lg:p-8">
+          <DashboardWagmiProvider>{children}</DashboardWagmiProvider>
+        </main>
       </div>
     </div>
   );

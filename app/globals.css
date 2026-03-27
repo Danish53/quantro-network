@@ -90,13 +90,56 @@ body {
   color: #e2e8f0 !important;
 }
 
-/* Prevent white/yellow autofill backgrounds in dark inputs */
+/*
+  Browser autofill (email/password/phone suggestions) paints a yellow/white background on the
+  <input> itself. Scoped dark-form wrappers override it with an inset shadow so fields stay
+  visually consistent with transparent/dark UI.
+*/
+.auth-dark-theme input:-webkit-autofill,
+.auth-dark-theme input:-webkit-autofill:hover,
+.auth-dark-theme input:-webkit-autofill:focus,
+.auth-dark-theme input:-webkit-autofill:active,
+.auth-dark-theme textarea:-webkit-autofill,
+.auth-dark-theme select:-webkit-autofill {
+  -webkit-text-fill-color: #e2e8f0 !important;
+  caret-color: #f8fafc;
+  transition: background-color 50000s ease-in-out 0s !important;
+  -webkit-box-shadow: 0 0 0 1000px #0c0d12 inset !important;
+  box-shadow: 0 0 0 1000px #0c0d12 inset !important;
+}
+
 .dashboard-theme input:-webkit-autofill,
 .dashboard-theme input:-webkit-autofill:hover,
 .dashboard-theme input:-webkit-autofill:focus,
+.dashboard-theme input:-webkit-autofill:active,
 .dashboard-theme textarea:-webkit-autofill,
 .dashboard-theme select:-webkit-autofill {
-  -webkit-text-fill-color: #e2e8f0;
-  transition: background-color 9999s ease-in-out 0s;
-  box-shadow: 0 0 0px 1000px #14182b inset;
+  -webkit-text-fill-color: #e2e8f0 !important;
+  caret-color: #f8fafc;
+  transition: background-color 50000s ease-in-out 0s !important;
+  -webkit-box-shadow: 0 0 0 1000px #14182b inset !important;
+  box-shadow: 0 0 0 1000px #14182b inset !important;
+}
+
+/* Chromium: newer internal autofill pseudo (helps when -webkit-autofill alone loses) */
+.auth-dark-theme input:autofill,
+.auth-dark-theme textarea:autofill,
+.auth-dark-theme select:autofill,
+.dashboard-theme input:autofill,
+.dashboard-theme textarea:autofill,
+.dashboard-theme select:autofill {
+  -webkit-text-fill-color: #e2e8f0 !important;
+  transition: background-color 50000s ease-in-out 0s !important;
+}
+
+.auth-dark-theme input:autofill,
+.auth-dark-theme textarea:autofill,
+.auth-dark-theme select:autofill {
+  box-shadow: 0 0 0 1000px #0c0d12 inset !important;
+}
+
+.dashboard-theme input:autofill,
+.dashboard-theme textarea:autofill,
+.dashboard-theme select:autofill {
+  box-shadow: 0 0 0 1000px #14182b inset !important;
 }

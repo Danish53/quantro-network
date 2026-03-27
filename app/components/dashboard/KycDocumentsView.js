@@ -61,10 +61,13 @@ function FileDropZone({ variant, preview, onFile, onClear, uploadKey, required }
           const f = e.dataTransfer.files?.[0];
           if (f) onFile(f);
         }}
-        className={`relative mt-2 flex min-h-[180px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[12px] border-2 border-dashed bg-white px-4 py-8 transition ${
-          drag ? "border-cyan-500 ring-2 ring-cyan-400/40" : "border-slate-300/80"
+        className={`group relative mt-2 flex min-h-[190px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[14px] border-2 border-dashed bg-gradient-to-br from-[#10172d] via-[#121a33] to-[#0f162a] px-4 py-8 transition ${
+          drag
+            ? "border-[#9A6B20]/85 ring-2 ring-[#9A6B20]/35 shadow-[0_0_0_1px_rgba(154,107,32,0.35),0_16px_34px_rgba(0,0,0,0.35)]"
+            : "border-[#2b3559] hover:border-[#9A6B20]/55 hover:shadow-[0_14px_32px_rgba(0,0,0,0.28)]"
         }`}
       >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(154,107,32,0.16),transparent_62%)] opacity-80" />
         <input
           ref={inputRef}
           type="file"
@@ -88,22 +91,22 @@ function FileDropZone({ variant, preview, onFile, onClear, uploadKey, required }
                 if (inputRef.current) inputRef.current.value = "";
                 onClear();
               }}
-              className="mt-3 text-sm font-medium text-[#2563eb] underline hover:text-[#60a5fa]"
+              className="relative z-10 mt-3 rounded-full border border-[#9A6B20]/45 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-[#e7c88d] transition hover:border-[#9A6B20]/80 hover:bg-[#9A6B20]/12"
             >
               {t("dash.kyc.remove_file")}
             </button>
           </>
         ) : (
           <>
-            <svg className="h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1} aria-hidden>
+            <svg className="relative z-10 h-12 w-12 text-slate-300 transition group-hover:text-[#e7c88d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1} aria-hidden>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-13.5l1.409 1.409a2.25 2.25 0 010 3.182l-7.5 7.5a2.25 2.25 0 01-3.182 0l-7.5-7.5a2.25 2.25 0 010-3.182l1.409-1.409"
               />
             </svg>
-            <p className="mt-3 text-center text-sm font-medium text-slate-700">{t(uploadKey)}</p>
-            <p className="mt-1 text-xs text-slate-500">{t("dash.kyc.drag_hint")}</p>
+            <p className="relative z-10 mt-3 text-center text-sm font-semibold text-slate-100">{t(uploadKey)}</p>
+            <p className="relative z-10 mt-1 text-xs text-slate-400">{t("dash.kyc.drag_hint")}</p>
           </>
         )}
       </div>

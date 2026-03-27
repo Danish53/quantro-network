@@ -9,21 +9,12 @@ import {
   useState,
 } from "react";
 import { languageOptions } from "@/app/lib/languages";
-import { SITE_STRING_KEYS, SITE_STRINGS } from "@/app/lib/siteStrings";
+import { SITE_STRING_KEYS, SITE_STRINGS, SITE_STRINGS_REVISION } from "@/app/lib/siteStrings";
 
 const SiteTranslationContext = createContext(null);
 
-const CHUNK_SIZE = 35;
-
-async function translateTexts(target, texts) {
-  const response = await fetch("/api/translate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ target, texts }),
-  });
-  if (!response.ok) throw new Error("Translation request failed");
-  const data = await response.json();
-  return data.translations ?? [];
+function translationCacheKey(language) {
+  return `qn_site_tr_${language}_r${SITE_STRINGS_REVISION}_${SITE_STRING_KEYS.length}`;
 }
 
 export function SiteTranslationProvider({ children }) {
@@ -58,19 +49,39 @@ export function SiteTranslationProvider({ children }) {
         return;
       }
 
+      const key = translationCacheKey(language);
+      try {
+        const raw = window.localStorage.getItem(key);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            setTranslations(parsed);
+            setIsTranslating(false);
+            return;
+          }
+        }
+      } catch {
+        /* ignore bad cache */
+      }
+
       setIsTranslating(true);
       try {
-        const keys = SITE_STRING_KEYS;
-        const merged = {};
-        for (let i = 0; i < keys.length; i += CHUNK_SIZE) {
-          const batchKeys = keys.slice(i, i + CHUNK_SIZE);
-          const batchTexts = batchKeys.map((k) => SITE_STRINGS[k]);
-          const translated = await translateTexts(language, batchTexts);
-          batchKeys.forEach((key, j) => {
-            merged[key] = translated[j] ?? SITE_STRINGS[key];
-          });
+        const response = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ target: language, scope: "all" }),
+        });
+        if (!response.ok) throw new Error("Translation request failed");
+        const data = await response.json();
+        const merged = data.translations ?? {};
+        if (!cancelled) {
+          setTranslations(merged);
+          try {
+            window.localStorage.setItem(key, JSON.stringify(merged));
+          } catch {
+            /* quota */
+          }
         }
-        if (!cancelled) setTranslations(merged);
       } catch {
         if (!cancelled) setTranslations({});
       } finally {

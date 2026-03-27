@@ -93,6 +93,12 @@ export function NavIcon({ name, className = "" }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m0 0a2.25 2.25 0 012.25-2.25H18.75A2.25 2.25 0 0121 9v3M3 9v3" />
         </svg>
       );
+    case "walletConnect":
+      return (
+        <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 7.5h1.875A2.625 2.625 0 0121 10.125v3.75a2.625 2.625 0 01-2.625 2.625H16.5m0-9v9m0-9h-9A2.25 2.25 0 005.25 9.75v4.5A2.25 2.25 0 007.5 16.5h9m-7.5-4.5h.008v.008H9V12zm3 0h.008v.008H12V12z" />
+        </svg>
+      );
     case "convert":
       return (
         <svg className={c} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>

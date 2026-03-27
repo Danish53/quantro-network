@@ -1,5 +1,6 @@
 import "./globals.css";
 import { SiteTranslationProvider } from "./components/SiteTranslationProvider";
+import TranslationLoadingOverlay from "./components/TranslationLoadingOverlay";
 import { ToastProvider } from "./components/ui/ToastProvider";
 import connectDB from "../lib/db/mongoose";
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning className="h-full overflow-x-hidden antialiased">
       <body className="flex min-h-full min-w-0 flex-col overflow-x-hidden font-sans">
         <SiteTranslationProvider>
+          <TranslationLoadingOverlay />
           <ToastProvider>{children}</ToastProvider>
         </SiteTranslationProvider>
       </body>

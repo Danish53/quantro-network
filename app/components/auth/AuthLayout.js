@@ -5,7 +5,7 @@ import Link from "next/link";
  */
 export default function AuthLayout({ children, compact = false }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05060a] text-slate-100">
+    <div className="auth-dark-theme relative min-h-screen overflow-hidden bg-[#05060a] text-slate-100">
       {/* Base wash */}
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(76,29,149,0.35),transparent_50%)]"

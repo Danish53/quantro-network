@@ -1,11 +1,26 @@
-import { roadmapPhases } from "./roadmapPhases";
+"use client";
+
+import { useSiteTranslation } from "../SiteTranslationProvider";
+import { ROADMAP_PHASE_COUNT } from "./roadmapPhases";
 import RoadmapPhaseCard from "./RoadmapPhaseCard";
 
 export default function RoadmapTimelineSection() {
+  const { t } = useSiteTranslation();
+  const roadmapPhases = Array.from({ length: ROADMAP_PHASE_COUNT }, (_, i) => {
+    const phase = i + 1;
+    return {
+      id: `phase-${phase}`,
+      label: t(`roadmap.phase${phase}.label`),
+      title: t(`roadmap.phase${phase}.title`),
+      description: t(`roadmap.phase${phase}.desc`),
+      bullets: [0, 1, 2, 3].map((b) => t(`roadmap.phase${phase}.b${b}`)),
+      footer: t(`roadmap.phase${phase}.footer`),
+    };
+  });
   return (
     <section aria-labelledby="roadmap-timeline-heading">
       <h2 id="roadmap-timeline-heading" className="sr-only">
-        Product roadmap timeline
+        {t("roadmap.timeline_sr")}
       </h2>
       <div className="relative">
         {/* Mobile + desktop: vertical guide; centered on large screens */}

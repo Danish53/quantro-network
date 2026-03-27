@@ -35,8 +35,8 @@ export default function Navbar({
       }
     };
 
-    document.addEventListener("mousedown", closeOnOutsideClick);
-    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("click", closeOnOutsideClick);
+    return () => document.removeEventListener("click", closeOnOutsideClick);
   }, []);
 
   const handleLanguageChange = (languageCode) => {
@@ -90,7 +90,7 @@ export default function Navbar({
             {t(ctaLabelKey)} <span aria-hidden="true" className="ml-1">{">"}</span>
           </Link>
 
-          <div ref={langDropdownRef} className="relative">
+          <div ref={langDropdownRef} className="relative z-[60]">
             <button
               type="button"
               onClick={() => setIsLangOpen((prev) => !prev)}
@@ -116,14 +116,20 @@ export default function Navbar({
 
             {isLangOpen ? (
               <ul
-                className="absolute right-0 z-20 mt-2 max-h-72 w-64 overflow-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+                className="absolute right-0 z-[70] mt-2 max-h-72 w-64 overflow-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
                 role="listbox"
                 aria-label={t("nav.lang_options")}
+                onMouseDown={(e) => e.stopPropagation()}
               >
                 {languageOptions.map((langOption) => (
                   <li key={langOption.code}>
                     <button
                       type="button"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleLanguageChange(langOption.code);
+                      }}
                       onClick={() => handleLanguageChange(langOption.code)}
                       className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-[13px] ${
                         language === langOption.code
@@ -209,6 +215,10 @@ export default function Navbar({
                   <button
                     key={langOption.code}
                     type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleLanguageChange(langOption.code);
+                    }}
                     onClick={() => handleLanguageChange(langOption.code)}
                     className={`flex items-center gap-2 rounded-lg px-2 py-2 text-left text-sm ${
                       language === langOption.code

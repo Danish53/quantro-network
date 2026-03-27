@@ -25,8 +25,8 @@ export default function DashboardTopBar({ onMenuClick }) {
     const fn = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setLangOpen(false);
     };
-    document.addEventListener("mousedown", fn);
-    return () => document.removeEventListener("mousedown", fn);
+    document.addEventListener("click", fn);
+    return () => document.removeEventListener("click", fn);
   }, []);
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function DashboardTopBar({ onMenuClick }) {
         </div>
 
         <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
-          <button
+          {/* <button
             type="button"
             className="relative flex h-9 w-9 items-center justify-center rounded-[10px] text-slate-400 transition hover:bg-white/[0.05] hover:text-white sm:h-10 sm:w-10"
             aria-label={t("dash.notifications")}
@@ -122,7 +122,7 @@ export default function DashboardTopBar({ onMenuClick }) {
               />
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2m0 14v2.25M4.5 9.75H3m18 0h-1.5M8.25 19.5V21M15.75 19.5V21" />
             </svg>
-          </button>
+          </button> */}
 
           <div ref={ref} className="relative">
             <button
@@ -143,8 +143,9 @@ export default function DashboardTopBar({ onMenuClick }) {
             </button>
             {langOpen ? (
               <ul
-                className="absolute right-0 z-50 mt-2 max-h-64 w-52 overflow-auto rounded-[10px] border border-white/[0.08] bg-[#1C1C30] py-1 shadow-xl"
+                className="absolute right-0 z-[110] mt-2 max-h-64 w-52 overflow-auto rounded-[10px] border border-white/[0.08] bg-[#1C1C30] py-1 shadow-xl"
                 role="listbox"
+                onMouseDown={(e) => e.stopPropagation()}
               >
                 {languageOptions.map((opt) => (
                   <li key={opt.code}>
@@ -153,6 +154,12 @@ export default function DashboardTopBar({ onMenuClick }) {
                       className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm ${
                         language === opt.code ? "bg-white/[0.08] text-white" : "text-slate-300 hover:bg-white/[0.05]"
                       }`}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setLanguage(opt.code);
+                        setLangOpen(false);
+                      }}
                       onClick={() => {
                         setLanguage(opt.code);
                         setLangOpen(false);

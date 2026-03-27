@@ -1,22 +1,51 @@
 "use client";
 
 import DashboardNavigateDropdown from "./DashboardNavigateDropdown";
-import { useState } from "react";
+import DashboardToast from "./DashboardToast";
+import { useEffect, useState } from "react";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 
-const CURRENCIES = [
-  { value: "BTC", labelKey: "dash.fund.currency_btc" },
-  { value: "ETH", labelKey: "dash.fund.currency_eth" },
-  { value: "USDT", labelKey: "dash.fund.currency_usdt" },
+const ASSETS = [
+  { value: "USDT_BNB", label: "USDT (BNB)" },
+  { value: "USDC_BNB", label: "USDC (BNB)" },
+  { value: "ETH", label: "ETH" },
 ];
 
 export default function FundAccountView() {
   const { t } = useSiteTranslation();
-  const [currency, setCurrency] = useState("BTC");
+  const [asset, setAsset] = useState("USDT_BNB");
   const [amount, setAmount] = useState("");
+  const [rows, setRows] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+
+  const baseField =
+    "mt-2 w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/wallets/transactions", { credentials: "include" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        const tx = Array.isArray(data?.transactions) ? data.transactions : [];
+        setRows(tx.filter((x) => x.type === "deposit"));
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="relative pb-24">
+      <div className="pointer-events-none fixed right-4 top-20 z-[80] space-y-2 sm:right-6">
+        <DashboardToast type="error" message={error} onClose={() => setError("")} />
+        <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
+      </div>
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-white">{t("dash.fund.page_title")}</h1>
         <div className="flex flex-wrap items-center gap-3 sm:justify-end">
@@ -37,25 +66,53 @@ export default function FundAccountView() {
       <section className="mt-8 rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-6">
         <h2 className="text-lg font-semibold text-white">{t("dash.fund.deposit_title")}</h2>
         <form
-          className="mt-6 space-y-5"
-          onSubmit={(e) => {
+          className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2"
+          onSubmit={async (e) => {
             e.preventDefault();
+            setError("");
+            setNotice("");
+            const amt = Number(amount);
+            if (!Number.isFinite(amt) || amt <= 0) {
+              setError(t("dash.fund.err_amount"));
+              return;
+            }
+            try {
+              setBusy(true);
+              const res = await fetch("/api/wallets/deposit/mock", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  asset,
+                  amount: amt,
+                }),
+              });
+              const data = await res.json().catch(() => ({}));
+              if (!res.ok) throw new Error(data?.error || t("dash.fund.err_submit"));
+              setRows((prev) => [data.transaction, ...prev]);
+              setAmount("");
+              setNotice(t("dash.fund.ok"));
+            } catch (err) {
+              setError(err.message || t("dash.fund.err_submit"));
+            } finally {
+              setBusy(false);
+            }
           }}
         >
           <div>
             <label htmlFor="fund-currency" className="block text-sm text-[#a0aec0]">
-              {t("dash.fund.currency_label")} <span className="text-red-500">*</span>
+              {t("dash.fund.asset_label")} <span className="text-red-500">*</span>
             </label>
             <div className="relative mt-2">
               <select
                 id="fund-currency"
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="w-full appearance-none rounded-[10px] border border-white/[0.12] bg-[#14182b] py-3 pl-4 pr-10 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/30"
+                value={asset}
+                onChange={(e) => setAsset(e.target.value)}
+                className={`${baseField} appearance-none pr-10`}
               >
-                {CURRENCIES.map((c) => (
+                {ASSETS.map((c) => (
                   <option key={c.value} value={c.value}>
-                    {t(c.labelKey)}
+                    {c.label}
                   </option>
                 ))}
               </select>
@@ -68,31 +125,43 @@ export default function FundAccountView() {
           </div>
 
           <div>
-            <label htmlFor="fund-amount" className="block text-sm text-[#a0aec0]">
-              {t("dash.fund.amount_label")} <span className="text-red-500">*</span>
+            <label htmlFor="fund-network" className="text-sm text-[#a0aec0]">
+              {t("dash.fund.network_label")}
             </label>
-            <div className="relative mt-2 flex rounded-[10px] border border-white/[0.12] bg-[#14182b] focus-within:border-[#2563eb]/50 focus-within:ring-1 focus-within:ring-[#2563eb]/30">
-              <span className="flex items-center border-r border-white/[0.08] px-4 text-lg text-slate-400">$</span>
-              <input
-                id="fund-amount"
-                type="text"
-                inputMode="decimal"
-                autoComplete="off"
-                placeholder={t("dash.fund.amount_placeholder")}
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="min-w-0 flex-1 rounded-r-[10px] bg-transparent py-3 pr-4 text-sm text-white placeholder:text-slate-500 outline-none"
-              />
-            </div>
-            <p className="mt-2 text-xs text-slate-500">{t("dash.fund.min_deposit")}</p>
+            <input
+              id="fund-network"
+              readOnly
+              value={asset === "ETH" ? "Ethereum Mainnet" : "BNB Smart Chain (BEP-20)"}
+              className={`${baseField} cursor-not-allowed opacity-80`}
+            />
           </div>
 
-          <button
-            type="submit"
-            className="w-full rounded-[10px] bg-[#1a73e8] py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1567d3] sm:w-auto sm:min-w-[140px] sm:px-8"
-          >
-            {t("dash.fund.submit")}
-          </button>
+          <div>
+            <label htmlFor="fund-amount" className="block text-sm text-[#a0aec0]">
+              {t("dash.fund.amount_label_crypto")} <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="fund-amount"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
+              placeholder={t("dash.fund.amount_placeholder_crypto")}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className={baseField}
+            />
+            <p className="mt-2 text-xs text-slate-500">{t("dash.fund.min_deposit_crypto")}</p>
+          </div>
+
+          <div className="md:col-span-2">
+            <button
+              type="submit"
+              disabled={busy}
+              className="rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {busy ? t("dash.fund.working") : t("dash.fund.submit")}
+            </button>
+          </div>
         </form>
       </section>
 
@@ -100,23 +169,32 @@ export default function FundAccountView() {
       <section className="mt-8 rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-6">
         <h2 className="text-lg font-semibold text-white">{t("dash.fund.recent_title")}</h2>
         <div className="mt-4 overflow-x-auto rounded-[8px] border border-white/[0.06]">
-          <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+          <table className="w-full min-w-[560px] border-collapse text-left text-sm">
             <thead>
               <tr className="border-b border-white/[0.08] bg-[#14182b]/80">
                 <th className="px-4 py-3 font-medium text-[#a0aec0]">{t("dash.fund.col_reference")}</th>
+                <th className="px-4 py-3 font-medium text-[#a0aec0]">{t("dash.fund.col_asset")}</th>
                 <th className="px-4 py-3 font-medium text-[#a0aec0]">{t("dash.fund.col_amount")}</th>
-                <th className="px-4 py-3 font-medium text-[#a0aec0]">{t("dash.fund.col_currency")}</th>
                 <th className="px-4 py-3 font-medium text-[#a0aec0]">{t("dash.fund.col_status")}</th>
-                <th className="px-4 py-3 font-medium text-[#a0aec0]">{t("dash.fund.col_date")}</th>
-                <th className="px-4 py-3 font-medium text-[#a0aec0]">{t("dash.fund.col_action")}</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan={6} className="px-4 py-16 text-center text-slate-500">
-                  {t("dash.fund.empty")}
-                </td>
-              </tr>
+              {!rows.length ? (
+                <tr>
+                  <td colSpan={4} className="px-4 py-12 text-center text-slate-500">
+                    {t("dash.fund.empty")}
+                  </td>
+                </tr>
+              ) : (
+                rows.map((tx) => (
+                  <tr key={tx.id} className="border-b border-white/[0.04] last:border-0">
+                    <td className="px-4 py-3 text-slate-300">{tx.reference || "—"}</td>
+                    <td className="px-4 py-3 text-slate-300">{tx.asset}</td>
+                    <td className="px-4 py-3 text-emerald-300">+{Number(tx.amount || 0).toFixed(4)}</td>
+                    <td className="px-4 py-3 text-slate-300">{tx.status}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
