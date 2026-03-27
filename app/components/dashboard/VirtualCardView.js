@@ -5,7 +5,7 @@ import Link from "next/link";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 import DashboardToast from "./DashboardToast";
-import PremiumPlasticCard, { firstFourDigitsFromMaskedPan } from "./PremiumPlasticCard";
+import PremiumPlasticCard from "./PremiumPlasticCard";
 
 const cardShell = "rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6";
 
@@ -154,22 +154,23 @@ export default function VirtualCardView() {
         <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
       </div>
 
-      <div className="mb-4 space-y-2">
+      {/* <div className="mb-4 space-y-2">
         <p className="inline-flex items-center rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-200">
           {t("dash.vcard.mock_badge")}
         </p>
-      </div>
+      </div> */}
 
       {loading ? (
         <div className="grid gap-6 lg:grid-cols-2">
           <div
-            className="mx-auto w-full max-w-[420px] animate-pulse overflow-hidden rounded-[22px] border border-white/10 bg-gradient-to-br from-[#0047AB]/40 to-[#4B0082]/30"
-            style={{ aspectRatio: "1.586 / 1" }}
+            className="mx-auto w-full max-w-[420px] animate-pulse overflow-hidden rounded-[22px] border border-cyan-500/20 bg-[#0a0a0c]"
+            style={{ aspectRatio: "1.586 / 1", boxShadow: "0 0 40px rgba(34, 211, 238, 0.15)" }}
           >
             <div className="h-full p-6">
-              <div className="h-3 w-28 rounded bg-white/10" />
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-teal-500/40 to-lime-500/30" />
+              <div className="mt-3 h-3 w-24 rounded bg-white/10" />
               <div className="mt-10 h-8 w-full max-w-[280px] rounded bg-white/10" />
-              <div className="mt-6 h-4 w-16 rounded bg-white/10" />
+              <div className="mt-8 h-3 w-32 rounded bg-white/10" />
             </div>
           </div>
           <div className={`${cardShell} animate-pulse`}>
@@ -217,16 +218,17 @@ export default function VirtualCardView() {
               {/* <p className="mb-3 text-center text-[11px] font-medium uppercase tracking-widest text-slate-400 lg:text-left">
                 {card.networkLabel || t("dash.vcard.network")}
               </p> */}
-              <PremiumPlasticCard
-                bankName={t("dash.vcard.network")}
-                cardNumberDisplay={card.maskedPan || t("dash.vcard.masked")}
-                cardNumberSub={firstFourDigitsFromMaskedPan(card.maskedPan)}
-                expiresTitle={t("dash.vcard.card_expires_end")}
-                expiresMidLabel={t("dash.vcard.card_month_year")}
-                expiresValue={`${String(card.expiryMonth).padStart(2, "0")}-${String(card.expiryYear).slice(-2)}`}
-                cardholderName={t("dash.vcard.cardholder_placeholder")}
-                cvvHint={t("dash.vcard.cvv_masked")}
-              />
+              <div className="relative mx-auto w-full max-w-[440px]">
+                <div
+                  className="pointer-events-none absolute -inset-8 -z-10 rounded-[40%] bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.14)_0%,transparent_55%),radial-gradient(ellipse_at_70%_30%,rgba(59,130,246,0.12)_0%,transparent_45%),radial-gradient(ellipse_at_20%_80%,rgba(251,146,60,0.08)_0%,transparent_40%)] blur-2xl"
+                  aria-hidden
+                />
+                <PremiumPlasticCard
+                  cardNumberDisplay={card.maskedPan || t("dash.vcard.masked")}
+                  expiresValue={`${String(card.expiryMonth).padStart(2, "0")}-${String(card.expiryYear).slice(-2)}`}
+                  cardholderName={t("dash.vcard.cardholder_placeholder")}
+                />
+              </div>
             </div>
 
             <div className={`${cardShell} flex flex-col justify-between`}>

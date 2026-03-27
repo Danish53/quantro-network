@@ -1,152 +1,258 @@
 "use client";
+import logo from "@/public/images/logo-white.png";
+import Image from "next/image";
 
 /**
- * Premium physical-style card (ISO 7810 ID-1 ratio ~1.586:1).
- * Visual: deep blue → indigo gradient, gloss, EMV chip, contactless, hologram strip.
+ * Quantro virtual debit card — matches brand artboard:
+ * dark carbon center, teal/blue/lime neon edge glow, gradient Q, QUANTRO / NETWORK,
+ * gold EMV chip, OCR-style PAN, QUANTRO USER + DEBIT + VISA.
  */
 export default function PremiumPlasticCard({
-  bankName = "QUANTRO NETWORK",
   cardNumberDisplay,
   cardNumberSub,
-  expiresTitle = "EXPIRES END",
-  expiresMidLabel = "MONTH / YEAR",
   expiresValue = "00-00",
-  cardholderName = "CARDHOLDER NAME",
-  cvvHint = "CVV •••",
+  cardholderName = "QUANTRO USER",
   className = "",
 }) {
+  const pan = formatPanDisplay(cardNumberDisplay);
+
   return (
-    <div
-      className={`relative mx-auto w-full max-w-[420px] overflow-hidden rounded-[22px] border border-white/[0.12] shadow-[0_24px_48px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.06)_inset] ${className}`.trim()}
-      style={{ aspectRatio: "1.586 / 1" }}
-    >
-      {/* Base — #0047AB → #4B0082 style gradient */}
+    <div className={`quantro-vcard-shell mx-auto w-full max-w-[440px] ${className}`.trim()}>
       <div
-        className="absolute inset-0 rounded-[22px] bg-gradient-to-br from-[#0047AB] via-[#312e81] to-[#4B0082]"
-        aria-hidden
-      />
-      {/* Wavy depth */}
-      <svg className="pointer-events-none absolute inset-0 h-full w-full rounded-[22px] opacity-35" aria-hidden>
-        <defs>
-          <linearGradient id="pp-wave" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#6366f1" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#1e1b4b" stopOpacity="0.15" />
-          </linearGradient>
-        </defs>
-        <path fill="url(#pp-wave)" d="M-20 80 Q80 40 180 90 T380 70 L400 200 L-40 220 Z" />
-        <path fill="#312e81" fillOpacity="0.4" d="M200 -10 Q320 20 420 100 L440 280 L0 300 L-20 40 Z" />
-      </svg>
-      {/* Diagonal gloss */}
-      <div
-        className="pointer-events-none absolute -right-1/4 -top-1/2 h-[200%] w-1/2 rotate-[32deg] bg-gradient-to-b from-white/[0.22] via-white/[0.07] to-transparent"
-        aria-hidden
-      />
-      <div className="pointer-events-none absolute inset-0 rounded-[22px] ring-1 ring-white/[0.08]" aria-hidden />
+        className="relative overflow-hidden rounded-[20px] border border-white/[0.14] sm:rounded-[24px]"
+        style={{
+          aspectRatio: "1.586 / 1",
+          transform: "perspective(1400px) rotateY(-6deg) rotateX(2deg)",
+          transformStyle: "preserve-3d",
+          // boxShadow: `
+          //   0 0 0 1px rgba(45, 212, 191, 0.35),
+          //   0 0 50px rgba(34, 211, 238, 0.45),
+          //   0 0 90px rgba(56, 189, 248, 0.25),
+          //   0 0 70px rgba(163, 230, 53, 0.2),
+          //   0 32px 64px rgba(0, 0, 0, 0.75)
+          // `,
+        }}
+      >
+        {/* Deep base + carbon weave */}
+        <div
+          className="absolute inset-0 rounded-[20px] sm:rounded-[24px]"
+          style={{
+            backgroundColor: "#070708",
+            backgroundImage: `
+              radial-gradient(ellipse 100% 80% at 50% 50%, rgba(30, 30, 34, 0.95) 0%, transparent 62%),
+              radial-gradient(ellipse 70% 50% at 20% 30%, rgba(45, 212, 191, 0.07) 0%, transparent 50%),
+              radial-gradient(ellipse 50% 40% at 85% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+              repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 3px,
+                rgba(255,255,255,0.04) 3px,
+                rgba(255,255,255,0.04) 4px
+              ),
+              repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                rgba(0,0,0,0.35) 3px,
+                rgba(0,0,0,0.35) 4px
+              ),
+              linear-gradient(180deg, #0d0d10 0%, #080809 45%, #0c0c0f 100%)
+            `,
+            backgroundSize: "100% 100%, 100% 100%, 100% 100%, 8px 8px, 8px 8px, 100% 100%",
+          }}
+          aria-hidden
+        />
 
-      <div className="relative flex h-full flex-col p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            {/* <BankMark /> */}
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white sm:text-xs">{bankName}</span>
+        {/* Neon sweeps (teal / blue / lime) */}
+        <svg
+          className="pointer-events-none absolute inset-0 h-full w-full rounded-[20px] opacity-[0.95] mix-blend-screen sm:rounded-[24px]"
+          viewBox="0 0 400 252"
+          preserveAspectRatio="none"
+          aria-hidden
+        >
+          <defs>
+            <linearGradient id="neon-a" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0" />
+              <stop offset="35%" stopColor="#2dd4bf" stopOpacity="0.95" />
+              <stop offset="70%" stopColor="#22d3ee" stopOpacity="0.85" />
+              <stop offset="100%" stopColor="#a3e635" stopOpacity="0.5" />
+            </linearGradient>
+            <linearGradient id="neon-b" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
+            </linearGradient>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path
+            d="M-10 38 C90 12 200 28 410 20"
+            fill="none"
+            stroke="url(#neon-a)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            filter="url(#glow)"
+          />
+          <path
+            d="M20 200 C120 175 260 230 420 185"
+            fill="none"
+            stroke="url(#neon-b)"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            opacity="0.85"
+          />
+          <path
+            d="M-5 120 C100 90 220 140 405 95"
+            fill="none"
+            stroke="#a3e635"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            opacity="0.55"
+          />
+        </svg>
+
+        {/* Gloss */}
+        <div
+          className="pointer-events-none absolute -right-[18%] -top-[40%] h-[150%] w-[50%] rotate-[26deg] rounded-full bg-gradient-to-b from-white/[0.18] via-white/[0.05] to-transparent"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[20px] ring-1 ring-inset ring-white/[0.08] sm:rounded-[24px]"
+          aria-hidden
+        />
+
+        <div className="relative flex h-full min-h-0 flex-col px-6 pb-5 pt-6 sm:px-7 sm:pb-6 sm:pt-7">
+          <span className="sr-only">
+            Expires {expiresValue.replace("-", "/")}
+          </span>
+          {/* Top: gradient Q + QUANTRO / NETWORK */}
+          {/* <div className="flex items-start gap-2.5">
+            <QuantroLogoMark />
+            <div className="min-w-0 pt-0.5 leading-none">
+              <div className="text-[1.155rem] font-extrabold tracking-[0.04em] text-white sm:text-[1.25rem]">
+                QUANTRO
+              </div>
+              <div className="mt-1 text-[0.5rem] font-semibold uppercase tracking-[0.32em] text-[#2dd4bf] sm:text-[0.72rem]">
+                NETWORK
+              </div>
+            </div>
+          </div> */}
+          <Image src={logo} alt="image" width={130} height={130} />
+
+          {/* Gold chip — middle left */}
+          <div className="mt-5 sm:mt-6">
+            <EmvChipGold />
           </div>
-          <ContactlessIcon />
+
+          {/* PAN — center band, OCR-style (Share Tech Mono via CSS) */}
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center py-3 text-center sm:py-4">
+            <div
+              className="quantro-vcard-pan text-[clamp(1rem,4.2vw,1.35rem)] font-normal tracking-[0.22em] text-white"
+              style={{
+                textShadow:
+                  "0 0 24px rgba(34, 211, 238, 0.35), 0 0 2px rgba(255,255,255,0.4), 0 2px 6px rgba(0,0,0,0.85)",
+              }}
+            >
+              {pan}
+            </div>
+            {cardNumberSub ? (
+              <div className="mt-2 font-mono text-[0.62rem] tracking-[0.35em] text-white/45">{cardNumberSub}</div>
+            ) : null}
+          </div>
+
+          {/* Bottom: cardholder | DEBIT + VISA (reference artboard — no expiry line on front) */}
+          <div className="mt-auto flex items-end justify-between gap-4 pt-2">
+            <div className="min-w-0 max-w-[58%] text-[0.72rem] font-semibold uppercase leading-tight tracking-[0.22em] text-white sm:text-[0.76rem]">
+              {(cardholderName || "QUANTRO USER").toUpperCase()}
+            </div>
+            <div className="shrink-0 text-right">
+              <div className="text-[0.52rem] font-bold uppercase tracking-[0.42em] text-white">DEBIT</div>
+              <div
+                className="mt-1 text-[1.65rem] font-black italic leading-none tracking-tight text-white sm:text-[1.85rem]"
+                style={{
+                  fontFamily: "system-ui, -apple-system, sans-serif",
+                  textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                }}
+              >
+                VISA
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="mt-5 flex items-center justify-between gap-4">
-          <EmvChip />
-          <HologramPlate />
-        </div>
-
-        <div className="mt-6 min-w-0 flex-1">
-          <p
-            className="font-mono text-[clamp(0.95rem,3.8vw,1.35rem)] font-medium tracking-[0.14em] text-white tabular-nums"
-            style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}
-          >
-            {cardNumberDisplay}
-          </p>
-          {cardNumberSub ? (
-            <p className="mt-1 font-mono text-xs tracking-wider text-white/80">{cardNumberSub}</p>
-          ) : null}
-        </div>
-
-        {/* <div className="mt-auto flex flex-wrap items-end justify-between gap-4 pt-1">
-          <div className="min-w-0 max-w-[45%]">
-            <p className="text-[8px] font-semibold uppercase tracking-[0.18em] text-white/95">{cardholderName}</p>
-          </div>
-          <div className="flex flex-1 flex-col items-center text-center">
-            <p className="text-[9px] font-medium uppercase tracking-widest text-white/55">{expiresTitle}</p>
-            <p className="mt-0.5 text-[10px] uppercase tracking-wider text-white/70">{expiresMidLabel}</p>
-            <p className="mt-1 font-mono text-sm font-semibold tracking-wide text-white">{expiresValue}</p>
-          </div>
-          <div className="text-right">
-            <p className="text-[11px] font-medium tracking-wide text-white/80">{cvvHint}</p>
-          </div>
-        </div> */}
       </div>
     </div>
   );
 }
 
-/** First contiguous 4-digit group from masked PAN (e.g. 4532 from "4532 •••• •••• 1048"). */
+/** Match reference spacing: 4321 9876 5432 1098 */
+function formatPanDisplay(raw) {
+  if (!raw || typeof raw !== "string") return "4321 9876 5432 1098";
+  const trimmed = raw.trim();
+  if (/^[•\d\s]+$/.test(trimmed) || trimmed.includes("•")) return trimmed;
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 16) {
+    return `${digits.slice(0, 4)} ${digits.slice(4, 8)} ${digits.slice(8, 12)} ${digits.slice(12, 16)}`;
+  }
+  return trimmed;
+}
+
+/** First contiguous 4-digit group from masked PAN */
 export function firstFourDigitsFromMaskedPan(maskedPan) {
   if (!maskedPan || typeof maskedPan !== "string") return "";
   const m = maskedPan.match(/\d{4}/);
   return m ? m[0] : "";
 }
 
-function BankMark() {
+function QuantroLogoMark() {
   return (
-    <svg width="36" height="28" viewBox="0 0 36 28" fill="none" aria-hidden className="shrink-0">
-      <path d="M8 4h6l4 10 4-10h6v20h-5V12l-3 7h-4l-3-7v12H8V4z" fill="white" fillOpacity="0.95" />
+    <svg width="49" height="49" viewBox="0 0 38 30" fill="none" aria-hidden className="shrink-0 drop-shadow-[0_0_18px_rgba(45,212,191,0.55)]">
+      <defs>
+        <linearGradient id="qmark-grad" x1="6" y1="6" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#2dd4bf" />
+          <stop offset="0.5" stopColor="#22d3ee" />
+          <stop offset="1" stopColor="#4ade80" />
+        </linearGradient>
+      </defs>
+      <text
+        x="50%"
+        y="54%"
+        dominantBaseline="middle"
+        textAnchor="middle"
+        fill="url(#qmark-grad)"
+        style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontSize: "31px", fontWeight: 900 }}
+      >
+        Q
+      </text>
     </svg>
   );
 }
 
-function ContactlessIcon() {
+function EmvChipGold() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden className="shrink-0 text-white">
-      <path d="M8 22c4-4 12-4 16 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.45" />
-      <path d="M10 18c3-3 9-3 12 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.65" />
-      <path d="M12 14c2-2 6-2 8 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.85" />
-      <path d="M14 10h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function EmvChip() {
-  return (
-    <div className="relative h-11 w-14 shrink-0 rounded-md bg-gradient-to-br from-[#d4af37] via-[#f5e6a8] to-[#b8860b] p-[2px] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_2px_8px_rgba(0,0,0,0.35)]">
-      <div className="flex h-full w-full flex-col justify-between rounded-[5px] bg-gradient-to-br from-[#c9a227] to-[#8b6914] p-1">
-        <div className="h-px w-full bg-black/25" />
+    <div
+      className="relative h-[44px] w-[56px] shrink-0 rounded-lg p-[2px] shadow-[inset_0_2px_0_rgba(255,255,255,0.55),0_4px_14px_rgba(0,0,0,0.55)]"
+      style={{
+        background: "linear-gradient(145deg, #f0d78c 0%, #c9a227 45%, #8b6914 100%)",
+      }}
+    >
+      <div
+        className="flex h-full w-full flex-col justify-between rounded-[6px] p-1.5"
+        style={{
+          background: "linear-gradient(165deg, #d4af37 0%, #a67c1a 55%, #6b4a0e 100%)",
+        }}
+      >
+        <div className="h-px w-full bg-black/35" />
         <div className="grid grid-cols-3 gap-px">
           {[0, 1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-1 bg-black/15" />
+            <div key={i} className="h-[4px] bg-black/25" />
           ))}
         </div>
-        <div className="h-px w-full bg-black/25" />
+        <div className="h-px w-full bg-black/35" />
       </div>
-    </div>
-  );
-}
-
-function HologramPlate() {
-  return (
-    <div className="relative h-11 w-16 shrink-0 overflow-hidden rounded border border-white/30 bg-gradient-to-br from-slate-200/90 via-slate-400/80 to-slate-500/90 shadow-inner">
-      <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 64 44" aria-hidden>
-        <path
-          fill="none"
-          stroke="#475569"
-          strokeWidth="0.4"
-          d="M8 28c6-10 18-14 28-8s14 14 10 22M12 12c10 4 14 16 8 24"
-        />
-      </svg>
-      <svg className="absolute inset-1 opacity-50" viewBox="0 0 100 60" aria-hidden>
-        <path
-          fill="currentColor"
-          className="text-slate-600"
-          d="M50 8c-12 4-20 14-18 24 2 12 16 18 28 14 10-3 16-12 14-22-2-10-12-18-24-16z"
-        />
-      </svg>
     </div>
   );
 }

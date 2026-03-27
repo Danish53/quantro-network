@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 import DashboardToast from "./DashboardToast";
@@ -62,28 +63,6 @@ export default function WalletsView() {
       cancelled = true;
     };
   }, [t]);
-
-  async function quickDeposit(asset) {
-    try {
-      setBusyAsset(asset);
-      setError("");
-      setNotice("");
-      const res = await fetch("/api/wallets/deposit/mock", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ asset, amount: asset === "ETH" ? 0.05 : 100 }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || t("dash.wal.err_deposit"));
-      await refreshData();
-      setNotice(t("dash.wal.deposit_ok"));
-    } catch (e) {
-      setError(e.message || t("dash.wal.err_deposit"));
-    } finally {
-      setBusyAsset("");
-    }
-  }
 
   async function quickWithdraw(asset) {
     try {
@@ -156,14 +135,12 @@ export default function WalletsView() {
             <p className="mt-4 text-xs uppercase tracking-wide text-slate-500">{t("dash.wal.balance")}</p>
             <p className="text-2xl font-bold text-white">{loading ? "..." : money.format(wallet?.balance || 0)}</p>
             <div className="mt-6 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => quickDeposit(w.asset)}
-                disabled={busyAsset === w.asset || loading}
+              <Link
+                href="/dashboard/fund"
                 className="flex-1 rounded-[10px] bg-[#2563eb] px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-[#1d4ed8]"
               >
-                {busyAsset === w.asset ? t("dash.wal.working") : t("dash.wal.deposit")}
-              </button>
+                {t("dash.wal.deposit")}
+              </Link>
               <button
                 type="button"
                 onClick={() => quickWithdraw(w.asset)}

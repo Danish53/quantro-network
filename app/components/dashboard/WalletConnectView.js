@@ -102,7 +102,7 @@ export default function WalletConnectView() {
             >
               {t("dash.wc.open_modal")}
             </button>
-            <p className="mt-3 text-xs text-slate-500">{t("dash.wc.project_hint")}</p>
+            {/* <p className="mt-3 text-xs text-slate-500">{t("dash.wc.project_hint")}</p> */}
             {connectError || actionError ? <p className="text-sm text-rose-300">{actionError || connectError?.message}</p> : null}
           </div>
         ) : (

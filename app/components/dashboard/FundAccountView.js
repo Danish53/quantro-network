@@ -4,11 +4,15 @@ import DashboardNavigateDropdown from "./DashboardNavigateDropdown";
 import DashboardToast from "./DashboardToast";
 import { useEffect, useState } from "react";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import Link from "next/link";
+import { useAccount, usePublicClient, useSwitchChain, useWriteContract } from "wagmi";
+import { erc20Abi, parseUnits } from "viem";
+import { TOKEN_META } from "@/app/lib/wallet/tokenAddresses";
 
 const ASSETS = [
   { value: "USDT_BNB", label: "USDT (BNB)" },
   { value: "USDC_BNB", label: "USDC (BNB)" },
-  { value: "ETH", label: "ETH" },
+  
 ];
 
 export default function FundAccountView() {
@@ -19,6 +23,10 @@ export default function FundAccountView() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const { address, chainId, isConnected } = useAccount();
+  const { switchChainAsync } = useSwitchChain();
+  const { writeContractAsync } = useWriteContract();
+  const publicClient = usePublicClient();
 
   const baseField =
     "mt-2 w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
@@ -38,6 +46,61 @@ export default function FundAccountView() {
       cancelled = true;
     };
   }, []);
+
+  async function handleOnchainDeposit(submitAsset, amountText) {
+    const meta = TOKEN_META[submitAsset];
+    const amountNum = Number(amountText);
+    if (!Number.isFinite(amountNum) || amountNum <= 0) {
+      throw new Error(t("dash.fund.err_amount"));
+    }
+    if (!isConnected || !address) {
+      throw new Error(t("dash.fund.err_wallet"));
+    }
+
+    const treasury = process.env.NEXT_PUBLIC_BSC_TREASURY_ADDRESS;
+
+    if (!treasury) {
+      throw new Error(t("dash.fund.err_treasury"));
+    }
+
+    if (chainId !== meta.chainId) {
+      await switchChainAsync({ chainId: meta.chainId });
+    }
+
+    const units = parseUnits(amountText, meta.decimals);
+    const txHash = await writeContractAsync({
+      abi: erc20Abi,
+      address: meta.address,
+      functionName: "transfer",
+      args: [treasury, units],
+      chainId: meta.chainId,
+    });
+
+    if (!txHash) {
+      throw new Error(t("dash.fund.err_submit"));
+    }
+
+    if (publicClient) {
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
+    }
+
+    const creditRes = await fetch("/api/wallets/deposit/onchain", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        asset: submitAsset,
+        txHash,
+        fromAddress: address,
+      }),
+    });
+    const creditData = await creditRes.json().catch(() => ({}));
+    if (!creditRes.ok) {
+      throw new Error(creditData?.error || t("dash.fund.err_submit"));
+    }
+
+    return creditData?.transaction;
+  }
 
   return (
     <div className="relative pb-24">
@@ -62,38 +125,32 @@ export default function FundAccountView() {
         </div>
       </div>
 
-      {/* Deposit Request */}
       <section className="mt-8 rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-6">
         <h2 className="text-lg font-semibold text-white">{t("dash.fund.deposit_title")}</h2>
+        <p className="mt-2 text-xs text-slate-500">{t("dash.fund.onchain_note")}</p>
+        {!isConnected ? (
+          <p className="mt-2 text-sm text-amber-300">
+            {t("dash.fund.err_wallet")} {" "}
+            <Link href="/dashboard/wallet-connect" className="underline decoration-dotted hover:text-amber-200">
+              {t("dash.fund.connect_wallet_cta")}
+            </Link>
+          </p>
+        ) : null}
+
         <form
           className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2"
           onSubmit={async (e) => {
             e.preventDefault();
             setError("");
             setNotice("");
-            const amt = Number(amount);
-            if (!Number.isFinite(amt) || amt <= 0) {
-              setError(t("dash.fund.err_amount"));
-              return;
-            }
             try {
               setBusy(true);
-              const res = await fetch("/api/wallets/deposit/mock", {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  asset,
-                  amount: amt,
-                }),
-              });
-              const data = await res.json().catch(() => ({}));
-              if (!res.ok) throw new Error(data?.error || t("dash.fund.err_submit"));
-              setRows((prev) => [data.transaction, ...prev]);
+              const tx = await handleOnchainDeposit(asset, amount.trim());
+              if (tx) setRows((prev) => [tx, ...prev]);
               setAmount("");
-              setNotice(t("dash.fund.ok"));
+              setNotice(t("dash.fund.ok_onchain"));
             } catch (err) {
-              setError(err.message || t("dash.fund.err_submit"));
+              setError(err?.message || t("dash.fund.err_submit"));
             } finally {
               setBusy(false);
             }
@@ -131,7 +188,7 @@ export default function FundAccountView() {
             <input
               id="fund-network"
               readOnly
-              value={asset === "ETH" ? "Ethereum Mainnet" : "BNB Smart Chain (BEP-20)"}
+              value="BNB Smart Chain (BEP-20)"
               className={`${baseField} cursor-not-allowed opacity-80`}
             />
           </div>
@@ -156,16 +213,15 @@ export default function FundAccountView() {
           <div className="md:col-span-2">
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || !isConnected}
               className="rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {busy ? t("dash.fund.working") : t("dash.fund.submit")}
+              {busy ? t("dash.fund.working_onchain") : t("dash.fund.submit_onchain")}
             </button>
           </div>
         </form>
       </section>
 
-      {/* Recent Deposits */}
       <section className="mt-8 rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-6">
         <h2 className="text-lg font-semibold text-white">{t("dash.fund.recent_title")}</h2>
         <div className="mt-4 overflow-x-auto rounded-[8px] border border-white/[0.06]">
@@ -188,7 +244,7 @@ export default function FundAccountView() {
               ) : (
                 rows.map((tx) => (
                   <tr key={tx.id} className="border-b border-white/[0.04] last:border-0">
-                    <td className="px-4 py-3 text-slate-300">{tx.reference || "—"}</td>
+                    <td className="px-4 py-3 text-slate-300">{tx.txHash ? `${tx.txHash.slice(0, 10)}...` : tx.reference || "-"}</td>
                     <td className="px-4 py-3 text-slate-300">{tx.asset}</td>
                     <td className="px-4 py-3 text-emerald-300">+{Number(tx.amount || 0).toFixed(4)}</td>
                     <td className="px-4 py-3 text-slate-300">{tx.status}</td>

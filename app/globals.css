@@ -41,6 +41,17 @@ body {
   }
 }
 
+/* Virtual card PAN — font loaded via next/font in layout (--font-share-tech-mono) */
+.quantro-vcard-pan {
+  font-family: var(--font-share-tech-mono), ui-monospace, monospace;
+}
+
+/* Reset global <p> rule inside virtual card shell */
+.quantro-vcard-shell p {
+  font-size: unset !important;
+  line-height: unset !important;
+}
+
 /* Dashboard sidebar: slim scrollbar (Firefox + WebKit) */
 .dashboard-sidebar-scroll {
   scrollbar-width: thin;

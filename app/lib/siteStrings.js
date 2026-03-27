@@ -428,6 +428,13 @@ export const SITE_STRINGS = {
   "dash.fund.submit": "Submit deposit",
   "dash.fund.working": "Submitting...",
   "dash.fund.ok": "Deposit request submitted",
+  "dash.fund.onchain_note": "This deposit sends real crypto from your connected wallet to platform treasury.",
+  "dash.fund.connect_wallet_cta": "Connect wallet",
+  "dash.fund.submit_onchain": "Deposit from connected wallet",
+  "dash.fund.working_onchain": "Waiting for blockchain confirmation...",
+  "dash.fund.ok_onchain": "On-chain deposit confirmed and credited.",
+  "dash.fund.err_wallet": "Please connect your wallet first.",
+  "dash.fund.err_treasury": "Deposit address not configured.",
   "dash.fund.err_amount": "Enter a valid amount",
   "dash.fund.err_submit": "Deposit failed",
   "dash.fund.recent_title": "Recent Deposits",
@@ -493,7 +500,7 @@ export const SITE_STRINGS = {
   "dash.kyc.drag_hint": "or drag and drop",
   "dash.kyc.submit": "Submit KYC Documents",
   "dash.kyc.submitting": "Submitting...",
-  "dash.kyc.submit_ok": "KYC submitted. Review started in mock sandbox.",
+  "dash.kyc.submit_ok": "KYC submitted.",
   "dash.kyc.submit_error": "Could not submit KYC. Try again.",
   "dash.kyc.status_not_submitted": "KYC not submitted yet.",
   "dash.kyc.status_pending": "KYC is under review.",
@@ -536,7 +543,7 @@ export const SITE_STRINGS = {
   "dash.tx.col_date": "Date",
   "dash.tx.empty": "No transactions found",
   "dash.vcard.title": "Virtual Debit Card",
-  "dash.vcard.subtitle": "Spend online with crypto-backed virtual card (sandbox). US-based users require KYC.",
+  "dash.vcard.subtitle": "Spend online with crypto-backed virtual card. US-based users require KYC.",
   "dash.vcard.balance_label": "Available to spend",
   "dash.vcard.balance_fiat": "USD balance",
   "dash.vcard.status_pending_review": "Pending review",
@@ -556,9 +563,9 @@ export const SITE_STRINGS = {
   "dash.vcard.expiry": "Expires",
   "dash.vcard.network": "Quantro Debit Card",
   "dash.vcard.loading": "Loading your card...",
-  "dash.vcard.mock_badge": "Mock Sandbox Mode",
+  "dash.vcard.mock_badge": "Mode",
   "dash.vcard.saving": "Updating...",
-  "dash.vcard.apply_ok": "Virtual card created in mock sandbox mode.",
+  "dash.vcard.apply_ok": "Virtual card created.",
   "dash.vcard.freeze_ok": "Card frozen successfully.",
   "dash.vcard.unfreeze_ok": "Card unfrozen successfully.",
   "dash.vcard.err_load": "Could not load card details.",
@@ -577,7 +584,7 @@ export const SITE_STRINGS = {
   "dash.vcard.card_bank_name": "BANK NAME",
   "dash.vcard.card_expires_end": "EXPIRES END",
   "dash.vcard.card_month_year": "MONTH / YEAR",
-  "dash.vcard.cardholder_placeholder": "CARDHOLDER NAME",
+  "dash.vcard.cardholder_placeholder": "QUANTRO USER",
   "dash.vcard.cvv_masked": "CVV •••",
   "dash.wal.title": "Crypto Wallets",
   "dash.wal.subtitle": "USDT & USDC on BNB Chain, and Ethereum — for funding your virtual card and withdrawals.",
@@ -608,7 +615,7 @@ export const SITE_STRINGS = {
   "dash.wal.err_deposit": "Deposit failed",
   "dash.wal.err_withdraw": "Withdrawal failed",
   "dash.wal.working": "Processing...",
-  "dash.wal.deposit_ok": "Mock deposit added successfully",
+  "dash.wal.deposit_ok": "Deposit added successfully",
   "dash.wal.withdraw_ok": "Withdrawal request created",
   "dash.wc.title": "Wallet Connect",
   "dash.wc.subtitle": "Connect your wallet to read on-chain balances for supported tokens on BNB Smart Chain.",
@@ -639,7 +646,7 @@ export const SITE_STRINGS = {
   "dash.wc.address_hidden": "Address hidden for privacy",
   "dash.wc.close": "Close",
   "dash.conv.title": "Convert & Spend",
-  "dash.conv.subtitle": "Convert crypto to USD for card spending. Rates are indicative in sandbox.",
+  "dash.conv.subtitle": "Convert crypto to USD for card spending.",
   "dash.conv.from": "From",
   "dash.conv.to": "To",
   "dash.conv.amount": "Amount",
@@ -892,7 +899,7 @@ export const SITE_STRINGS = {
 };
 
 /** Bump when strings change so cached translations invalidate. */
-export const SITE_STRINGS_REVISION = 4;
+export const SITE_STRINGS_REVISION = 6;
 
 /** Stable key order for batch translation (must match SITE_STRINGS). */
 export const SITE_STRING_KEYS = Object.keys(SITE_STRINGS);
@@ -922,3 +929,4 @@ export const FAQ_PAGE_ITEMS = [
   { q: "faq_page.q5", a: "faq_page.a5", category: "general" },
   { q: "faq_page.q6", a: "faq_page.a6", category: "billing" },
 ];
+
