@@ -6,7 +6,7 @@ import { useSiteTranslation } from "../SiteTranslationProvider";
 export default function AboutPreFooterCta() {
   const { t } = useSiteTranslation();
   return (
-    <section className="rounded-2xl border border-white/10 bg-[#0f1629]/95 px-5 py-8 shadow-lg sm:px-8 sm:py-10">
+    <section className="rounded-2xl border border-white/10 bg-[#141235]/95 px-5 py-8 shadow-lg sm:px-8 sm:py-10">
       <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
         <div>
           <h2 className="text-xl font-bold text-white sm:text-2xl">{t("about.cta.title")}</h2>

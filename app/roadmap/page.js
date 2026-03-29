@@ -13,10 +13,10 @@ export const metadata = {
 
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-[#0D0B29] text-slate-900">
       <Navbar />
 
-      <div className="bg-[#060a14] text-slate-100">
+      <div className="bg-[#0D0B29] text-slate-100">
         <main className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 py-12 sm:gap-14 sm:px-6 sm:py-16 lg:gap-16 lg:px-10 lg:py-20">
           <RoadmapHeroSection />
           <RoadmapVisionSection />

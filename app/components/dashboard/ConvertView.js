@@ -16,7 +16,7 @@ export default function ConvertView() {
   const [notice, setNotice] = useState("");
 
   const baseField =
-    "mt-2 w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
+    "mt-2 w-full rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/60 px-4 py-2.5 text-sm text-slate-100 outline-none transition focus:border-[#6366f1]/60 focus:ring-1 focus:ring-[#6366f1]/25";
 
   const parsedAmount = Number(amount || 0);
   const previewUsd = Number.isFinite(parsedAmount) ? Number((parsedAmount * rate).toFixed(2)) : 0;
@@ -29,7 +29,7 @@ export default function ConvertView() {
         <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
       </div>
 
-      <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-8">
+      <div className="rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <label htmlFor="conv-from" className="text-sm text-[#a0aec0]">
@@ -60,7 +60,7 @@ export default function ConvertView() {
           </div>
         </div>
 
-        <div className="mt-6 rounded-[10px] border border-white/[0.06] bg-[#14182b] px-4 py-3 text-sm text-slate-400">
+        <div className="mt-6 rounded-[10px] border border-white/[0.08] bg-[#0F0D2E]/50 px-4 py-3 text-sm text-slate-400">
           <p>
             {t("dash.conv.rate")}: <span className="text-slate-200">1 {from.replace("_BNB", "")} ≈ {rate.toFixed(2)} USD</span>
           </p>

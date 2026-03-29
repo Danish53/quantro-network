@@ -5,14 +5,14 @@ import { aboutImages } from "./aboutImages";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 
 const cardClass =
-  "rounded-2xl border border-white/10 bg-[#0f1629]/95 p-6 text-left shadow-lg sm:p-8";
+  "rounded-2xl border border-white/10 bg-[#141235]/95 p-6 text-left shadow-lg sm:p-8";
 
 export default function AboutMobileSection() {
   const { t } = useSiteTranslation();
   return (
     <section>
       <h2 className="text-center text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{t("about.mobile.section_title")}</h2>
-      <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-[#0f1629]/95 p-6 shadow-xl sm:p-8 lg:mt-10 lg:p-10">
+      <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-[#141235]/95 p-6 shadow-xl sm:p-8 lg:mt-10 lg:p-10">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div className="text-left">
             <h3 className="text-xl font-bold text-white sm:text-2xl">{t("about.mobile.subtitle")}</h3>

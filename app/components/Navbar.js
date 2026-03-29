@@ -14,13 +14,30 @@ export default function Navbar({
   links = NAV_LINKS,
   loginLabelKey = "nav.login",
   ctaLabelKey = "nav.cta",
+  portalLabelKey = "nav.my_portal",
   ctaHref = "/register",
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const langDropdownRef = useRef(null);
   const pathname = usePathname();
   const { language, setLanguage, t, isTranslating } = useSiteTranslation();
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        if (!cancelled) setLoggedIn(res.ok);
+      } catch {
+        if (!cancelled) setLoggedIn(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
 
   const selectedLanguage = useMemo(
     () => languageOptions.find((lang) => lang.code === language) ?? languageOptions[0],
@@ -80,15 +97,26 @@ export default function Navbar({
         </div>
 
         <div className="hidden items-center gap-3 xl:flex">
-          <Link href="/login" className="px-1 text-[13px] font-semibold text-[#111827] transition hover:text-blue-700">
-            {t(loginLabelKey)}
-          </Link>
-          <Link
-            href={ctaHref}
-            className="rounded-full border border-[lightgray] bg-white px-5 py-[9px] text-[14px] font-semibold text-[#111827] transition hover:bg-slate-50"
-          >
-            {t(ctaLabelKey)} <span aria-hidden="true" className="ml-1">{">"}</span>
-          </Link>
+          {loggedIn ? (
+            <Link
+              href="/dashboard"
+              className="rounded-full border border-[lightgray] bg-white px-5 py-[9px] text-[14px] font-semibold text-[#111827] transition hover:bg-slate-50"
+            >
+              {t(portalLabelKey)}
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="px-1 text-[13px] font-semibold text-[#111827] transition hover:text-blue-700">
+                {t(loginLabelKey)}
+              </Link>
+              <Link
+                href={ctaHref}
+                className="rounded-full border border-[lightgray] bg-white px-5 py-[9px] text-[14px] font-semibold text-[#111827] transition hover:bg-slate-50"
+              >
+                {t(ctaLabelKey)} <span aria-hidden="true" className="ml-1">{">"}</span>
+              </Link>
+            </>
+          )}
 
           <div ref={langDropdownRef} className="relative z-[60]">
             <button
@@ -198,16 +226,28 @@ export default function Navbar({
                 </Link>
               );
             })}
-            <Link href="/login" className="rounded-md px-2 py-2 text-sm font-semibold text-slate-900" onClick={() => setIsOpen(false)}>
-              {t(loginLabelKey)}
-            </Link>
-            <Link
-              href={ctaHref}
-              className="mt-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-900 shadow-sm"
-              onClick={() => setIsOpen(false)}
-            >
-              {t(ctaLabelKey)} <span aria-hidden="true" className="ml-1">{">"}</span>
-            </Link>
+            {loggedIn ? (
+              <Link
+                href="/dashboard"
+                className="mt-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-900 shadow-sm"
+                onClick={() => setIsOpen(false)}
+              >
+                {t(portalLabelKey)}
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="rounded-md px-2 py-2 text-sm font-semibold text-slate-900" onClick={() => setIsOpen(false)}>
+                  {t(loginLabelKey)}
+                </Link>
+                <Link
+                  href={ctaHref}
+                  className="mt-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-900 shadow-sm"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {t(ctaLabelKey)} <span aria-hidden="true" className="ml-1">{">"}</span>
+                </Link>
+              </>
+            )}
             <div className="mt-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
               <p className="px-2 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{t("nav.language")}</p>
               <div className="grid gap-1">

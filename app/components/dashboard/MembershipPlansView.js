@@ -15,7 +15,7 @@ const PRIME_KEYS = [
 
 function GoldCheck() {
   return (
-    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#9A6B20]/25 text-[#e8a54c]" aria-hidden>
+    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#6366f1]/25 text-[#a5b4fc]" aria-hidden>
       <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
       </svg>
@@ -26,22 +26,22 @@ function GoldCheck() {
 function PlanCard({ titleKey, priceKey, featureKeys }) {
   const { t } = useSiteTranslation();
   return (
-    <div className="flex flex-col rounded-[12px] border border-white/[0.08] bg-gradient-to-b from-[#1c1c34]/95 to-[#16162a] p-5 shadow-[0_0_40px_-12px_rgba(59,130,246,0.15)] sm:p-6">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">{t(titleKey)}</p>
-      <p className="mt-3 text-3xl font-bold tracking-tight text-white">{t(priceKey)}</p>
-      <p className="mt-1 text-sm text-slate-500">{t("dash.mem.billing_cycle")}</p>
-      <ul className="mt-6 flex flex-col gap-3 border-t border-white/[0.06] pt-6">
+    <div className="flex flex-col rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">{t(titleKey)}</p>
+      <p className="mt-3 text-3xl font-bold tracking-tight text-slate-100">{t(priceKey)}</p>
+      <p className="mt-1 text-sm text-slate-400">{t("dash.mem.billing_cycle")}</p>
+      <ul className="mt-6 flex flex-col gap-3 border-t border-white/[0.08] pt-6">
         {featureKeys.map((key) => (
-          <li key={key} className="flex gap-3 text-sm leading-snug text-slate-200">
+          <li key={key} className="flex gap-3 text-sm leading-snug text-slate-300">
             <GoldCheck />
             <span>{t(key)}</span>
           </li>
         ))}
       </ul>
-      <div className="mt-8 flex flex-col gap-3 border-t border-white/[0.06] pt-6">
+      <div className="mt-8 flex flex-col gap-3 border-t border-white/[0.08] pt-6">
         <button
           type="button"
-          className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-white/[0.1] bg-[#14142a] px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-[#1c1c30]"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/50 px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
         >
           <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
             <path
@@ -73,24 +73,24 @@ export default function MembershipPlansView() {
   return (
     <div className="relative pb-24">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
-        <h1 className="text-2xl font-bold tracking-tight text-white">{t("dash.mem.title")}</h1>
-        <nav className="text-sm text-slate-500" aria-label="Breadcrumb">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-100">{t("dash.mem.title")}</h1>
+        <nav className="text-sm text-slate-400" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <Link href="/dashboard" className="transition hover:text-slate-300">
+              <Link href="/dashboard" className="font-medium transition hover:text-[#a5b4fc]">
                 {t("dash.mem.breadcrumb_dashboard")}
               </Link>
             </li>
-            <li className="px-1 text-slate-600" aria-hidden>
+            <li className="px-1 text-slate-500" aria-hidden>
               {">"}
             </li>
-            <li className="text-slate-400">{t("dash.mem.title")}</li>
+            <li className="font-medium text-slate-300">{t("dash.mem.title")}</li>
           </ol>
         </nav>
       </div>
 
       {/* Wallet bar */}
-      <div className="mt-8 flex flex-col gap-4 rounded-[12px] border border-[#3b82f6]/25 bg-[#14142a]/90 p-4 shadow-[0_0_32px_-8px_rgba(59,130,246,0.25)] sm:flex-row sm:items-center sm:justify-between sm:p-5">
+      <div className="mt-8 flex flex-col gap-4 rounded-xl border border-[#6366f1]/25 bg-[#141235] p-4 shadow-sm ring-1 ring-white/[0.04] sm:flex-row sm:items-center sm:justify-between sm:p-5">
         <div className="flex gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] bg-[#3b82f6]/15 text-[#60a5fa] ring-1 ring-[#3b82f6]/30">
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
@@ -102,15 +102,15 @@ export default function MembershipPlansView() {
             </svg>
           </div>
           <div>
-            <p className="font-semibold text-white">{t("dash.mem.wallet_title")}</p>
-            <p className="mt-0.5 text-sm text-slate-500">{t("dash.mem.wallet_caption")}</p>
+            <p className="font-semibold text-slate-100">{t("dash.mem.wallet_title")}</p>
+            <p className="mt-0.5 text-sm text-slate-400">{t("dash.mem.wallet_caption")}</p>
           </div>
         </div>
         <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-6">
-          <p className="text-center text-3xl font-bold tracking-tight text-[#38bdf8] sm:text-right">$0.00</p>
+          <p className="text-center text-3xl font-bold tracking-tight text-[#6366f1] sm:text-right">$0.00</p>
           <Link
             href="/dashboard/fund"
-            className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#2563eb] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition hover:bg-[#1d4ed8]"
+            className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#5C5AFF] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:bg-[#4b49eb]"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -121,8 +121,8 @@ export default function MembershipPlansView() {
       </div>
 
       <div className="mt-10">
-        <h2 className="text-lg font-bold text-white">{t("dash.mem.available_title")}</h2>
-        <p className="mt-1 text-sm text-slate-500">{t("dash.mem.available_subtitle")}</p>
+        <h2 className="text-lg font-bold text-slate-100">{t("dash.mem.available_title")}</h2>
+        <p className="mt-1 text-sm text-slate-400">{t("dash.mem.available_subtitle")}</p>
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           <PlanCard titleKey="dash.mem.plan_access_title" priceKey="dash.mem.price_access" featureKeys={ACCESS_KEYS} />
           <PlanCard titleKey="dash.mem.plan_prime_title" priceKey="dash.mem.price_prime" featureKeys={PRIME_KEYS} />
@@ -131,7 +131,7 @@ export default function MembershipPlansView() {
 
       <button
         type="button"
-        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg shadow-blue-600/35 transition hover:bg-[#1d4ed8]"
+        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#5C5AFF] text-white shadow-lg shadow-indigo-500/30 transition hover:bg-[#4b49eb]"
         aria-label={t("dash.chat_support")}
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

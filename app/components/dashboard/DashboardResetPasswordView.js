@@ -13,13 +13,13 @@ export default function DashboardResetPasswordView() {
   const [message, setMessage] = useState("");
 
   const baseField =
-    "mt-2 w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
+    "mt-2 w-full rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/60 px-4 py-2.5 text-sm text-slate-100 outline-none transition focus:border-[#6366f1]/60 focus:ring-1 focus:ring-[#6366f1]/25";
 
   return (
     <DashboardStandardPage titleKey="dash.dpw.title" breadcrumbLastKey="dash.dpw.title">
       <p className="mb-6 text-sm text-slate-400">{t("dash.dpw.subtitle")}</p>
 
-      <div className="mx-auto max-w-lg rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-8">
+      <div className="mx-auto max-w-lg rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-8">
         <form
           className="space-y-5"
           onSubmit={async (e) => {

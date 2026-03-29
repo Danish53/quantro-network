@@ -7,7 +7,8 @@ import { useSiteTranslation } from "../SiteTranslationProvider";
 import DashboardToast from "./DashboardToast";
 import PremiumPlasticCard from "./PremiumPlasticCard";
 
-const cardShell = "rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6";
+const cardShell =
+  "rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6";
 
 export default function VirtualCardView() {
   const { t } = useSiteTranslation();
@@ -147,7 +148,7 @@ export default function VirtualCardView() {
 
   return (
     <DashboardStandardPage titleKey="dash.vcard.title" breadcrumbLastKey="dash.vcard.title">
-      <p className="mb-6 max-w-2xl text-sm text-slate-400">{t("dash.vcard.subtitle")}</p>
+      <p className="mb-6 max-w-2xl text-sm text-slate-600">{t("dash.vcard.subtitle")}</p>
 
       <div className="pointer-events-none fixed right-4 top-20 z-[80] space-y-2 sm:right-6">
         <DashboardToast type="error" message={error} onClose={() => setError("")} />
@@ -163,11 +164,11 @@ export default function VirtualCardView() {
       {loading ? (
         <div className="grid gap-6 lg:grid-cols-2">
           <div
-            className="mx-auto w-full max-w-[420px] animate-pulse overflow-hidden rounded-[22px] border border-cyan-500/20 bg-[#0a0a0c]"
-            style={{ aspectRatio: "1.586 / 1", boxShadow: "0 0 40px rgba(34, 211, 238, 0.15)" }}
+            className="mx-auto w-full max-w-[420px] animate-pulse overflow-hidden rounded-[22px] border border-white/[0.1] bg-[#0F0D2E]/50"
+            style={{ aspectRatio: "1.586 / 1" }}
           >
             <div className="h-full p-6">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-teal-500/40 to-lime-500/30" />
+              <div className="h-9 w-9 rounded-xl bg-white/10" />
               <div className="mt-3 h-3 w-24 rounded bg-white/10" />
               <div className="mt-10 h-8 w-full max-w-[280px] rounded bg-white/10" />
               <div className="mt-8 h-3 w-32 rounded bg-white/10" />
@@ -183,16 +184,16 @@ export default function VirtualCardView() {
 
       {!loading && !hasCard ? (
         <div className={`${cardShell} text-center`}>
-          <h2 className="text-lg font-semibold text-white">{t("dash.vcard.apply_title")}</h2>
+          <h2 className="text-lg font-semibold text-slate-100">{t("dash.vcard.apply_title")}</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-slate-400">{t("dash.vcard.apply_body")}</p>
           {kycStatus !== "approved" && (
-            <p className="mx-auto mt-3 max-w-md text-sm text-amber-200">{t("dash.vcard.kyc_required")}</p>
+            <p className="mx-auto mt-3 max-w-md text-sm text-amber-800">{t("dash.vcard.kyc_required")}</p>
           )}
           <button
             type="button"
             onClick={handleApplyCard}
             disabled={busy || loading || kycStatus !== "approved"}
-            className="mt-6 rounded-[10px] bg-[#2563eb] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition hover:bg-[#1d4ed8] disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-6 rounded-[10px] bg-[#5C5AFF] px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:bg-[#4b49eb] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {busy ? (
               <span className="inline-flex items-center gap-2">
@@ -233,8 +234,8 @@ export default function VirtualCardView() {
 
             <div className={`${cardShell} flex flex-col justify-between`}>
               <div>
-                <p className="text-sm text-[#a0aec0]">{t("dash.vcard.balance_fiat")}</p>
-                <p className="mt-1 text-3xl font-bold text-[#38bdf8]">{moneyFmt.format(card.balanceUsd || 0)}</p>
+                <p className="text-sm text-slate-500">{t("dash.vcard.balance_fiat")}</p>
+                <p className="mt-1 text-3xl font-bold text-[#6366f1]">{moneyFmt.format(card.balanceUsd || 0)}</p>
                 <p className="mt-2 text-xs text-slate-500">{t("dash.vcard.balance_label")}</p>
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -278,7 +279,7 @@ export default function VirtualCardView() {
           </div>
 
           <div className={`${cardShell} mt-6`}>
-            <h2 className="text-lg font-semibold text-white">{t("dash.vcard.activity")}</h2>
+            <h2 className="text-lg font-semibold text-slate-100">{t("dash.vcard.activity")}</h2>
             <div className="mt-4 overflow-x-auto dashboard-sidebar-scroll">
               <table className="w-full min-w-[520px] border-collapse text-left text-sm">
                 <thead>
@@ -298,7 +299,7 @@ export default function VirtualCardView() {
                     </tr>
                   ) : (
                     transactions.map((tx) => (
-                      <tr key={tx.id} className="border-b border-white/[0.04] last:border-0">
+                      <tr key={tx.id} className="border-b border-white/[0.06] last:border-0">
                         <td className="px-3 py-3 text-slate-300">{tx.merchant}</td>
                         <td className={`px-3 py-3 ${tx.amountUsd < 0 ? "text-rose-300" : "text-emerald-300"}`}>
                           {moneyFmt.format(tx.amountUsd)}

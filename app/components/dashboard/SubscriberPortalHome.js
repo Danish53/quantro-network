@@ -30,19 +30,19 @@ export default function SubscriberPortalHome() {
 
   return (
     <div className="space-y-6 lg:space-y-8">
-      <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">{t("dash.home_title")}</h1>
+      <h1 className="text-xl font-bold tracking-tight text-slate-100 sm:text-2xl">{t("dash.home_title")}</h1>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((card) => (
           <div
             key={card.labelKey}
-            className="flex items-center gap-4 rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 shadow-lg sm:p-5"
+            className="flex items-center gap-4 rounded-[10px] border border-white/[0.08] bg-[#141235] p-4 shadow-sm ring-1 ring-white/[0.04] sm:p-5"
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] bg-[#9A6B20]/15 text-[#d4a84b] ring-1 ring-[#9A6B20]/25">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] bg-[#6366f1]/20 text-[#a5b4fc] ring-1 ring-[#6366f1]/30">
               <StatMiniIcon name={card.icon} />
             </div>
             <div className="min-w-0">
-              <p className="text-xl font-bold tracking-tight text-white sm:text-2xl">{card.value}</p>
+              <p className="text-xl font-bold tracking-tight text-slate-100 sm:text-2xl">{card.value}</p>
               <p className="text-xs text-slate-400 sm:text-sm">{t(card.labelKey)}</p>
             </div>
           </div>
@@ -76,14 +76,14 @@ export default function SubscriberPortalHome() {
           infoLabel={t("dash.chart_info")}
           downloadLabel={t("dash.chart_download")}
           legend={
-            <div className="mt-3 flex flex-wrap gap-4 border-t border-white/[0.06] pt-3 text-[11px] text-slate-400">
+            <div className="mt-3 flex flex-wrap gap-4 border-t border-white/[0.08] pt-3 text-[11px] text-slate-400">
               <span>
                 <span className="text-slate-500">{t("dash.monthly_current_label")}: </span>
-                <span className="font-medium text-white">$0.00</span>
+                <span className="font-medium text-slate-100">$0.00</span>
               </span>
               <span>
                 <span className="text-slate-500">{t("dash.monthly_total_label")}: </span>
-                <span className="font-medium text-white">$0.00</span>
+                <span className="font-medium text-slate-100">$0.00</span>
               </span>
             </div>
           }
@@ -93,19 +93,19 @@ export default function SubscriberPortalHome() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <section className="rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 sm:p-5">
-          <h2 className="text-sm font-semibold text-white sm:text-base">{t("dash.card_subscription_summary")}</h2>
-          <div className="mt-4 min-h-[120px] rounded-[8px] border border-dashed border-white/[0.08] bg-[#14142a]/80" />
+        <section className="rounded-[10px] border border-white/[0.08] bg-[#141235] p-4 shadow-sm ring-1 ring-white/[0.04] sm:p-5">
+          <h2 className="text-sm font-semibold text-slate-100 sm:text-base">{t("dash.card_subscription_summary")}</h2>
+          <div className="mt-4 min-h-[120px] rounded-[8px] border border-dashed border-white/[0.1] bg-[#0F0D2E]/40" />
         </section>
-        <section className="rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 sm:p-5">
-          <h2 className="text-sm font-semibold text-white sm:text-base">{t("dash.card_monthly_earnings_trend")}</h2>
-          <div className="mt-4 min-h-[120px] rounded-[8px] border border-dashed border-white/[0.08] bg-[#14142a]/80" />
+        <section className="rounded-[10px] border border-white/[0.08] bg-[#141235] p-4 shadow-sm ring-1 ring-white/[0.04] sm:p-5">
+          <h2 className="text-sm font-semibold text-slate-100 sm:text-base">{t("dash.card_monthly_earnings_trend")}</h2>
+          <div className="mt-4 min-h-[120px] rounded-[8px] border border-dashed border-white/[0.1] bg-[#0F0D2E]/40" />
         </section>
       </div>
 
       <button
         type="button"
-        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg shadow-blue-600/35 transition hover:bg-[#1d4ed8]"
+        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#5C5AFF] text-white shadow-lg shadow-indigo-500/30 transition hover:bg-[#4b49eb]"
         aria-label={t("dash.chat_support")}
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -122,23 +122,23 @@ export default function SubscriberPortalHome() {
 
 function ChartPanel({ title, footer, infoLabel, downloadLabel, legend, children }) {
   return (
-    <section className="rounded-[10px] border border-white/[0.06] bg-[#1C1C30] p-4 shadow-xl sm:p-5">
+    <section className="rounded-[10px] border border-white/[0.08] bg-[#141235] p-4 shadow-sm ring-1 ring-white/[0.04] sm:p-5">
       <div className="mb-4 flex items-start justify-between gap-2">
-        <h2 className="text-sm font-semibold text-white sm:text-base">{title}</h2>
-        <div className="flex gap-1 text-slate-500">
-          <button type="button" className="rounded p-1 hover:bg-white/[0.06] hover:text-white" aria-label={infoLabel}>
+        <h2 className="text-sm font-semibold text-slate-100 sm:text-base">{title}</h2>
+        <div className="flex gap-1 text-slate-400">
+          <button type="button" className="rounded p-1 hover:bg-white/[0.08] hover:text-slate-100" aria-label={infoLabel}>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
             </svg>
           </button>
-          <button type="button" className="rounded p-1 hover:bg-white/[0.06] hover:text-white" aria-label={downloadLabel}>
+          <button type="button" className="rounded p-1 hover:bg-white/[0.08] hover:text-slate-100" aria-label={downloadLabel}>
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
           </button>
         </div>
       </div>
-      <div className="relative min-h-[200px] rounded-[8px] bg-[#14142a]/80 p-2 sm:min-h-[240px]">{children}</div>
+      <div className="relative min-h-[200px] rounded-[8px] bg-[#0F0D2E]/40 p-2 sm:min-h-[240px]">{children}</div>
       {footer ? <p className="mt-2 text-[11px] text-slate-500">{footer}</p> : null}
       {legend}
     </section>
@@ -169,7 +169,7 @@ function DualLineChartPlaceholder({ monthLabels }) {
           y1={padT + (i * gh) / 4}
           x2={w - padR}
           y2={padT + (i * gh) / 4}
-          stroke="rgba(255,255,255,0.06)"
+          stroke="rgba(148,163,184,0.35)"
           strokeWidth="1"
         />
       ))}
@@ -230,7 +230,7 @@ function BarChartPlaceholder({ monthLabels }) {
             width="32"
             height={b.h * 1.35}
             rx="4"
-            fill="#9A6B20"
+            fill="#5C5AFF"
             fillOpacity="0.85"
           />
         </g>

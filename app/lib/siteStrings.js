@@ -9,6 +9,7 @@ export const SITE_STRINGS = {
   "nav.faqs": "FAQs",
   "nav.login": "Login",
   "nav.cta": "Get started for Free",
+  "nav.my_portal": "My Portal",
   "app.translating": "Translating interface…",
   "nav.language": "Language",
   "nav.translating": "Translating…",
@@ -352,6 +353,8 @@ export const SITE_STRINGS = {
   "dash.logo_alt": "Quantro Network",
   "dash.search_placeholder": "Search pages...",
   "dash.search_aria": "Search pages",
+  "dash.topbar_connect_wallet": "Connect wallet",
+  "dash.topbar_wallet_manage": "Manage",
   "dash.open_menu": "Open menu",
   "dash.close_menu": "Close menu",
   "dash.close_overlay": "Close menu",
@@ -617,6 +620,15 @@ export const SITE_STRINGS = {
   "dash.wal.working": "Processing...",
   "dash.wal.deposit_ok": "Deposit added successfully",
   "dash.wal.withdraw_ok": "Withdrawal request created",
+  "dash.wal.web3_badge": "Web3 wallet",
+  "dash.wal.web3_title": "Connect your crypto wallet",
+  "dash.wal.web3_subtitle": "Link MetaMask, WalletConnect, or another provider to view BSC token balances. Connection stays in your browser only — nothing is saved to our servers.",
+  "dash.wal.web3_connected_title": "Connected Web3 wallet",
+  "dash.wal.web3_connected_hint": "On-chain USDT and USDC on BNB Smart Chain (read-only balances).",
+  "dash.wal.web3_onchain_note": "Balances below are read from the blockchain for your connected address.",
+  "dash.wal.web3_manage": "Wallet details",
+  "dash.wal.copy": "Copy",
+  "dash.wal.copied": "Copied",
   "dash.wc.title": "Wallet Connect",
   "dash.wc.subtitle": "Connect your wallet to read on-chain balances for supported tokens on BNB Smart Chain.",
   "dash.wc.connect": "Connect Wallet",
@@ -899,7 +911,7 @@ export const SITE_STRINGS = {
 };
 
 /** Bump when strings change so cached translations invalidate. */
-export const SITE_STRINGS_REVISION = 6;
+export const SITE_STRINGS_REVISION = 8;
 
 /** Stable key order for batch translation (must match SITE_STRINGS). */
 export const SITE_STRING_KEYS = Object.keys(SITE_STRINGS);

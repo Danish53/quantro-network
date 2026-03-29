@@ -55,7 +55,7 @@ body {
 /* Dashboard sidebar: slim scrollbar (Firefox + WebKit) */
 .dashboard-sidebar-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(100, 116, 139, 0.45) rgba(15, 23, 42, 0.35);
+  scrollbar-color: rgba(148, 163, 184, 0.45) rgba(15, 13, 46, 0.5);
 }
 
 .dashboard-sidebar-scroll::-webkit-scrollbar {
@@ -65,39 +65,39 @@ body {
 
 .dashboard-sidebar-scroll::-webkit-scrollbar-track {
   margin: 6px 0;
-  background: rgba(15, 23, 42, 0.25);
+  background: rgba(20, 18, 53, 0.6);
   border-radius: 9999px;
 }
 
 .dashboard-sidebar-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(148, 163, 184, 0.45), rgba(100, 116, 139, 0.5));
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.35), rgba(79, 70, 229, 0.45));
   border-radius: 9999px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .dashboard-sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(186, 199, 214, 0.55), rgba(148, 163, 184, 0.55));
+  background: linear-gradient(180deg, rgba(129, 140, 248, 0.5), rgba(99, 102, 241, 0.55));
 }
 
-/* Dashboard visual polish */
+/* Dashboard primary buttons — match marketing hero CTA (#5C5AFF) */
 .dashboard-theme button[class*="bg-[#2563eb]"] {
-  background: linear-gradient(135deg, #9a6b20 0%, #7b5419 100%);
-  box-shadow: 0 10px 24px rgba(154, 107, 32, 0.25);
+  background: linear-gradient(135deg, #5c5aff 0%, #4b49eb 100%) !important;
+  box-shadow: 0 8px 20px rgba(92, 90, 255, 0.22);
 }
 
 .dashboard-theme button[class*="bg-[#2563eb]"]:hover {
-  background: linear-gradient(135deg, #ac7924 0%, #8a5f1c 100%);
+  background: linear-gradient(135deg, #6e6bff 0%, #5c5aff 100%) !important;
 }
 
 .dashboard-theme button[class*="border-[#2563eb]"] {
-  border-color: #9a6b20 !important;
-  color: #e8c98a !important;
+  border-color: #6366f1 !important;
+  color: #4338ca !important;
 }
 
-/* Keep selects/options dark and avoid white dropdown look */
+/* Dark dashboard selects */
 .dashboard-theme select,
 .dashboard-theme select option {
-  background-color: #14182b !important;
+  background-color: #141235 !important;
   color: #e2e8f0 !important;
 }
 
@@ -128,14 +128,18 @@ body {
   -webkit-text-fill-color: #e2e8f0 !important;
   caret-color: #f8fafc;
   transition: background-color 50000s ease-in-out 0s !important;
-  -webkit-box-shadow: 0 0 0 1000px #14182b inset !important;
-  box-shadow: 0 0 0 1000px #14182b inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #141235 inset !important;
+  box-shadow: 0 0 0 1000px #141235 inset !important;
 }
 
 /* Chromium: newer internal autofill pseudo (helps when -webkit-autofill alone loses) */
 .auth-dark-theme input:autofill,
 .auth-dark-theme textarea:autofill,
-.auth-dark-theme select:autofill,
+.auth-dark-theme select:autofill {
+  -webkit-text-fill-color: #e2e8f0 !important;
+  transition: background-color 50000s ease-in-out 0s !important;
+}
+
 .dashboard-theme input:autofill,
 .dashboard-theme textarea:autofill,
 .dashboard-theme select:autofill {
@@ -152,5 +156,5 @@ body {
 .dashboard-theme input:autofill,
 .dashboard-theme textarea:autofill,
 .dashboard-theme select:autofill {
-  box-shadow: 0 0 0 1000px #14182b inset !important;
+  box-shadow: 0 0 0 1000px #141235 inset !important;
 }

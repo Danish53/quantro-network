@@ -11,7 +11,7 @@ export default function AboutAlgorithmsSection() {
   return (
     <section>
       <h2 className="text-center text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{t("about.algo.section_title")}</h2>
-      <div className="mt-8 grid gap-8 overflow-hidden rounded-2xl border border-white/10 bg-[#0f1629]/95 p-6 shadow-xl sm:p-8 lg:mt-10 lg:grid-cols-2 lg:items-center lg:gap-12 lg:p-10">
+      <div className="mt-8 grid gap-8 overflow-hidden rounded-2xl border border-white/10 bg-[#141235]/95 p-6 shadow-xl sm:p-8 lg:mt-10 lg:grid-cols-2 lg:items-center lg:gap-12 lg:p-10">
         <div className="order-2 text-left lg:order-1">
           <p className="text-sm leading-relaxed text-slate-300 sm:text-base">{t("about.algo.body")}</p>
           <ul className="mt-6 space-y-3 text-sm text-slate-200 sm:text-base">

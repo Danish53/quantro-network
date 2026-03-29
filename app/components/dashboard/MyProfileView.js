@@ -26,7 +26,7 @@ export default function MyProfileView() {
   const [saveMessage, setSaveMessage] = useState("");
 
   const baseField =
-    "w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#9A6B20]/50 focus:ring-1 focus:ring-[#9A6B20]/25";
+    "w-full rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/60 px-4 py-2.5 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-[#9A6B20]/50 focus:ring-1 focus:ring-[#9A6B20]/25";
 
   useEffect(() => {
     let cancelled = false;
@@ -107,15 +107,15 @@ export default function MyProfileView() {
       </div>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-          <h1 className="text-2xl font-bold tracking-tight text-white">{t("dash.profile.page_title")}</h1>
-          <nav className="text-sm text-slate-500" aria-label="Breadcrumb">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-100">{t("dash.profile.page_title")}</h1>
+          <nav className="text-sm text-slate-400" aria-label="Breadcrumb">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
-                <Link href="/dashboard" className="transition hover:text-slate-300">
+                <Link href="/dashboard" className="transition hover:text-[#a5b4fc]">
                   {t("dash.profile.breadcrumb_dashboard")}
                 </Link>
               </li>
-              <li className="px-1 text-slate-600" aria-hidden>
+              <li className="px-1 text-slate-500" aria-hidden>
                 {">"}
               </li>
               <li className="text-slate-300">{t("dash.profile.page_title")}</li>
@@ -129,12 +129,12 @@ export default function MyProfileView() {
 
       {profileLoading ? (
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-          <section className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 animate-pulse">
+          <section className="rounded-xl border border-white/[0.08] bg-[#141235] p-6 shadow-sm ring-1 ring-white/[0.04] animate-pulse">
             <div className="mx-auto h-28 w-28 rounded-full bg-white/10" />
             <div className="mx-auto mt-4 h-4 w-32 rounded bg-white/10" />
             <div className="mt-8 h-10 w-full rounded bg-white/10" />
           </section>
-          <section className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 animate-pulse">
+          <section className="rounded-xl border border-white/[0.08] bg-[#141235] p-6 shadow-sm ring-1 ring-white/[0.04] animate-pulse">
             <div className="h-5 w-36 rounded bg-white/10" />
             <div className="mt-2 h-4 w-56 rounded bg-white/10" />
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -148,9 +148,9 @@ export default function MyProfileView() {
       ) : (
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
         {/* Profile summary */}
-        <section className="relative flex flex-col rounded-[14px] border border-[#9A6B20]/20 bg-gradient-to-b from-[#1a2140] to-[#161b33] p-6 shadow-[0_14px_35px_rgba(0,0,0,0.28)]">
+        <section className="relative flex flex-col rounded-[14px] border border-white/[0.08] bg-[#141235] from-[#1a2140] to-[#161b33] p-6 shadow-[0_14px_35px_rgba(0,0,0,0.28)]">
           <div className="flex flex-col items-center text-center">
-            <p className="text-lg font-semibold text-white">
+            <p className="text-lg font-semibold text-slate-100">
               {profileLoading ? "…" : username || fullName || "—"}
             </p>
             <div className="relative mt-5">
@@ -175,7 +175,7 @@ export default function MyProfileView() {
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="absolute -bottom-0.5 -right-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-[#9A6B20] text-white shadow-lg ring-2 ring-[#161b33] transition hover:bg-[#ac7924]"
+                className="absolute -bottom-0.5 -right-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-[#6062F6] text-white shadow-lg ring-2 ring-[#161b33] transition hover:bg-[#ac7924]"
                 aria-label={t("dash.profile.edit_photo")}
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
@@ -190,7 +190,7 @@ export default function MyProfileView() {
             <label htmlFor="affiliate-link" className="text-sm font-medium text-[#a0aec0]">
               {t("dash.profile.affiliate_label")}
             </label>
-            <div className="relative mt-2 flex rounded-[10px] border border-[#2a3558] bg-[#14182b] focus-within:border-[#9A6B20]/50 focus-within:ring-1 focus-within:ring-[#9A6B20]/25">
+            <div className="relative mt-2 flex rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/60 focus-within:border-[#9A6B20]/50 focus-within:ring-1 focus-within:ring-[#9A6B20]/25">
               <input
                 id="affiliate-link"
                 readOnly
@@ -221,8 +221,8 @@ export default function MyProfileView() {
         </section>
 
         {/* Personal details */}
-        <section className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
-          <h2 className="text-lg font-semibold text-white">{t("dash.profile.details_title")}</h2>
+        <section className="rounded-xl border border-white/[0.08] bg-[#141235] p-6 shadow-sm ring-1 ring-white/[0.04] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
+          <h2 className="text-lg font-semibold text-slate-100">{t("dash.profile.details_title")}</h2>
           <p className="mt-1 text-sm text-slate-500">{t("dash.profile.details_subtitle")}</p>
           {profileLoadError && (
             <p className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{t("dash.profile.load_error")}</p>
@@ -345,7 +345,7 @@ export default function MyProfileView() {
               <button
                 type="submit"
                 disabled={profileLoading || saveState === "saving"}
-                className="rounded-[10px] bg-[#9A6B20] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#9A6B20]/20 transition hover:bg-[#ac7924] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-[10px] bg-[#6062F6] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#9A6B20]/20 transition hover:bg-[#ac7924] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saveState === "saving" ? t("dash.profile.saving") : t("dash.profile.save")}
               </button>
@@ -356,13 +356,13 @@ export default function MyProfileView() {
       )}
 
       {/* Change password — full width */}
-      <section className="mt-6 rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
-        <h2 className="text-lg font-semibold text-white">{t("dash.profile.password_title")}</h2>
+      <section className="mt-6 rounded-xl border border-white/[0.08] bg-[#141235] p-6 shadow-sm ring-1 ring-white/[0.04] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
+        <h2 className="text-lg font-semibold text-slate-100">{t("dash.profile.password_title")}</h2>
         <p className="mt-1 text-sm text-slate-500">{t("dash.profile.password_subtitle")}</p>
         <div className="mt-6">
           <Link
             href="/dashboard/reset-password"
-            className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#9A6B20] bg-transparent px-6 py-2.5 text-sm font-semibold text-[#e8c98a] transition hover:bg-[#9A6B20]/10"
+            className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#6062F6] bg-transparent px-6 py-2.5 text-sm font-semibold text-[#6062F6] transition hover:bg-[#9A6B20]/10"
           >
             {t("dash.profile.password_change")}
           </Link>
@@ -371,7 +371,7 @@ export default function MyProfileView() {
 
       <button
         type="button"
-        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg shadow-blue-600/35 transition hover:bg-[#1d4ed8]"
+        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#5C5AFF] text-white shadow-lg shadow-indigo-500/30 transition hover:bg-[#4b49eb]"
         aria-label={t("dash.chat_support")}
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

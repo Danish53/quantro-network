@@ -5,19 +5,19 @@ export default function DashboardToast({ type = "info", message, onClose }) {
 
   const tone =
     type === "error"
-      ? "border-red-500/35 bg-red-500/15 text-red-100"
+      ? "border-red-400/35 bg-red-950/50 text-red-100"
       : type === "success"
-        ? "border-emerald-500/35 bg-emerald-500/15 text-emerald-100"
-        : "border-cyan-500/35 bg-cyan-500/15 text-cyan-100";
+        ? "border-emerald-400/35 bg-emerald-950/40 text-emerald-100"
+        : "border-indigo-400/35 bg-[#141235] text-indigo-100";
 
   return (
-    <div className={`pointer-events-auto w-full max-w-sm rounded-xl border px-4 py-3 shadow-2xl backdrop-blur-md ${tone}`}>
+    <div className={`pointer-events-auto w-full max-w-sm rounded-xl border px-4 py-3 shadow-lg ${tone}`}>
       <div className="flex items-start gap-3">
         <p className="flex-1 text-sm leading-5">{message}</p>
         <button
           type="button"
           onClick={onClose}
-          className="rounded p-1 text-xs text-white/80 transition hover:bg-white/10 hover:text-white"
+          className="rounded p-1 text-xs text-slate-400 transition hover:bg-white/10 hover:text-white"
           aria-label="Close notification"
         >
           x

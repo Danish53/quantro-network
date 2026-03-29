@@ -7,7 +7,6 @@ export const dashboardNavSections = [
       { labelKey: "dash.nav_portal", href: "/dashboard", icon: "portal" },
       { labelKey: "dash.nav_virtual_card", href: "/dashboard/virtual-card", icon: "vcard" },
       { labelKey: "dash.nav_wallets", href: "/dashboard/wallets", icon: "wallets" },
-      { labelKey: "dash.nav_wallet_connect", href: "/dashboard/wallet-connect", icon: "walletConnect" },
       { labelKey: "dash.nav_convert", href: "/dashboard/convert", icon: "convert" },
       { labelKey: "dash.nav_fund", href: "/dashboard/fund", icon: "fund" },
       { labelKey: "dash.nav_withdrawal", href: "/dashboard/withdrawal", icon: "withdraw", hasChevron: true },

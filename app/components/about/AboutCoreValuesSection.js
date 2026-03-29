@@ -9,7 +9,7 @@ const VALUE_KEYS = [
 ];
 
 const cardClass =
-  "rounded-2xl border border-white/10 bg-[#0f1629]/95 p-6 text-left shadow-lg sm:p-8";
+  "rounded-2xl border border-white/10 bg-[#141235]/95 p-6 text-left shadow-lg sm:p-8";
 
 export default function AboutCoreValuesSection() {
   const { t } = useSiteTranslation();

@@ -15,19 +15,19 @@ export default function DashboardStandardPage({ titleKey, breadcrumbLastKey, chi
   return (
     <div className="relative pb-24">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <h1 className="text-2xl font-bold tracking-tight text-white">{t(titleKey)}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-100">{t(titleKey)}</h1>
         <div className="flex flex-wrap items-center gap-3 lg:justify-end">
-          <nav className="text-sm text-slate-500" aria-label="Breadcrumb">
+          <nav className="text-sm text-slate-400" aria-label="Breadcrumb">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
-                <Link href="/dashboard" className="transition hover:text-slate-300">
+                <Link href="/dashboard" className="font-medium transition hover:text-[#a5b4fc]">
                   {t("dash.breadcrumb_dashboard")}
                 </Link>
               </li>
-              <li className="px-1 text-slate-600" aria-hidden>
+              <li className="px-1 text-slate-500" aria-hidden>
                 {">"}
               </li>
-              <li className="text-slate-300">{t(last)}</li>
+              <li className="font-medium text-slate-300">{t(last)}</li>
             </ol>
           </nav>
           <DashboardNavigateDropdown />

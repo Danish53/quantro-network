@@ -301,7 +301,7 @@ export default function KycDocumentsView() {
   };
 
   const baseField =
-    "w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
+    "w-full rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/60 px-4 py-2.5 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-[#6366f1]/60 focus:ring-1 focus:ring-[#6366f1]/25";
 
   return (
     <div className="relative pb-24">
@@ -311,7 +311,7 @@ export default function KycDocumentsView() {
       </div>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">{t("dash.kyc.title")}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-100">{t("dash.kyc.title")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-400">{t("dash.kyc.subtitle")}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3 lg:justify-end">
@@ -335,7 +335,7 @@ export default function KycDocumentsView() {
       <div className="mx-auto mt-8 max-w-3xl">
         <form
           onSubmit={handleSubmit}
-          className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-8"
+          className="rounded-[12px] border border-white/[0.08] bg-[#141235] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] ring-1 ring-white/[0.04] sm:p-8"
         >
           <div className="mb-4">
             {kycStatus === "approved" ? (
@@ -562,7 +562,7 @@ export default function KycDocumentsView() {
 
       <button
         type="button"
-        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg shadow-blue-600/35 transition hover:bg-[#1d4ed8]"
+        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#5C5AFF] text-white shadow-lg shadow-indigo-500/30 transition hover:bg-[#4b49eb]"
         aria-label={t("dash.chat_support")}
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

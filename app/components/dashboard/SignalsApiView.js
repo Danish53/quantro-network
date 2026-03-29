@@ -9,10 +9,10 @@ export default function SignalsApiView() {
     <DashboardStandardPage titleKey="dash.sig.title" breadcrumbLastKey="dash.sig.title">
       <p className="mb-6 max-w-2xl text-sm text-slate-400">{t("dash.sig.subtitle")}</p>
 
-      <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6">
+      <div className="rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6">
         <p className="text-sm text-[#a0aec0]">{t("dash.sig.key_label")}</p>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <code className="flex-1 rounded-[10px] border border-white/[0.1] bg-[#14182b] px-4 py-3 font-mono text-sm text-slate-300">
+          <code className="flex-1 rounded-[10px] border border-white/[0.1] bg-[#0F0D2E]/60 px-4 py-3 font-mono text-sm text-slate-300">
             {t("dash.sig.masked")}
           </code>
           <div className="flex gap-2">
@@ -26,13 +26,13 @@ export default function SignalsApiView() {
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-4 border-t border-white/[0.08] pt-6 sm:grid-cols-2">
-          <div className="rounded-[10px] bg-[#14182b] px-4 py-3">
+          <div className="rounded-[10px] border border-white/[0.06] bg-[#0F0D2E]/40 px-4 py-3">
             <p className="text-xs text-slate-500">{t("dash.sig.usage")}</p>
-            <p className="mt-1 text-lg font-semibold text-white">0</p>
+            <p className="mt-1 text-lg font-semibold text-slate-100">0</p>
           </div>
-          <div className="rounded-[10px] bg-[#14182b] px-4 py-3">
+          <div className="rounded-[10px] border border-white/[0.06] bg-[#0F0D2E]/40 px-4 py-3">
             <p className="text-xs text-slate-500">{t("dash.sig.limit")}</p>
-            <p className="mt-1 text-lg font-semibold text-white">60 / min</p>
+            <p className="mt-1 text-lg font-semibold text-slate-100">60 / min</p>
           </div>
         </div>
       </div>

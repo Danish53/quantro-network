@@ -3,7 +3,7 @@
 import { useSiteTranslation } from "../SiteTranslationProvider";
 
 const cardClass =
-  "flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#0f1629]/95 px-6 py-12 text-center shadow-lg sm:py-14";
+  "flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#141235]/95 px-6 py-12 text-center shadow-lg sm:py-14";
 
 export default function AboutStatsSection() {
   const { t } = useSiteTranslation();

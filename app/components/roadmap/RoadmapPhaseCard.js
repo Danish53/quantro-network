@@ -1,7 +1,7 @@
 export default function RoadmapPhaseCard({ label, title, description, bullets, footer, side = "left" }) {
   return (
     <article
-      className={`w-full max-w-xl rounded-2xl border border-white/10 bg-[#0f1629]/95 p-6 text-left shadow-xl sm:p-8 ${
+      className={`w-full max-w-xl rounded-2xl border border-white/10 bg-[#141235]/95 p-6 text-left shadow-xl sm:p-8 ${
         side === "left" ? "lg:mr-auto" : "lg:ml-auto"
       }`}
     >

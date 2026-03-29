@@ -1,5 +1,6 @@
-import WalletConnectView from "../../components/dashboard/WalletConnectView";
+import { redirect } from "next/navigation";
 
+/** Legacy URL: wallet connection is modal + Crypto Wallets page only. */
 export default function WalletConnectPage() {
-  return <WalletConnectView />;
+  redirect("/dashboard/wallets?openWallet=1");
 }

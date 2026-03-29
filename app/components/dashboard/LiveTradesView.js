@@ -8,7 +8,7 @@ export default function LiveTradesView() {
   return (
     <DashboardStandardPage titleKey="dash.live.title" breadcrumbLastKey="dash.live.title">
       <p className="mb-6 text-sm text-slate-400">{t("dash.live.subtitle")}</p>
-      <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6">
+      <div className="rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6">
         <div className="dashboard-sidebar-scroll overflow-x-auto">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
             <thead>

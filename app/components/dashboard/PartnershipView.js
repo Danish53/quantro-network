@@ -19,9 +19,9 @@ export default function PartnershipView() {
         {TIERS.map((tier) => (
           <div
             key={tier.titleKey}
-            className="flex flex-col rounded-[12px] border border-white/[0.08] bg-[#161b33] p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
+            className="flex flex-col rounded-xl border border-white/[0.08] bg-[#141235] p-6 shadow-sm ring-1 ring-white/[0.04] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
           >
-            <p className="text-lg font-bold text-white">{t(tier.titleKey)}</p>
+            <p className="text-lg font-bold text-slate-100">{t(tier.titleKey)}</p>
             <p className="mt-2 text-sm text-slate-400">{t(tier.descKey)}</p>
             <button
               type="button"

@@ -18,7 +18,7 @@ export default function AboutCoreTeamSection() {
           {t("about.team.subtitle")}
         </p>
       </div>
-      <div className="mt-8 rounded-2xl border border-white/10 bg-[#0f1629]/95 p-6 shadow-xl sm:p-8 lg:mt-10 lg:p-10">
+      <div className="mt-8 rounded-2xl border border-white/10 bg-[#141235]/95 p-6 shadow-xl sm:p-8 lg:mt-10 lg:p-10">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {columnKeys.map((col) => (
             <div key={col.title}>

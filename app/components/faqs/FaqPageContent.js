@@ -59,7 +59,7 @@ export default function FaqPageContent() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t("faq_page.search_ph")}
-            className="w-full rounded-xl border border-white/[0.12] bg-[#0a0d18] px-5 py-3.5 text-left text-sm text-white placeholder:text-slate-500 outline-none ring-0 transition focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 sm:text-[15px]"
+            className="w-full rounded-xl border border-white/[0.12] bg-[#141235] px-5 py-3.5 text-left text-sm text-white placeholder:text-slate-500 outline-none ring-0 transition focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 sm:text-[15px]"
           />
         </div>
 
@@ -88,7 +88,7 @@ export default function FaqPageContent() {
       </div>
 
       <div className="relative mx-auto w-full max-w-3xl px-4 pb-16 sm:px-6 lg:px-10">
-        <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0d18]/80 shadow-[0_24px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.05] backdrop-blur-sm">
+        <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#141235]/80 shadow-[0_24px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.05] backdrop-blur-sm">
           {visibleItems.length === 0 ? (
             <p className="px-6 py-12 text-center text-sm text-slate-400">{t("faq_page.no_results")}</p>
           ) : (
@@ -134,7 +134,7 @@ export default function FaqPageContent() {
             </ul>
           )}
 
-          <div className="border-t border-white/[0.06] bg-[#060814] p-6 sm:p-8">
+          <div className="border-t border-white/[0.06] bg-[#141235] p-6 sm:p-8">
             <div className="mx-auto max-w-md text-center">
               <p className="text-base font-semibold text-white sm:text-lg">{t("faq_page.support_title")}</p>
               <p className="mt-3 text-sm leading-relaxed text-slate-400 sm:text-[15px]">{t("faq_page.support_body")}</p>

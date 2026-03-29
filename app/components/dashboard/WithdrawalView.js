@@ -16,7 +16,7 @@ export default function WithdrawalView() {
   const [notice, setNotice] = useState("");
 
   const baseField =
-    "mt-2 w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
+    "mt-2 w-full rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/60 px-4 py-2.5 text-sm text-slate-100 outline-none transition focus:border-[#6366f1]/60 focus:ring-1 focus:ring-[#6366f1]/25";
 
   useEffect(() => {
     let cancelled = false;
@@ -41,7 +41,7 @@ export default function WithdrawalView() {
         <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
       </div>
 
-      <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6">
+      <div className="rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6">
         <form
           className="grid grid-cols-1 gap-5 md:grid-cols-2"
           onSubmit={async (e) => {
@@ -127,8 +127,8 @@ export default function WithdrawalView() {
         </form>
       </div>
 
-      <h2 className="mb-4 mt-10 text-lg font-semibold text-white">{t("dash.wd.recent")}</h2>
-      <div className="rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 sm:p-6">
+      <h2 className="mb-4 mt-10 text-lg font-semibold text-slate-100">{t("dash.wd.recent")}</h2>
+      <div className="rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6">
         <div className="dashboard-sidebar-scroll overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-left text-sm">
             <thead>
@@ -148,7 +148,7 @@ export default function WithdrawalView() {
                 </tr>
               ) : (
                 rows.map((tx) => (
-                  <tr key={tx.id} className="border-b border-white/[0.04] last:border-0">
+                  <tr key={tx.id} className="border-b border-white/[0.06] last:border-0">
                     <td className="px-4 py-3 text-slate-300">{tx.reference || "—"}</td>
                     <td className="px-4 py-3 text-slate-300">{tx.asset}</td>
                     <td className="px-4 py-3 text-rose-300">-{Number(tx.amount || 0).toFixed(4)}</td>

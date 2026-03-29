@@ -30,8 +30,8 @@ export default function TransactionHistoryView() {
   const transactions = useMemo(() => [], []);
 
   const baseField =
-    "w-full rounded-[10px] border border-[#2a3558] bg-[#14182b] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#2563eb]/50 focus:ring-1 focus:ring-[#2563eb]/25";
-  const selectClass = `${baseField} appearance-none pr-10 text-slate-200`;
+    "w-full rounded-[10px] border border-white/[0.12] bg-[#0F0D2E]/60 px-4 py-2.5 text-sm text-slate-100 outline-none transition focus:border-[#6366f1]/60 focus:ring-1 focus:ring-[#6366f1]/25";
+  const selectClass = `${baseField} appearance-none pr-10 text-slate-100`;
 
   const resetFilters = () => {
     setTxType("");
@@ -48,16 +48,16 @@ export default function TransactionHistoryView() {
   return (
     <div className="relative pb-24">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <h1 className="text-2xl font-bold tracking-tight text-white">{t("dash.tx.title")}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-100">{t("dash.tx.title")}</h1>
         <div className="flex flex-wrap items-center gap-3 lg:justify-end">
-          <nav className="text-sm text-slate-500" aria-label="Breadcrumb">
+          <nav className="text-sm text-slate-400" aria-label="Breadcrumb">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
-                <Link href="/dashboard" className="transition hover:text-slate-300">
+                <Link href="/dashboard" className="transition hover:text-[#a5b4fc]">
                   {t("dash.tx.breadcrumb_dashboard")}
                 </Link>
               </li>
-              <li className="px-1 text-slate-600" aria-hidden>
+              <li className="px-1 text-slate-500" aria-hidden>
                 {">"}
               </li>
               <li className="text-slate-300">{t("dash.tx.title")}</li>
@@ -67,7 +67,7 @@ export default function TransactionHistoryView() {
         </div>
       </div>
 
-      <section className="mt-8 rounded-[12px] border border-white/[0.08] bg-[#161b33] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] sm:p-6 lg:p-8">
+      <section className="mt-8 rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6 lg:p-8">
         <form onSubmit={applyFilters}>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <div>
@@ -214,7 +214,7 @@ export default function TransactionHistoryView() {
 
       <button
         type="button"
-        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg shadow-blue-600/35 transition hover:bg-[#1d4ed8]"
+        className="fixed bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#5C5AFF] text-white shadow-lg shadow-indigo-500/30 transition hover:bg-[#4b49eb]"
         aria-label={t("dash.chat_support")}
       >
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

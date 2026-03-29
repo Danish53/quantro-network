@@ -10,11 +10,11 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-[#0D0B29] text-slate-900">
       <Navbar />
 
       <main>
-        <div className="bg-[#050510] text-slate-100">
+        <div className="bg-[#0D0B29] text-slate-100">
           <TermsPageContent />
         </div>
 

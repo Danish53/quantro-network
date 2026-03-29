@@ -2,15 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useDashboardWalletModal } from "./DashboardWalletConnectModal";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useAccount } from "wagmi";
 import { languageOptions } from "@/app/lib/languages";
-import logoImage from "@/public/images/logo-white.png";
 import FlagIcon from "../FlagIcon";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import logowhite from "@/public/images/logo-white.png"
+
+function shortenAddress(addr) {
+  if (!addr || addr.length < 12) return addr || "";
+  return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+}
+
+function WalletGlyph({ className = "h-4 w-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21 12a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m0 0a2.25 2.25 0 012.25-2.25H18.75A2.25 2.25 0 0121 9v3M3 9v3"
+      />
+    </svg>
+  );
+}
 
 export default function DashboardTopBar({ onMenuClick }) {
   const router = useRouter();
+  const { openWalletModal } = useDashboardWalletModal();
+  const { address, isConnected } = useAccount();
   const [langOpen, setLangOpen] = useState(false);
   const [avatarDataUrl, setAvatarDataUrl] = useState("");
   const [avatarInitials, setAvatarInitials] = useState("QN");
@@ -57,11 +78,11 @@ export default function DashboardTopBar({ onMenuClick }) {
   }, []);
 
   return (
-    <header className="relative z-30 w-full border-b border-white/[0.06] bg-[#14142a]/95 backdrop-blur-md">
+    <header className="relative z-30 w-full border-b border-white/[0.06] bg-transparent backdrop-blur-md">
       <div className="flex min-h-[52px] w-full min-w-0 items-center gap-1.5 px-2 py-1.5 sm:min-h-[56px] sm:gap-4 sm:px-5 sm:py-2 lg:px-6">
         <button
           type="button"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-[#1C1C30] text-white lg:hidden"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.05] text-slate-200 lg:hidden"
           aria-label={t("dash.open_menu")}
           onClick={onMenuClick}
         >
@@ -71,27 +92,49 @@ export default function DashboardTopBar({ onMenuClick }) {
         </button>
 
         <Link href="/dashboard" className="flex shrink-0 items-center" aria-label={t("dash.logo_alt")}>
-          <Image src={logoImage} alt={t("dash.logo_alt")} className="h-6 w-auto max-w-[120px] sm:h-8 sm:max-w-[180px]" priority />
+          <Image
+            src={logowhite}
+            alt={t("dash.logo_alt")}
+            width={185}
+            height={50}
+            className="h-7 w-auto max-w-[140px] object-contain object-left sm:h-9 sm:max-w-[180px]"
+            priority
+          />
         </Link>
 
-        <div className="relative mx-auto hidden min-w-0 flex-1 max-w-2xl sm:flex">
-          <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden>
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <div className="relative mx-auto hidden min-w-0 flex-1 max-w-xs sm:flex sm:max-w-sm md:max-w-md">
+          <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden>
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
           </span>
           <input
             type="search"
             placeholder={t("dash.search_placeholder")}
-            className="h-10 w-full min-w-0 rounded-[10px] border border-white/[0.08] bg-[#1C1C30] py-2 pl-9 pr-10 text-xs text-white placeholder:text-slate-500 outline-none transition focus:border-[#9A6B20]/45 focus:ring-1 focus:ring-[#9A6B20]/25 sm:h-11 sm:pl-10 sm:pr-16 sm:text-sm md:pr-20"
+            className="h-8 w-full min-w-0 rounded-[9px] border border-white/[0.1] bg-[#141235] py-1.5 pl-8 pr-2 text-xs text-slate-100 placeholder:text-slate-500 outline-none ring-1 ring-white/[0.04] transition focus:border-[#6366f1]/50 focus:ring-2 focus:ring-[#6366f1]/20 md:pr-14"
             aria-label={t("dash.search_aria")}
           />
-          <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-white/15 bg-[#252538] px-1.5 py-0.5 text-[10px] font-medium text-slate-400 sm:inline">
+          <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 rounded border border-white/[0.1] bg-[#141235] px-1 py-0.5 text-[9px] font-medium text-slate-500 md:inline">
             ⌘K
           </kbd>
         </div>
 
-        <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+          <button
+            type="button"
+            onClick={openWalletModal}
+            className={`inline-flex h-8 max-w-[11rem] shrink-0 items-center justify-center gap-1.5 rounded-[9px] border px-2.5 text-[11px] font-semibold transition sm:max-w-[13rem] md:max-w-none md:px-3 ${
+              isConnected
+                ? "border-emerald-500/35 bg-[#141235] text-emerald-100/90 ring-1 ring-white/[0.04] hover:border-emerald-400/45 hover:bg-[#1a1842]"
+                : "border-[#6366f1]/40 bg-gradient-to-r from-[#6366f1] to-[#5C5AFF] text-white shadow-md shadow-indigo-950/30 hover:brightness-110"
+            }`}
+            aria-label={isConnected ? t("dash.topbar_wallet_manage") : t("dash.topbar_connect_wallet")}
+          >
+            <WalletGlyph className={`h-3.5 w-3.5 shrink-0 ${isConnected ? "text-emerald-300" : ""}`} />
+            <span className="min-w-0 truncate">
+              {isConnected && address ? shortenAddress(address) : t("dash.topbar_connect_wallet")}
+            </span>
+          </button>
           {/* <button
             type="button"
             className="relative flex h-9 w-9 items-center justify-center rounded-[10px] text-slate-400 transition hover:bg-white/[0.05] hover:text-white sm:h-10 sm:w-10"
@@ -128,7 +171,7 @@ export default function DashboardTopBar({ onMenuClick }) {
             <button
               type="button"
               onClick={() => setLangOpen((v) => !v)}
-              className="flex h-9 items-center gap-1.5 rounded-[10px] border border-white/[0.08] bg-[#1C1C30] px-2 text-xs font-medium text-white sm:h-10 sm:gap-2 sm:px-3 sm:text-sm"
+              className="flex h-8 items-center gap-1.5 rounded-[9px] border border-white/[0.1] bg-[#141235] px-2 text-xs font-medium text-slate-200 ring-1 ring-white/[0.04] transition hover:bg-[#1a1842] sm:h-9 sm:gap-2 sm:px-3 sm:text-sm"
               aria-expanded={langOpen}
               aria-haspopup="listbox"
             >
@@ -143,7 +186,7 @@ export default function DashboardTopBar({ onMenuClick }) {
             </button>
             {langOpen ? (
               <ul
-                className="absolute right-0 z-[110] mt-2 max-h-64 w-52 overflow-auto rounded-[10px] border border-white/[0.08] bg-[#1C1C30] py-1 shadow-xl"
+                className="absolute right-0 z-[110] mt-2 max-h-64 w-52 overflow-auto rounded-[10px] border border-white/[0.1] bg-[#141235] py-1 shadow-lg ring-1 ring-black/20"
                 role="listbox"
                 onMouseDown={(e) => e.stopPropagation()}
               >
@@ -152,7 +195,7 @@ export default function DashboardTopBar({ onMenuClick }) {
                     <button
                       type="button"
                       className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm ${
-                        language === opt.code ? "bg-white/[0.08] text-white" : "text-slate-300 hover:bg-white/[0.05]"
+                        language === opt.code ? "bg-[#6366f1]/25 text-[#a5b4fc]" : "text-slate-300 hover:bg-white/[0.06]"
                       }`}
                       onMouseDown={(e) => {
                         e.preventDefault();
@@ -181,14 +224,14 @@ export default function DashboardTopBar({ onMenuClick }) {
               router.push("/login");
               router.refresh();
             }}
-            className="hidden h-9 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.1] bg-[#252538] px-2.5 text-[11px] font-medium text-slate-200 transition hover:bg-[#2f2f48] sm:flex sm:h-10 sm:px-3 sm:text-xs"
+            className="hidden h-8 shrink-0 items-center justify-center rounded-[9px] border border-white/[0.1] bg-[#141235] px-2.5 text-[11px] font-medium text-slate-200 ring-1 ring-white/[0.04] transition hover:bg-[#1a1842] sm:flex sm:h-9 sm:px-3 sm:text-xs"
           >
             {t("dash.logout")}
           </button>
 
           <button
             type="button"
-            className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.12] bg-gradient-to-br from-[#3d3d52] to-[#252538] text-xs font-bold text-white sm:h-10 sm:w-10"
+            className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.15] bg-gradient-to-br from-[#6366f1] to-[#5C5AFF] text-[10px] font-bold text-white shadow-sm sm:h-9 sm:w-9 sm:text-xs"
             aria-label={t("dash.profile")}
           >
             {avatarDataUrl ? (

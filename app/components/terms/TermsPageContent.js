@@ -43,7 +43,7 @@ export default function TermsPageContent() {
       </div>
 
       <div className="relative mx-auto w-full max-w-3xl px-4 pb-12 sm:px-6 lg:px-10">
-        <article className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0d18]/90 shadow-[0_24px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.05] backdrop-blur-sm">
+        <article className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#141235]/90 shadow-[0_24px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.05] backdrop-blur-sm">
           <div className="space-y-10 px-4 py-8 sm:px-10 sm:py-10">
             {SECTION_KEYS.map(({ titleKey, bodyKey }) => (
               <section key={titleKey}>

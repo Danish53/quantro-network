@@ -39,7 +39,7 @@ export default function RoadmapTimelineSection() {
               >
                 {/* Node on the timeline */}
                 <div
-                  className="absolute left-[13px] top-8 z-10 size-3.5 -translate-x-1/2 rounded-full border-[3px] border-[#060a14] bg-violet-500 shadow-[0_0_12px_rgba(139,92,246,0.6)] lg:left-1/2 lg:top-1/2 lg:-translate-y-1/2"
+                  className="absolute left-[13px] top-8 z-10 size-3.5 -translate-x-1/2 rounded-full border-[3px] border-[#0D0B29] bg-violet-500 shadow-[0_0_12px_rgba(139,92,246,0.6)] lg:left-1/2 lg:top-1/2 lg:-translate-y-1/2"
                   aria-hidden
                 />
 
