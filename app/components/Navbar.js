@@ -29,7 +29,8 @@ export default function Navbar({
     (async () => {
       try {
         const res = await fetch("/api/auth/me", { credentials: "include" });
-        if (!cancelled) setLoggedIn(res.ok);
+        const data = await res.json().catch(() => ({}));
+        if (!cancelled) setLoggedIn(Boolean(res.ok && data?.user));
       } catch {
         if (!cancelled) setLoggedIn(false);
       }

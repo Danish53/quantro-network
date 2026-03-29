@@ -16,8 +16,9 @@ export default function HeroSection() {
     (async () => {
       try {
         const res = await fetch("/api/auth/me", { credentials: "include" });
+        const data = await res.json().catch(() => ({}));
         if (!cancelled) {
-          setCtaHref(res.ok ? "/dashboard" : "/login");
+          setCtaHref(res.ok && data?.user ? "/dashboard" : "/login");
         }
       } catch {
         if (!cancelled) setCtaHref("/login");
