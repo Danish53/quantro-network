@@ -22,13 +22,13 @@ export default function SplitFeatureSection() {
               href="/get-started"
               className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#4f46e5] to-[#9333ea] px-6 py-3.5 text-sm font-semibold text-white shadow-md transition hover:opacity-95 sm:px-7"
             >
-              {t("split.cta_primary")} <span className="ml-1.5 text-base leading-none">&gt;</span>
+              {t("split.cta_primary")}
             </Link>
             <Link
               href="/about-us"
               className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-[#0f172a] transition hover:bg-slate-50 sm:px-7"
             >
-              {t("split.cta_secondary")} <span className="ml-1.5 text-base leading-none">&gt;</span>
+              {t("split.cta_secondary")}
             </Link>
           </div>
         </article>

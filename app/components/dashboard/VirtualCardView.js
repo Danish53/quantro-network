@@ -5,7 +5,7 @@ import Link from "next/link";
 import DashboardStandardPage from "./DashboardStandardPage";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 import DashboardToast from "./DashboardToast";
-import PremiumPlasticCard from "./PremiumPlasticCard";
+import PremiumPlasticCard, { demoCvvFromSeed } from "./PremiumPlasticCard";
 
 const cardShell =
   "rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6";
@@ -219,15 +219,18 @@ export default function VirtualCardView() {
               {/* <p className="mb-3 text-center text-[11px] font-medium uppercase tracking-widest text-slate-400 lg:text-left">
                 {card.networkLabel || t("dash.vcard.network")}
               </p> */}
-              <div className="relative mx-auto w-full max-w-[440px]">
+              <div className="relative mx-auto w-full max-w-[415px]">
                 <div
                   className="pointer-events-none absolute -inset-8 -z-10 rounded-[40%] bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.14)_0%,transparent_55%),radial-gradient(ellipse_at_70%_30%,rgba(59,130,246,0.12)_0%,transparent_45%),radial-gradient(ellipse_at_20%_80%,rgba(251,146,60,0.08)_0%,transparent_40%)] blur-2xl"
                   aria-hidden
                 />
                 <PremiumPlasticCard
                   cardNumberDisplay={card.maskedPan || t("dash.vcard.masked")}
+                  panCopyValue={card.panCopyable ?? card.panFull ?? undefined}
                   expiresValue={`${String(card.expiryMonth).padStart(2, "0")}-${String(card.expiryYear).slice(-2)}`}
                   cardholderName={t("dash.vcard.cardholder_placeholder")}
+                  cvvDisplay={demoCvvFromSeed(card.id)}
+                  flipHint={t("dash.vcard.flip_hint")}
                 />
               </div>
             </div>

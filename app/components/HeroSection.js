@@ -50,7 +50,7 @@ export default function HeroSection() {
           href={ctaHref}
           className="mt-6 inline-flex w-full max-w-xs items-center justify-center rounded-full bg-[#5C5AFF] px-6 py-3.5 text-base font-semibold text-white shadow-[0_10px_40px_rgba(92,90,255,0.45)] transition hover:bg-[#6e6bff] sm:mt-8 sm:w-auto sm:max-w-none sm:px-12 sm:py-4 sm:text-lg"
         >
-          {t("hero.cta")} <span className="ml-2 text-lg leading-none sm:text-xl">›</span>
+          {t("hero.cta")}
         </Link>
 
         <p className="mt-6 text-base font-semibold text-white sm:mt-7 sm:text-lg">{t("hero.trusted")}</p>

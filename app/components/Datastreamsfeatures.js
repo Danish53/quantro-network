@@ -30,7 +30,7 @@ export default function Datastreamsfeatures() {
           href="/get-started"
           className="mt-8 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#4f46e5] to-[#9333ea] px-7 py-3.5 text-sm font-semibold text-white shadow-md transition hover:opacity-95"
         >
-          {t("data.cta")} <span className="ml-1.5 text-base leading-none">&gt;</span>
+          {t("data.cta")}
         </Link>
       </article>
     </section>

@@ -114,7 +114,7 @@ export default function Navbar({
                 href={ctaHref}
                 className="rounded-full border border-[lightgray] bg-white px-5 py-[9px] text-[14px] font-semibold text-[#111827] transition hover:bg-slate-50"
               >
-                {t(ctaLabelKey)} <span aria-hidden="true" className="ml-1">{">"}</span>
+                {t(ctaLabelKey)}
               </Link>
             </>
           )}
@@ -245,7 +245,7 @@ export default function Navbar({
                   className="mt-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-900 shadow-sm"
                   onClick={() => setIsOpen(false)}
                 >
-                  {t(ctaLabelKey)} <span aria-hidden="true" className="ml-1">{">"}</span>
+                  {t(ctaLabelKey)}
                 </Link>
               </>
             )}

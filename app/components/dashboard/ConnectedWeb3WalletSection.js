@@ -1,15 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useAccount, useDisconnect, useReadContracts, useSwitchChain } from "wagmi";
-import { bsc } from "wagmi/chains";
-import { erc20Abi, formatUnits } from "viem";
+import { useAccount, useBalance, useDisconnect, useReadContracts, useSwitchChain } from "wagmi";
+import { bsc, mainnet } from "wagmi/chains";
+import { erc20Abi, formatEther, formatUnits } from "viem";
 import { useSiteTranslation } from "../SiteTranslationProvider";
-import { BSC_TOKENS, TokenBadge, connectorIcon, shortenAddress } from "./web3WalletUi";
+import { ConnectorAvatar, ETHEREUM_TOKENS, TokenBadge, shortenAddress } from "./web3WalletUi";
 import { useDashboardWalletModal } from "./DashboardWalletConnectModal";
 
 const cardShell =
   "rounded-xl border border-white/[0.08] bg-[#141235] p-5 shadow-sm ring-1 ring-white/[0.04] sm:p-6";
+
+function shortChainName(chainId) {
+  if (chainId === mainnet.id) return "Ethereum";
+  if (chainId === bsc.id) return "BNB Chain";
+  if (chainId == null) return "—";
+  return String(chainId);
+}
 
 export default function ConnectedWeb3WalletSection() {
   const { t } = useSiteTranslation();
@@ -18,38 +25,53 @@ export default function ConnectedWeb3WalletSection() {
   const { disconnect } = useDisconnect();
   const { switchChain, isPending: isSwitchingChain } = useSwitchChain();
   const [copied, setCopied] = useState(false);
-  const isWrongNetwork = isConnected && chainId !== bsc.id;
 
-  const tokenContracts = isConnected && address
-    ? BSC_TOKENS.map((token) => ({
-        abi: erc20Abi,
-        address: token.address,
-        functionName: "balanceOf",
-        args: [address],
-      }))
-    : [];
+  const onEthereum = chainId === mainnet.id;
+  const needsEthereumForBalances = isConnected && chainId != null && chainId !== mainnet.id;
+
+  const { data: ethBalance, isLoading: ethBalanceLoading } = useBalance({
+    address,
+    chainId: mainnet.id,
+    query: { enabled: Boolean(address && isConnected && onEthereum) },
+  });
+
+  const tokenContracts =
+    isConnected && address && onEthereum
+      ? ETHEREUM_TOKENS.map((token) => ({
+          chainId: mainnet.id,
+          abi: erc20Abi,
+          address: token.address,
+          functionName: "balanceOf",
+          args: [address],
+        }))
+      : [];
 
   const { data: balanceResults = [], isLoading: isLoadingBalances, isFetching: isFetchingBalances } = useReadContracts({
     contracts: tokenContracts,
     allowFailure: true,
-    query: { enabled: tokenContracts.length > 0 && !isWrongNetwork },
+    query: { enabled: tokenContracts.length > 0 && onEthereum },
   });
 
-  const tokenCards = useMemo(
+  const ethFormatted = useMemo(() => {
+    if (!ethBalance?.value) return "0";
+    return Number(formatEther(ethBalance.value)).toLocaleString("en-US", { maximumFractionDigits: 6 });
+  }, [ethBalance?.value]);
+
+  const erc20Cards = useMemo(
     () =>
-      BSC_TOKENS.map((token, index) => {
+      ETHEREUM_TOKENS.map((token, index) => {
         const result = balanceResults[index];
         const hasError = Boolean(result?.error);
         const isBusy = isLoadingBalances || isFetchingBalances;
         const raw = typeof result?.result === "bigint" ? formatUnits(result.result, token.decimals) : "0";
         const balanceText = Number(raw).toLocaleString("en-US", { maximumFractionDigits: 6 });
         let status = t("dash.wc.status_ready");
-        if (isWrongNetwork) status = t("dash.wc.status_wrong_network");
+        if (needsEthereumForBalances) status = t("dash.wc.status_wrong_network");
         else if (hasError) status = t("dash.wc.status_error");
         else if (isBusy) status = t("dash.wc.status_loading");
-        return { ...token, balanceText, status, hasError, isBusy, isWrongNetwork };
+        return { ...token, balanceText, status, hasError, isBusy };
       }),
-    [balanceResults, isFetchingBalances, isLoadingBalances, isWrongNetwork, t],
+    [balanceResults, isFetchingBalances, isLoadingBalances, needsEthereumForBalances, t],
   );
 
   useEffect(() => {
@@ -93,6 +115,12 @@ export default function ConnectedWeb3WalletSection() {
     );
   }
 
+  const ethStatus = needsEthereumForBalances
+    ? t("dash.wc.status_wrong_network")
+    : ethBalanceLoading
+      ? t("dash.wc.status_loading")
+      : t("dash.wc.status_ready");
+
   return (
     <div className={`${cardShell} mb-8`}>
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -100,15 +128,15 @@ export default function ConnectedWeb3WalletSection() {
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-lg font-semibold text-white">{t("dash.wal.web3_connected_title")}</h2>
             <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-medium text-emerald-300">{t("dash.wc.connected")}</span>
-            {isWrongNetwork ? (
-              <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-xs font-medium text-amber-200">{t("dash.wc.status_wrong_network")}</span>
+            {needsEthereumForBalances ? (
+              <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-xs font-medium text-amber-200">{t("dash.wal.use_ethereum_for_balances")}</span>
             ) : null}
           </div>
           <p className="mt-1 text-sm text-slate-400">{t("dash.wal.web3_connected_hint")}</p>
 
           <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/10">{connectorIcon(connector?.name)}</span>
+              <ConnectorAvatar connector={connector} sizeClass="h-11 w-11" />
               <div className="min-w-0">
                 <p className="text-xs uppercase tracking-wide text-slate-500">{t("dash.wc.connected_with")}</p>
                 <p className="truncate font-medium text-white">{connector?.name || "—"}</p>
@@ -126,19 +154,21 @@ export default function ConnectedWeb3WalletSection() {
                   {copied ? t("dash.wal.copied") : t("dash.wal.copy")}
                 </button>
               </div>
-              <p className="mt-1 text-xs text-slate-500">{shortenAddress(address)} · BSC</p>
+              <p className="mt-1 text-xs text-slate-500">
+                {shortenAddress(address)} · {shortChainName(chainId)}
+              </p>
             </div>
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            {isWrongNetwork ? (
+            {needsEthereumForBalances ? (
               <button
                 type="button"
-                onClick={() => switchChain({ chainId: bsc.id })}
+                onClick={() => switchChain({ chainId: mainnet.id })}
                 disabled={isSwitchingChain}
                 className="rounded-[10px] bg-amber-500 px-4 py-2 text-sm font-semibold text-[#111827] transition hover:bg-amber-400 disabled:opacity-60"
               >
-                {isSwitchingChain ? t("dash.wc.switching") : t("dash.wc.switch_network")}
+                {isSwitchingChain ? t("dash.wc.switching") : t("dash.wal.switch_to_ethereum")}
               </button>
             ) : null}
             <button
@@ -160,10 +190,35 @@ export default function ConnectedWeb3WalletSection() {
       </div>
 
       <div className="mt-8 border-t border-white/[0.06] pt-6">
-        <h3 className="text-base font-semibold text-white">{t("dash.wc.balance")}</h3>
+        <h3 className="text-base font-semibold text-white">{t("dash.wal.eth_section_title")}</h3>
         <p className="mt-1 text-xs text-slate-500">{t("dash.wal.web3_onchain_note")}</p>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {tokenCards.map((token) => (
+          <div className="rounded-[12px] border border-white/[0.1] bg-gradient-to-br from-[#1a1838] to-[#141235] p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-white/10">
+                  <TokenBadge symbol="ETH" />
+                </span>
+                <p className="font-semibold text-white">ETH</p>
+              </div>
+              <span
+                className={`rounded-full px-2.5 py-1 text-xs ${
+                  needsEthereumForBalances
+                    ? "bg-amber-500/20 text-amber-300"
+                    : ethBalanceLoading
+                      ? "bg-amber-500/20 text-amber-300"
+                      : "bg-emerald-500/20 text-emerald-300"
+                }`}
+              >
+                {ethStatus}
+              </span>
+            </div>
+            <p className="mt-4 text-xs uppercase tracking-wide text-slate-500">{t("dash.wc.balance")}</p>
+            <p className="mt-1 text-2xl font-bold text-white">{onEthereum ? ethFormatted : "—"}</p>
+            <p className="mt-1 text-[11px] text-slate-500">{t("dash.wal.eth_native_note")}</p>
+          </div>
+
+          {erc20Cards.map((token) => (
             <div
               key={token.symbol}
               className="rounded-[12px] border border-white/[0.1] bg-gradient-to-br from-[#1a1838] to-[#141235] p-4"
@@ -177,7 +232,7 @@ export default function ConnectedWeb3WalletSection() {
                 </div>
                 <span
                   className={`rounded-full px-2.5 py-1 text-xs ${
-                    token.isWrongNetwork
+                    needsEthereumForBalances
                       ? "bg-amber-500/20 text-amber-300"
                       : token.hasError
                         ? "bg-rose-500/20 text-rose-300"
@@ -190,7 +245,7 @@ export default function ConnectedWeb3WalletSection() {
                 </span>
               </div>
               <p className="mt-4 text-xs uppercase tracking-wide text-slate-500">{t("dash.wc.balance")}</p>
-              <p className="mt-1 text-2xl font-bold text-white">{token.balanceText}</p>
+              <p className="mt-1 text-2xl font-bold text-white">{onEthereum ? token.balanceText : "—"}</p>
             </div>
           ))}
         </div>

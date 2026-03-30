@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { dashboardNavSections } from "./dashboardNav";
 import { NavIcon } from "./DashboardNavIcons";
 import { useSiteTranslation } from "../SiteTranslationProvider";
@@ -16,7 +16,15 @@ function ChevronRight({ className = "h-4 w-4 text-slate-500" }) {
 
 export default function DashboardSidebar({ onNavigate }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { t } = useSiteTranslation();
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    onNavigate?.();
+    router.push("/login");
+    router.refresh();
+  }
 
   const linkClass = (active) =>
     `flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition ${
@@ -26,7 +34,7 @@ export default function DashboardSidebar({ onNavigate }) {
     }`;
 
   return (
-    <aside className="flex h-full min-h-0 w-full flex-col bg-transparent px-3 py-5 sm:px-4">
+    <aside className="flex h-full min-h-0 w-full flex-col bg-[#141235] px-3 py-5 sm:px-4">
       <nav className="dashboard-sidebar-scroll flex flex-1 flex-col gap-5 overflow-y-auto pb-6 pt-1">
         {dashboardNavSections.map((section) => (
           <div key={section.id}>
@@ -62,13 +70,29 @@ export default function DashboardSidebar({ onNavigate }) {
           </div>
         ))}
       </nav>
-      <Link
-        href="/"
-        className="mt-auto border-t border-white/[0.08] pt-4 text-center text-xs text-slate-400 transition hover:text-[#a5b4fc]"
-        onClick={() => onNavigate?.()}
-      >
-        {t("dash.exit_website")}
-      </Link>
+      <div className="mt-auto shrink-0 border-t border-white/[0.08] pt-4 lg:pt-3">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="mb-3 flex w-full items-center justify-center gap-2 rounded-[10px] border border-rose-500/35 bg-rose-500/10 px-3 py-2.5 text-[13px] font-semibold text-rose-100/95 transition hover:bg-rose-500/20 lg:hidden"
+        >
+          <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75} aria-hidden>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M18 9l3 3m0 0l-3 3m3-3H9"
+            />
+          </svg>
+          {t("dash.logout")}
+        </button>
+        <Link
+          href="/"
+          className="block text-center text-xs text-slate-400 transition hover:text-[#a5b4fc]"
+          onClick={() => onNavigate?.()}
+        >
+          {t("dash.exit_website")}
+        </Link>
+      </div>
     </aside>
   );
 }

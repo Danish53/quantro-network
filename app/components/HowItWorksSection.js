@@ -17,7 +17,9 @@ function ArrowBetween() {
       aria-hidden="true"
     >
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-[0_2px_12px_rgba(15,23,42,0.12)] ring-1 ring-slate-100 sm:h-10 sm:w-10">
-        <span className="text-sm font-semibold leading-none text-[#3b82f6] sm:text-base">›</span>
+        <svg className="h-4 w-4 text-[#3b82f6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
       </div>
     </div>
   );

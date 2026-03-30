@@ -6,12 +6,12 @@ import MembershipPlansSection from "../components/membership/MembershipPlansSect
 export const metadata = {
   title: "Membership Packages | Quantro Network",
   description:
-    "Quantro Network membership tiers — Access and Prime quarterly plans with real-time intelligence, analytics, and premium benefits.",
+    "Business address plans — Quarterly, semi-annual, and annual membership options with full feature lists and secure checkout.",
 };
 
 export default function MembershipPage() {
   return (
-    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-50 text-slate-900">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-white text-slate-900">
       <Navbar />
 
       <main>

@@ -1,9 +1,40 @@
-/** Shared Web3 wallet UI — icons, helpers, BSC token list for on-chain reads. */
+/** Shared Web3 wallet UI — icons, helpers, token lists for on-chain reads. */
 
 export const BSC_TOKENS = [
   { symbol: "USDT", decimals: 18, address: "0x55d398326f99059fF775485246999027B3197955" },
   { symbol: "USDC", decimals: 18, address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d" },
 ];
+
+/** Ethereum mainnet ERC-20s for Connected Web3 section (canonical decimals). */
+export const ETHEREUM_TOKENS = [
+  { symbol: "USDT", decimals: 6, address: "0xdAC17F958D2ee523a2206206994597C13D831ec7" },
+  { symbol: "USDC", decimals: 6, address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" },
+  { symbol: "WETH", decimals: 18, address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2" },
+  { symbol: "DAI", decimals: 18, address: "0x6B175474E89094C44Da98b954EedeAC495271d0F" },
+];
+
+export function walletConnectorIconUrl(icon) {
+  return typeof icon === "string" && (icon.startsWith("http") || icon.startsWith("data:")) ? icon : null;
+}
+
+/** EIP-6963 `connector.icon` URL when available; else mapped SVG from name. */
+export function ConnectorAvatar({ connector, sizeClass = "h-11 w-11", roundedClass = "rounded-full" }) {
+  const url = walletConnectorIconUrl(connector?.icon);
+  if (url) {
+    return (
+      <img
+        src={url}
+        alt=""
+        className={`${sizeClass} shrink-0 ${roundedClass} object-contain`}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+      />
+    );
+  }
+  return (
+    <span className={`grid ${sizeClass} shrink-0 place-items-center ${roundedClass} bg-white/10`}>{connectorIcon(connector?.name)}</span>
+  );
+}
 
 export function shortenAddress(address) {
   if (!address) return "—";
@@ -12,9 +43,18 @@ export function shortenAddress(address) {
 
 export function connectorIcon(name = "") {
   const lower = name.toLowerCase();
-  if (lower.includes("meta")) return <MetaMaskIcon />;
-  if (lower.includes("walletconnect")) return <WalletConnectIcon />;
+  if (lower.includes("rabby")) return <RabbyWalletIcon />;
+  if (lower.includes("okx")) return <OkxWalletIcon />;
+  if (lower.includes("rainbow")) return <RainbowWalletIcon />;
+  if (lower.includes("phantom")) return <PhantomWalletIcon />;
+  if (lower.includes("bitget")) return <BitgetWalletIcon />;
+  if (lower.includes("coin98")) return <Coin98WalletIcon />;
+  if (lower.includes("exodus")) return <ExodusWalletIcon />;
+  if (lower.includes("brave")) return <BraveWalletIcon />;
   if (lower.includes("coinbase")) return <CoinbaseIcon />;
+  if (lower.includes("trust")) return <TrustWalletIcon />;
+  if (lower.includes("walletconnect")) return <WalletConnectIcon />;
+  if (lower.includes("meta")) return <MetaMaskIcon />;
   return <GenericWalletIcon />;
 }
 
@@ -78,7 +118,113 @@ export function CoinbaseIcon() {
   );
 }
 
+function BraveWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="11" fill="#FB542B" />
+      <path
+        fill="#fff"
+        d="M12 6.5l1.2 3h3.3l-2.7 2 1 3.2L12 13.2 9.2 14.7l1-3.2-2.7-2h3.3L12 6.5z"
+      />
+    </svg>
+  );
+}
+
+function RabbyWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect width="24" height="24" rx="6" fill="#7B61FF" />
+      <circle cx="12" cy="12" r="4" fill="#fff" />
+    </svg>
+  );
+}
+
+function TrustWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="11" fill="#3375BB" />
+      <path d="M12 7l4 3v4c0 2.5-1.7 4.8-4 5.5-2.3-.7-4-3-4-5.5v-4l4-3z" fill="#fff" />
+    </svg>
+  );
+}
+
+function OkxWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect width="24" height="24" rx="6" fill="#000" />
+      <path fill="#fff" d="M7 7h3v10H7V7zm7 0h3v10h-3V7zm-3.5 3h3v4h-3v-4z" />
+    </svg>
+  );
+}
+
+function RainbowWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="11" fill="#7B61FF" />
+      <circle cx="12" cy="12" r="6" fill="none" stroke="#FF6B9D" strokeWidth="2.5" opacity="0.9" />
+    </svg>
+  );
+}
+
+function PhantomWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect width="24" height="24" rx="8" fill="#AB9FF2" />
+      <path
+        d="M12 8.5c-2.2 0-4 1.5-4 3.4 0 1.2.7 2.2 1.7 2.8-.1.4-.4 1-.9 1.4 1-.1 1.8-.6 2.2-1.1.3 0 .7.1 1 .1 2.2 0 4-1.5 4-3.4 0-1.9-1.8-3.4-4-3.4z"
+        fill="#fff"
+      />
+    </svg>
+  );
+}
+
+function BitgetWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect width="24" height="24" rx="6" fill="#00F0FF" />
+      <path d="M8 8h8v2H8V8zm0 3h8v2H8v-2zm0 3h5v2H8v-2z" fill="#0B0E26" />
+    </svg>
+  );
+}
+
+function Coin98WalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="11" fill="#CDA349" />
+      <rect x="8" y="9" width="8" height="6" rx="1" fill="#111" />
+    </svg>
+  );
+}
+
+function ExodusWalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect width="24" height="24" rx="6" fill="#8938FF" />
+      <path d="M12 6l6 6-6 6-6-6 6-6z" fill="#fff" opacity="0.95" />
+    </svg>
+  );
+}
+
 export function TokenBadge({ symbol }) {
+  if (symbol === "ETH" || symbol === "WETH") {
+    return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <circle cx="12" cy="12" r="12" fill="#627EEA" />
+        <path
+          d="M12 4v5.5l4.7 2.1L12 4zm0 0L7.3 11.6 12 9.5V4zm0 16v-6.2l4.7-2.7L12 20zm0 0l-4.7-8.1L12 13.8V20zm0-7.3l4.7-2.7-4.7-2.1-4.7 2.1 4.7 2.7z"
+          fill="#fff"
+        />
+      </svg>
+    );
+  }
+  if (symbol === "DAI") {
+    return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <circle cx="12" cy="12" r="12" fill="#F4B731" />
+        <circle cx="12" cy="12" r="5" fill="none" stroke="#fff" strokeWidth="1.8" />
+      </svg>
+    );
+  }
   if (symbol === "USDT") {
     return (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>

@@ -79,6 +79,33 @@ body {
   background: linear-gradient(180deg, rgba(129, 140, 248, 0.5), rgba(99, 102, 241, 0.55));
 }
 
+/* Wallet connect modal — thin scrollbar (dashboard indigo theme) */
+.wallet-modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.45) rgba(15, 13, 46, 0.35);
+}
+
+.wallet-modal-scroll::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+.wallet-modal-scroll::-webkit-scrollbar-track {
+  margin: 6px 0;
+  background: rgba(15, 13, 46, 0.5);
+  border-radius: 9999px;
+}
+
+.wallet-modal-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.45), rgba(92, 90, 255, 0.55));
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.wallet-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(129, 140, 248, 0.55), rgba(99, 102, 241, 0.65));
+}
+
 /* Dashboard primary buttons — match marketing hero CTA (#5C5AFF) */
 .dashboard-theme button[class*="bg-[#2563eb]"] {
   background: linear-gradient(135deg, #5c5aff 0%, #4b49eb 100%) !important;

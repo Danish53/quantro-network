@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import DashboardNavigateDropdown from "./DashboardNavigateDropdown";
-import DashboardChatFab from "./DashboardChatFab";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 
 /**
  * @param {string} titleKey - i18n key for H1
  * @param {string} [breadcrumbLastKey] - last crumb key; defaults to titleKey
  */
-export default function DashboardStandardPage({ titleKey, breadcrumbLastKey, children, showChat = true }) {
+export default function DashboardStandardPage({ titleKey, breadcrumbLastKey, children }) {
   const { t } = useSiteTranslation();
   const last = breadcrumbLastKey ?? titleKey;
   return (
@@ -25,7 +24,7 @@ export default function DashboardStandardPage({ titleKey, breadcrumbLastKey, chi
                 </Link>
               </li>
               <li className="px-1 text-slate-500" aria-hidden>
-                {">"}
+                /
               </li>
               <li className="font-medium text-slate-300">{t(last)}</li>
             </ol>
@@ -34,7 +33,6 @@ export default function DashboardStandardPage({ titleKey, breadcrumbLastKey, chi
         </div>
       </div>
       <div className="mt-8">{children}</div>
-      {showChat ? <DashboardChatFab /> : null}
     </div>
   );
 }

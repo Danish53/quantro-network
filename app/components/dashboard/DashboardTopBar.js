@@ -119,7 +119,7 @@ export default function DashboardTopBar({ onMenuClick }) {
           </kbd>
         </div>
 
-        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+        <div className="flex min-w-0 shrink-0 items-center justify-end gap-1 sm:gap-2">
           <button
             type="button"
             onClick={openWalletModal}
@@ -224,14 +224,14 @@ export default function DashboardTopBar({ onMenuClick }) {
               router.push("/login");
               router.refresh();
             }}
-            className="hidden h-8 shrink-0 items-center justify-center rounded-[9px] border border-white/[0.1] bg-[#141235] px-2.5 text-[11px] font-medium text-slate-200 ring-1 ring-white/[0.04] transition hover:bg-[#1a1842] sm:flex sm:h-9 sm:px-3 sm:text-xs"
+            className="hidden h-8 shrink-0 items-center justify-center rounded-[9px] border border-white/[0.1] bg-[#141235] px-2.5 text-[11px] font-medium text-slate-200 ring-1 ring-white/[0.04] transition hover:bg-[#1a1842] lg:flex lg:h-9 lg:px-3 lg:text-xs"
           >
             {t("dash.logout")}
           </button>
 
           <button
             type="button"
-            className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.15] bg-gradient-to-br from-[#6366f1] to-[#5C5AFF] text-[10px] font-bold text-white shadow-sm sm:h-9 sm:w-9 sm:text-xs"
+            className="hidden h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.15] bg-gradient-to-br from-[#6366f1] to-[#5C5AFF] text-[10px] font-bold text-white shadow-sm lg:flex lg:h-9 lg:w-9 lg:text-xs"
             aria-label={t("dash.profile")}
           >
             {avatarDataUrl ? (

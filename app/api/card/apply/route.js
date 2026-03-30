@@ -4,7 +4,7 @@ import { getAuthUserIdFromRequest } from "@/lib/api/authUser";
 import VirtualCard from "@/lib/models/VirtualCard";
 import User from "@/lib/models/User";
 import { reconcileMockKycStatus } from "@/lib/kyc/mockKyc";
-import { createMockStripeCard, reconcileMockCardLifecycle, serializeCard } from "@/lib/card/mockStripeCard";
+import { createMockStripeCard, ensureCardPanStorage, reconcileMockCardLifecycle, serializeCard } from "@/lib/card/mockStripeCard";
 
 export const runtime = "nodejs";
 const USA_ALLOWED = new Set(["US", "USA", "UNITED STATES", "UNITED STATES OF AMERICA", "UNITED STATE"]);
@@ -56,6 +56,7 @@ export async function POST(request) {
   const existing = await VirtualCard.findOne({ userId });
   if (existing) {
     await reconcileMockCardLifecycle(existing);
+    await ensureCardPanStorage(existing);
     return NextResponse.json({ error: "Virtual card already exists", card: serializeCard(existing) }, { status: 409 });
   }
 

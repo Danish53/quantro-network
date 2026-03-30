@@ -9,6 +9,12 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+  /** WalletConnect / noble deps bundle reliably with the App Router. */
+  transpilePackages: [
+    "@walletconnect/ethereum-provider",
+    "@walletconnect/utils",
+    "@walletconnect/universal-provider",
+  ],
 };
 
 export default nextConfig;

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db/mongoose";
 import { getAuthUserIdFromRequest } from "@/lib/api/authUser";
 import VirtualCard from "@/lib/models/VirtualCard";
-import { reconcileMockCardLifecycle, serializeCard } from "@/lib/card/mockStripeCard";
+import { ensureCardPanStorage, reconcileMockCardLifecycle, serializeCard } from "@/lib/card/mockStripeCard";
 
 export const runtime = "nodejs";
 
@@ -24,5 +24,6 @@ export async function GET(request) {
   }
 
   await reconcileMockCardLifecycle(card);
+  await ensureCardPanStorage(card);
   return NextResponse.json({ card: serializeCard(card) });
 }

@@ -23,13 +23,13 @@ export default function EngineeringTeamSection({ phoneSrc = "/images/sec-3.png" 
               href="/membership"
               className="inline-flex items-center justify-center rounded-full bg-[#5d45fd] px-6 py-3.5 text-sm font-semibold text-white shadow-md transition hover:brightness-105 sm:px-7"
             >
-              {t("eng.cta_join")} <span className="ml-1.5 text-base leading-none">&gt;</span>
+              {t("eng.cta_join")}
             </Link>
             <Link
               href="/membership"
               className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/80 px-6 py-3.5 text-sm font-semibold text-[#0a1128] backdrop-blur-sm transition hover:bg-white sm:px-7"
             >
-              {t("eng.cta_view")} <span className="ml-1.5 text-base leading-none">&gt;</span>
+              {t("eng.cta_view")}
             </Link>
           </div>
         </article>
