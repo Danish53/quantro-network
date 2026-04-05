@@ -8,6 +8,7 @@ import { languageOptions } from "@/app/lib/languages";
 import { NAV_LINKS } from "@/app/lib/siteStrings";
 import FlagIcon from "./FlagIcon";
 import { useSiteTranslation } from "./SiteTranslationProvider";
+import { usePortalLink } from "@/app/hooks/usePortalLink";
 
 export default function Navbar({
   brand = "Quantro Network",
@@ -19,26 +20,10 @@ export default function Navbar({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
   const langDropdownRef = useRef(null);
   const pathname = usePathname();
   const { language, setLanguage, t, isTranslating } = useSiteTranslation();
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch("/api/auth/me", { credentials: "include" });
-        const data = await res.json().catch(() => ({}));
-        if (!cancelled) setLoggedIn(Boolean(res.ok && data?.user));
-      } catch {
-        if (!cancelled) setLoggedIn(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [pathname]);
+  const { loggedIn, portalHref } = usePortalLink();
 
   const selectedLanguage = useMemo(
     () => languageOptions.find((lang) => lang.code === language) ?? languageOptions[0],
@@ -100,7 +85,7 @@ export default function Navbar({
         <div className="hidden items-center gap-3 xl:flex">
           {loggedIn ? (
             <Link
-              href="/dashboard"
+              href={portalHref}
               className="rounded-full border border-[lightgray] bg-white px-5 py-[9px] text-[14px] font-semibold text-[#111827] transition hover:bg-slate-50"
             >
               {t(portalLabelKey)}
@@ -229,7 +214,7 @@ export default function Navbar({
             })}
             {loggedIn ? (
               <Link
-                href="/dashboard"
+                href={portalHref}
                 className="mt-1 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-900 shadow-sm"
                 onClick={() => setIsOpen(false)}
               >

@@ -7,6 +7,7 @@ import connectDB from "@/lib/db/mongoose";
 import User from "@/lib/models/User";
 import { verifyRecaptchaV2 } from "@/lib/auth/recaptcha";
 import { AUTH_COOKIE, signAuthToken } from "@/lib/auth/jwt";
+import { effectiveUserRole } from "@/lib/auth/roles";
 
 const loginSchema = z.object({
   email: z.string().trim().email().max(255),
@@ -65,9 +66,20 @@ export async function POST(request) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }
 
+  if (user.deletedAt) {
+    return NextResponse.json({ error: "This account has been deactivated." }, { status: 401 });
+  }
+
+  const role = effectiveUserRole(user);
+  const redirectTo = role === "admin" ? "/dashboard/admin" : "/dashboard";
+
   let token;
   try {
-    token = await signAuthToken({ userId: user._id.toString(), email: user.email });
+    token = await signAuthToken({
+      userId: user._id.toString(),
+      email: user.email,
+      role,
+    });
   } catch (e) {
     console.error("[login jwt]", e);
     return NextResponse.json({ error: "Server misconfigured (JWT_SECRET)" }, { status: 500 });
@@ -75,11 +87,13 @@ export async function POST(request) {
 
   const res = NextResponse.json({
     ok: true,
+    redirectTo,
     user: {
       id: user._id.toString(),
       email: user.email,
       fullName: user.fullName,
       username: user.username,
+      role,
     },
   });
   res.cookies.set(AUTH_COOKIE, token, authCookieOptions());

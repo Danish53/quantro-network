@@ -66,6 +66,7 @@ export async function POST(request) {
       country: data.country,
       referral: data.referral ?? "",
       password: passwordHash,
+      role: "user",
     });
   } catch (e) {
     if (e.code === 11000) {

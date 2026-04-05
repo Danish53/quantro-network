@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { FAQ_PAGE_ITEMS } from "@/app/lib/siteStrings";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import { usePortalLink } from "@/app/hooks/usePortalLink";
 
 const FILTERS = [
   { id: "all", labelKey: "faq_page.filter_all" },
@@ -14,6 +15,7 @@ const FILTERS = [
 
 export default function FaqPageContent() {
   const { t } = useSiteTranslation();
+  const { loggedIn, portalHref } = usePortalLink();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [openIndex, setOpenIndex] = useState(null);
@@ -161,7 +163,7 @@ export default function FaqPageContent() {
               {t("faq_page.cta_pricing")}
             </Link>
             <Link
-              href="/dashboard"
+              href={loggedIn ? portalHref : "/login"}
               className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-transparent px-6 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t("faq_page.cta_portal")}

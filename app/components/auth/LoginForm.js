@@ -59,7 +59,11 @@ export default function LoginForm() {
         return;
       }
       toast({ variant: "success", message: "Signed in successfully. Redirecting…" });
-      router.push("/dashboard");
+      const next =
+        typeof data.redirectTo === "string" && data.redirectTo.startsWith("/")
+          ? data.redirectTo
+          : "/dashboard";
+      router.push(next);
       router.refresh();
     } catch {
       toast({ variant: "error", message: "Network error. Check your connection and try again." });

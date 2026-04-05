@@ -1,33 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import leftImage from "@/public/images/left-image.999f05cb.png";
 import rightImage from "@/public/images/right-image.5e8ab15a.png";
 import { useSiteTranslation } from "./SiteTranslationProvider";
+import { usePortalLink } from "@/app/hooks/usePortalLink";
 
 export default function HeroSection() {
   const { t } = useSiteTranslation();
-  const [ctaHref, setCtaHref] = useState("/login");
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch("/api/auth/me", { credentials: "include" });
-        const data = await res.json().catch(() => ({}));
-        if (!cancelled) {
-          setCtaHref(res.ok && data?.user ? "/dashboard" : "/login");
-        }
-      } catch {
-        if (!cancelled) setCtaHref("/login");
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { loggedIn, portalHref } = usePortalLink();
+  const ctaHref = loggedIn ? portalHref : "/login";
 
   return (
     <section

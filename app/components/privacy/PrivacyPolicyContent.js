@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSiteTranslation } from "../SiteTranslationProvider";
+import { usePortalLink } from "@/app/hooks/usePortalLink";
 
 const SECTION_KEYS = [
   { titleKey: "privacy.s1_title", bodyKey: "privacy.s1_body" },
@@ -26,6 +27,7 @@ function Bullet({ children }) {
 
 export default function PrivacyPolicyContent() {
   const { t } = useSiteTranslation();
+  const { loggedIn, portalHref } = usePortalLink();
 
   return (
     <div className="relative w-full min-w-0 overflow-x-hidden">
@@ -76,7 +78,7 @@ export default function PrivacyPolicyContent() {
               {t("faq_page.cta_pricing")}
             </Link>
             <Link
-              href="/dashboard"
+              href={loggedIn ? portalHref : "/login"}
               className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-transparent px-6 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t("faq_page.cta_portal")}

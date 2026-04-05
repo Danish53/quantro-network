@@ -5,6 +5,7 @@ import connectDB from "@/lib/db/mongoose";
 export const runtime = "nodejs";
 import User from "@/lib/models/User";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth/jwt";
+import { effectiveUserRole } from "@/lib/auth/roles";
 
 const patchMeSchema = z
   .object({
@@ -27,6 +28,7 @@ function jsonUser(user) {
     phone: user.phone,
     country: user.country,
     avatarDataUrl: user.avatarDataUrl || "",
+    role: effectiveUserRole(user),
   };
 }
 
@@ -50,7 +52,7 @@ export async function GET(request) {
   }
 
   const user = await User.findById(payload.userId).lean();
-  if (!user) {
+  if (!user || user.deletedAt) {
     return NextResponse.json({ user: null }, { status: 200 });
   }
 
@@ -92,7 +94,7 @@ export async function PATCH(request) {
   }
 
   const user = await User.findById(payload.userId);
-  if (!user) {
+  if (!user || user.deletedAt) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
