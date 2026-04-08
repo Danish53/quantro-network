@@ -486,7 +486,10 @@ export const SITE_STRINGS = {
   "dash.section_personal": "Personal",
   "dash.breadcrumb_dashboard": "Dashboard",
   "dash.nav_portal": "Subscriber Portal",
-  "dash.nav_virtual_card": "Virtual Card",
+  "dash.nav_qn_virtual_card": "QN Virtual Card",
+  "dash.nav_vcard_generate": "Generate a debit card",
+  "dash.nav_vcard_fund": "Fund / top up",
+  "dash.nav_vcard_terminate": "Terminate crypto debit card",
   "dash.nav_wallets": "Crypto Wallets",
   "dash.nav_wallet_connect": "Wallet Connect",
   "dash.nav_convert": "Convert & Spend",
@@ -699,6 +702,26 @@ export const SITE_STRINGS = {
   "dash.tx.empty": "No transactions found",
   "dash.vcard.title": "Virtual Debit Card",
   "dash.vcard.subtitle": "Spend online with crypto-backed virtual card. US-based users require KYC.",
+  "dash.vcard.section_generate_title": "Generate a debit card",
+  "dash.vcard.section_generate_subtitle": "Apply for your QN virtual debit card once KYC is approved.",
+  "dash.vcard.section_fund_title": "Fund / top up",
+  "dash.vcard.section_fund_subtitle": "Add funds to your wallets, then your card balance reflects available spending power in test mode.",
+  "dash.vcard.section_fund_deposit_link": "Open deposit (fund wallets)",
+  "dash.vcard.section_terminate_title": "Terminate crypto debit card",
+  "dash.vcard.section_terminate_subtitle":
+    "Freeze the card to block new charges immediately. Permanent closure flows may require support in production.",
+  "dash.vcard.need_card_first": "You need a card first. Go to Generate a debit card to apply.",
+  "dash.vcard.generate_has_card_title": "Your debit card is on file",
+  "dash.vcard.generate_has_card_body": "Use Fund / top up to add spending power, or Terminate to freeze or close options.",
+  "dash.vcard.goto_fund": "Fund / top up",
+  "dash.vcard.goto_terminate": "Terminate card",
+  "dash.vcard.fund_embed_kicker": "Wallet deposit — same flow as your Fund page",
+  "dash.vcard.terminate_kicker": "Card control",
+  "dash.vcard.terminate_panel_title": "Before you terminate",
+  "dash.vcard.terminate_panel_body":
+    "Freezing stops new purchases immediately. For permanent removal of the card product, contact support when production rules apply.",
+  "dash.vcard.terminate_bullet_freeze": "Freeze blocks new authorizations until you unfreeze.",
+  "dash.vcard.terminate_bullet_support": "Permanent closure or product removal may require support verification in production.",
   "dash.vcard.balance_label": "Available to spend",
   "dash.vcard.balance_fiat": "USD balance",
   "dash.vcard.status_pending_review": "Pending review",
@@ -1089,7 +1112,7 @@ export const SITE_STRINGS = {
 };
 
 /** Bump when strings change so cached translations invalidate. */
-export const SITE_STRINGS_REVISION = 13;
+export const SITE_STRINGS_REVISION = 16;
 
 /** Stable key order for batch translation (must match SITE_STRINGS). */
 export const SITE_STRING_KEYS = Object.keys(SITE_STRINGS);

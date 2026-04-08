@@ -10,7 +10,9 @@ export default function DashboardNavigateDropdown() {
   const { t } = useSiteTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
-  const quickLinks = dashboardNavSections.flatMap((s) => s.items);
+  const quickLinks = dashboardNavSections.flatMap((s) =>
+    s.items.flatMap((item) => (item.children?.length ? item.children : [item])),
+  );
 
   useEffect(() => {
     const fn = (e) => {

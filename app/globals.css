@@ -110,10 +110,45 @@ body {
 .dashboard-theme button[class*="bg-[#2563eb]"] {
   background: linear-gradient(135deg, #5c5aff 0%, #4b49eb 100%) !important;
   box-shadow: 0 8px 20px rgba(92, 90, 255, 0.22);
+  transition:
+    transform 0.2s cubic-bezier(0.33, 1, 0.68, 1),
+    box-shadow 0.22s ease,
+    filter 0.2s ease,
+    background 0.22s ease !important;
 }
 
 .dashboard-theme button[class*="bg-[#2563eb]"]:hover {
   background: linear-gradient(135deg, #6e6bff 0%, #5c5aff 100%) !important;
+  box-shadow: 0 10px 26px rgba(92, 90, 255, 0.32);
+  filter: brightness(1.04);
+}
+
+.dashboard-theme button[class*="bg-[#2563eb]"]:active {
+  transform: scale(0.985);
+  box-shadow: 0 4px 14px rgba(92, 90, 255, 0.2);
+}
+
+/* Dashboard — indigo primary buttons using literal #5C5AFF */
+.dashboard-theme button[class*="bg-[#5C5AFF]"],
+.dashboard-theme button[class*="bg-[#5c5aff]"] {
+  transition:
+    transform 0.2s cubic-bezier(0.33, 1, 0.68, 1),
+    box-shadow 0.22s ease,
+    filter 0.2s ease,
+    background-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dashboard-theme button[class*="bg-[#5C5AFF]"]:hover,
+  .dashboard-theme button[class*="bg-[#5c5aff]"]:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 10px 24px rgba(92, 90, 255, 0.28);
+  }
+
+  .dashboard-theme button[class*="bg-[#5C5AFF]"]:active,
+  .dashboard-theme button[class*="bg-[#5c5aff]"]:active {
+    transform: scale(0.985);
+  }
 }
 
 .dashboard-theme button[class*="border-[#2563eb]"] {
@@ -184,4 +219,52 @@ body {
 .dashboard-theme textarea:autofill,
 .dashboard-theme select:autofill {
   box-shadow: 0 0 0 1000px #141235 inset !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Site-wide button & CTA hover / active polish (opt out: class no-quantro-motion) */
+/* -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  button:enabled:not(.no-quantro-motion),
+  input[type="submit"]:enabled:not(.no-quantro-motion),
+  input[type="button"]:enabled:not(.no-quantro-motion) {
+    transition-property: transform, filter, box-shadow, background-color, border-color, color, opacity;
+    transition-duration: 0.22s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  button:enabled:not(.no-quantro-motion):hover,
+  input[type="submit"]:enabled:not(.no-quantro-motion):hover,
+  input[type="button"]:enabled:not(.no-quantro-motion):hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+  }
+
+  button:enabled:not(.no-quantro-motion):active,
+  input[type="submit"]:enabled:not(.no-quantro-motion):active,
+  input[type="button"]:enabled:not(.no-quantro-motion):active {
+    transform: translateY(0) scale(0.98);
+    filter: brightness(0.97);
+    transition-duration: 0.1s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Next.js <Link> pill / rounded CTAs (must include "rounded" in className) */
+  a[href].inline-flex[class*="rounded"]:not(.no-quantro-motion) {
+    transition-property: transform, filter, box-shadow, background-color, border-color, color, opacity;
+    transition-duration: 0.22s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  a[href].inline-flex[class*="rounded"]:not(.no-quantro-motion):hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+
+  a[href].inline-flex[class*="rounded"]:not(.no-quantro-motion):active {
+    transform: translateY(0) scale(0.98);
+    filter: brightness(0.97);
+    transition-duration: 0.1s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }

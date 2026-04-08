@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
       className={`${shareTechMono.variable} h-full overflow-x-hidden antialiased`}
     >
-      <body className="flex min-h-full min-w-0 flex-col overflow-x-hidden font-sans">
+      <body className="quantro-interactive flex min-h-full min-w-0 flex-col overflow-x-hidden font-sans">
         <SiteTranslationProvider>
           <TranslationLoadingOverlay />
           <ToastProvider>{children}</ToastProvider>

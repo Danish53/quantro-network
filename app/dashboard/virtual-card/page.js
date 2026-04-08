@@ -1,5 +1,6 @@
-import VirtualCardView from "../../components/dashboard/VirtualCardView";
+import { redirect } from "next/navigation";
 
+/** Default QN Virtual Card entry — same as Generate. */
 export default function VirtualCardPage() {
-  return <VirtualCardView />;
+  redirect("/dashboard/virtual-card/generate");
 }

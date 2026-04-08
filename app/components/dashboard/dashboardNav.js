@@ -5,10 +5,19 @@ export const dashboardNavSections = [
     labelKey: "dash.section_home",
     items: [
       { labelKey: "dash.nav_portal", href: "/dashboard", icon: "portal" },
-      { labelKey: "dash.nav_virtual_card", href: "/dashboard/virtual-card", icon: "vcard" },
+      {
+        labelKey: "dash.nav_qn_virtual_card",
+        icon: "vcard",
+        groupId: "qn-virtual-card",
+        children: [
+          { labelKey: "dash.nav_vcard_generate", href: "/dashboard/virtual-card/generate" },
+          { labelKey: "dash.nav_vcard_fund", href: "/dashboard/fund" },
+          { labelKey: "dash.nav_vcard_terminate", href: "/dashboard/virtual-card/terminate" },
+        ],
+      },
       { labelKey: "dash.nav_wallets", href: "/dashboard/wallets", icon: "wallets" },
       { labelKey: "dash.nav_convert", href: "/dashboard/convert", icon: "convert" },
-      { labelKey: "dash.nav_fund", href: "/dashboard/fund", icon: "fund" },
+      // { labelKey: "dash.nav_fund", href: "/dashboard/fund", icon: "fund" },
       { labelKey: "dash.nav_withdrawal", href: "/dashboard/withdrawal", icon: "withdraw", hasChevron: true },
       { labelKey: "dash.nav_membership_plans", href: "/dashboard/membership-plans", icon: "membership" },
       // { labelKey: "dash.nav_vault", href: "/dashboard/ea-vault", icon: "vault", hasChevron: true },
