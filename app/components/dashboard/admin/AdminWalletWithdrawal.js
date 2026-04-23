@@ -21,25 +21,26 @@ export default function WithdrawalPage() {
     const [totalAmount, setTotalAmount] = useState(0);
     const [count, setCount] = useState(0);
   
-    useEffect(() => {
-      async function fetchTotal() {
-        try {
-          const res = await fetch("/api/admin/wallet-requests-all?limit=50", {
-            credentials: "include",
-          });
-          const json = await res.json().catch(() => ({}));
+    // useEffect(() => {
+    //   async function fetchTotal() {
+    //     try {
+    //       const res = await fetch("/api/admin/withdraw-wallet-all?limit=50", {
+    //         credentials: "include",
+    //       });
+    //       const json = await res.json().catch(() => ({}));
   
-          if (res.ok && json.requests) {
-            // const total = json.requests.reduce((sum, r) => sum + (r.amount || 0), 0);
-            setTotalAmount(json.totalApprovedAmount || 0);
-            setCount(json.total || json.requests.length);
-          }
-        } catch {
-          // silent
-        }
-      }
-      fetchTotal();
-    }, []);
+    //       if (res.ok && json.requests) {
+    //         // const total = json.requests.reduce((sum, r) => sum + (r.amount || 0), 0);
+    //         setTotalAmount(json.availableBalance || 0);
+    //         console.log(json, "teststststttsts");
+    //         setCount(json.total || json.requests.length);
+    //       }
+    //     } catch {
+    //       // silent
+    //     }
+    //   }
+    //   fetchTotal();
+    // }, []);
 
   // =========================
   // GET API (LOAD HISTORY)
@@ -56,6 +57,8 @@ export default function WithdrawalPage() {
       }
 
       setWithdrawals(json.withdrawals || []);
+      setTotalAmount(json.availableBalance || 0);
+
     } catch {
       setFormErr("Failed to load withdrawals");
     } finally {

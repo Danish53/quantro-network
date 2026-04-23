@@ -30,15 +30,13 @@ export default function AdminTopBar({ onMenuClick }) {
   useEffect(() => {
     async function fetchTotal() {
       try {
-        const res = await fetch("/api/admin/wallet-requests-all?limit=50", {
-          credentials: "include",
-        });
+        const res = await fetch("/api/admin/withdraw-wallet-all?page=1&limit=10");
         const json = await res.json().catch(() => ({}));
 
-        if (res.ok && json.requests) {
-          // const total = json.requests.reduce((sum, r) => sum + (r.amount || 0), 0);
-          setTotalAmount(json.totalApprovedAmount || 0);
-          setCount(json.total || json.requests.length);
+        if (res.ok && json.withdrawals) {
+          // const total = json.withdrawals.reduce((sum, r) => sum + (r.amount || 0), 0);
+          setTotalAmount(json.availableBalance || 0);
+          setCount(json.total || json.withdrawals.length);
         }
       } catch {
         // silent
