@@ -27,7 +27,9 @@ export async function GET(request) {
     let filter = {};
     if (status) filter.status = status;
 
-    // 🔍 search by user/email/name
+    // =========================
+    // SEARCH FILTER
+    // =========================
     if (q) {
       const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 
@@ -52,6 +54,25 @@ export async function GET(request) {
       };
     }
 
+    // =========================
+    // TOTAL APPROVED AMOUNT (NEW 🔥)
+    // =========================
+    const approvedTotalAgg = await WalletRequest.aggregate([
+      { $match: { status: "approved" } },
+      {
+        $group: {
+          _id: null,
+          totalApprovedAmount: { $sum: "$amount" },
+        },
+      },
+    ]);
+
+    const totalApprovedAmount =
+      approvedTotalAgg[0]?.totalApprovedAmount || 0;
+
+    // =========================
+    // PAGINATED DATA
+    // =========================
     const [total, rows] = await Promise.all([
       WalletRequest.countDocuments(filter),
       WalletRequest.find(filter)
@@ -90,9 +111,16 @@ export async function GET(request) {
       limit,
       total,
       totalPages: Math.max(1, Math.ceil(total / limit)),
+
+      // 🔥 NEW FIELD
+      totalApprovedAmount,
     });
+
   } catch (e) {
     console.error("[admin/wallet-requests GET]", e);
-    return NextResponse.json({ error: "Failed to load requests" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to load requests" },
+      { status: 500 }
+    );
   }
 }

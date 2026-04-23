@@ -1,5 +1,5 @@
-import AdminWalletTransactionsPanel from "@/app/components/dashboard/admin/AdminWalletTransactionsPanel";
+import AdminWalletWithdrawal from "@/app/components/dashboard/admin/AdminWalletWithdrawal";
 
 export default function AdminWithdrawalsPage() {
-  return <AdminWalletTransactionsPanel txType="withdrawal" />;
+  return <AdminWalletWithdrawal txType="withdrawal" />;
 }

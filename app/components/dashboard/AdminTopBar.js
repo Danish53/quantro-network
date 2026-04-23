@@ -36,8 +36,8 @@ export default function AdminTopBar({ onMenuClick }) {
         const json = await res.json().catch(() => ({}));
 
         if (res.ok && json.requests) {
-          const total = json.requests.reduce((sum, r) => sum + (r.amount || 0), 0);
-          setTotalAmount(total);
+          // const total = json.requests.reduce((sum, r) => sum + (r.amount || 0), 0);
+          setTotalAmount(json.totalApprovedAmount || 0);
           setCount(json.total || json.requests.length);
         }
       } catch {
@@ -132,6 +132,8 @@ export default function AdminTopBar({ onMenuClick }) {
         </div>
 
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-1 sm:gap-2">
+          <Link href="/dashboard/admin/withdrawals">
+          
           <button className="flex items-center gap-2 rounded-[10px] border border-white/[0.1] bg-[#141235] px-4 py-2 text-sm text-slate-200 transition hover:bg-white/[0.06]">
 
   {/* Label */}
@@ -157,6 +159,7 @@ export default function AdminTopBar({ onMenuClick }) {
   </span> */}
 
 </button>
+</Link>
 
           <div ref={ref} className="relative">
             <button

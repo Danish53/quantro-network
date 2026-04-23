@@ -535,7 +535,7 @@ export default function AdminWalletRequestsPanel() {
             <button
               type="submit"
               disabled={submitting}
-              className="h-10 rounded-[9px] border bg-primary px-4 text-sm font-semibold text-slate-200 transition disabled:opacity-50"
+              className="px-4 h-10 rounded-[9px] bg-indigo-600 hover:bg-indigo-700 transition text-sm font-semibold disabled:opacity-50"
             >
               {submitting ? "Submitting..." : "Submit Request"}
             </button>
