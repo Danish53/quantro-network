@@ -8,6 +8,8 @@ import { languageOptions } from "@/app/lib/languages";
 import FlagIcon from "../FlagIcon";
 import { useSiteTranslation } from "../SiteTranslationProvider";
 import logowhite from "@/public/images/logo-white.png";
+import logousdt from "@/public/images/image.png";
+
 
 export default function AdminTopBar({ onMenuClick }) {
   const router = useRouter();
@@ -20,6 +22,30 @@ export default function AdminTopBar({ onMenuClick }) {
     () => languageOptions.find((l) => l.code === language) ?? languageOptions[0],
     [language],
   );
+
+  // amount total usdt
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    async function fetchTotal() {
+      try {
+        const res = await fetch("/api/admin/wallet-requests-all?limit=50", {
+          credentials: "include",
+        });
+        const json = await res.json().catch(() => ({}));
+
+        if (res.ok && json.requests) {
+          const total = json.requests.reduce((sum, r) => sum + (r.amount || 0), 0);
+          setTotalAmount(total);
+          setCount(json.total || json.requests.length);
+        }
+      } catch {
+        // silent
+      }
+    }
+    fetchTotal();
+  }, []);
 
   useEffect(() => {
     const fn = (e) => {
@@ -106,6 +132,32 @@ export default function AdminTopBar({ onMenuClick }) {
         </div>
 
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-1 sm:gap-2">
+          <button className="flex items-center gap-2 rounded-[10px] border border-white/[0.1] bg-[#141235] px-4 py-2 text-sm text-slate-200 transition hover:bg-white/[0.06]">
+
+  {/* Label */}
+  {/* <span className="text-slate-400">Wallet Requests</span> */}
+
+  {/* USDT ICON + AMOUNT */}
+  <div className="flex items-center gap-2">
+    
+    {/* USDT Icon */}
+    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15">
+      <Image src={logousdt} alt="USDT" width={20} height={20} />
+    </span>
+
+    {/* Amount */}
+    <span className="font-semibold text-slate-200 text-md">
+      {totalAmount.toLocaleString()}
+    </span>
+  </div>
+
+  {/* Count Badge */}
+  {/* <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-slate-400">
+    {count}
+  </span> */}
+
+</button>
+
           <div ref={ref} className="relative">
             <button
               type="button"

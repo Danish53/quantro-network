@@ -264,40 +264,42 @@ export default function KycDocumentsView() {
       setFormError(t("dash.kyc.fix_errors"));
       return;
     }
-    try {
-      setSubmitting(true);
-      const res = await fetch("/api/kyc/submit", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          docType,
-          docNumber: docNumber.trim(),
-          country: country.trim(),
-          state: stateName.trim(),
-          city: city.trim(),
-          addressLine1: addressLine1.trim(),
-          postalCode: postalCode.trim(),
-          dateOfBirth: dateOfBirth.trim(),
-          ssnLast4: ssnLast4.trim(),
-          usResident,
-          hasFrontImage: Boolean(frontFile),
-          hasBackImage: Boolean(backFile),
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setFormError(data?.error || t("dash.kyc.submit_error"));
-        return;
-      }
-      setKycStatus(data?.kyc?.status || "pending");
-      setNotice(t("dash.kyc.submit_ok"));
-      setIsEditing(false);
-    } catch {
-      setFormError(t("dash.kyc.submit_error"));
-    } finally {
-      setSubmitting(false);
-    }
+    setFormError("⚠️ Something went wrong. Please contact support.");
+    return;
+    // try {
+    //   setSubmitting(true);
+    //   const res = await fetch("/api/kyc/submit", {
+    //     method: "POST",
+    //     credentials: "include",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       docType,
+    //       docNumber: docNumber.trim(),
+    //       country: country.trim(),
+    //       state: stateName.trim(),
+    //       city: city.trim(),
+    //       addressLine1: addressLine1.trim(),
+    //       postalCode: postalCode.trim(),
+    //       dateOfBirth: dateOfBirth.trim(),
+    //       ssnLast4: ssnLast4.trim(),
+    //       usResident,
+    //       hasFrontImage: Boolean(frontFile),
+    //       hasBackImage: Boolean(backFile),
+    //     }),
+    //   });
+    //   const data = await res.json().catch(() => ({}));
+    //   if (!res.ok) {
+    //     setFormError(data?.error || t("dash.kyc.submit_error"));
+    //     return;
+    //   }
+    //   setKycStatus(data?.kyc?.status || "pending");
+    //   setNotice(t("dash.kyc.submit_ok"));
+    //   setIsEditing(false);
+    // } catch {
+    //   setFormError(t("dash.kyc.submit_error"));
+    // } finally {
+    //   setSubmitting(false);
+    // }
   };
 
   const baseField =
@@ -306,7 +308,7 @@ export default function KycDocumentsView() {
   return (
     <div className="relative pb-24">
       <div className="pointer-events-none fixed right-4 top-20 z-[80] space-y-2 sm:right-6">
-        <DashboardToast type="error" message={formError} onClose={() => setFormError("")} />
+        {/* <DashboardToast type="error" message={formError} onClose={() => setFormError("")} /> */}
         <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
       </div>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -333,6 +335,18 @@ export default function KycDocumentsView() {
       </div>
 
       <div className="mx-auto mt-8 max-w-3xl">
+        {formError && (
+  <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md flex justify-between items-start mb-4 shadow-sm">
+    <span className="text-sm">{formError}</span>
+
+    <button
+      onClick={() => setFormError("")}
+      className="ml-4 text-red-600 hover:text-red-800"
+    >
+      ✕
+    </button>
+  </div>
+)}
         <form
           onSubmit={handleSubmit}
           className="rounded-[12px] border border-white/[0.08] bg-[#141235] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] ring-1 ring-white/[0.04] sm:p-8"

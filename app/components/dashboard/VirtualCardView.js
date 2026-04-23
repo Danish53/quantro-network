@@ -189,6 +189,19 @@ export default function VirtualCardView({ variant }) {
         <DashboardToast type="success" message={notice} onClose={() => setNotice("")} />
       </div>
 
+      {/* {formError && ( */}
+  <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md flex justify-between items-start mb-4 shadow-sm">
+    <span className="text-sm">Something went wrong. Please contact support.</span>
+
+    <button
+      // onClick={() => setFormError("")}
+      className="ml-4 text-red-600 hover:text-red-800"
+    >
+      ✕
+    </button>
+  </div>
+{/* )} */}
+
       {loading ? (
         <div className="mt-8 grid gap-6 lg:grid-cols-2 lg:items-start">
           <div
