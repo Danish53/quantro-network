@@ -150,7 +150,7 @@ export default function WithdrawalPage() {
 
     {/* Amount */}
     <span className="font-semibold text-slate-200 text-lg">
-      {totalAmount.toLocaleString()} USDT
+      {totalAmount.toLocaleString()}
     </span>
   </div>
 
@@ -267,7 +267,7 @@ export default function WithdrawalPage() {
                   </td>
 
                   <td className="px-4 py-3">
-                    {w.amount} USDT
+                    {w.amount}
                   </td>
 
                   <td className="px-4 py-3 text-amber-400 capitalize">

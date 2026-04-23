@@ -669,7 +669,7 @@ export default function AdminWalletRequestsPanel() {
                         </td>
 
                         <td className="whitespace-nowrap px-4 py-3.5 text-right font-mono tabular-nums text-slate-100 sm:px-5">
-                          {formatMoney(row.amount)} USDT
+                          {formatMoney(row.amount)}
                         </td>
 
                         <td className="whitespace-nowrap px-4 py-3.5 sm:px-5">
